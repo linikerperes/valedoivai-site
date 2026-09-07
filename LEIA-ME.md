@@ -347,72 +347,76 @@ O que foi feito:
 
 ## 5. Publicação
 
-**Domínio:** `valedoivai.site`, comprado no Hostinger em 07/09/2026 (renova 07/09/2027).
-**Repositório:** <https://github.com/linikerperes/valedoivai-site> — privado, branch `main`.
+**No ar em:** GitHub Pages · **Domínio:** `valedoivai.site` (Hostinger, renova 07/09/2027)
+**Repositório:** <https://github.com/linikerperes/valedoivai-site> — público, branch `main`
 
-O site é estático, então não precisa de servidor, PHP nem banco. O caminho abaixo
-é gratuito e deixa você atualizar a arrecadação pelo celular.
+O deploy já está feito e funcionando. Falta apenas o DNS apontar para o GitHub.
 
-### Passo 1 — Cloudflare Pages (grátis)
+### Os registros de DNS
 
-1. Crie conta em <https://dash.cloudflare.com>
-2. **Workers & Pages** → **Create** → aba **Pages** → **Connect to Git**
-3. Autorize o GitHub e escolha o repositório **valedoivai-site**
-   (é privado; o app da Cloudflare pede permissão de acesso — pode conceder)
-4. Nas configurações de build, deixe assim:
-   - Framework preset: **None**
-   - Build command: **(vazio)**
-   - Build output directory: **`/`**
-5. **Save and Deploy**
+No **hPanel do Hostinger** → **Domínios** → `valedoivai.site` → **DNS / Nameservers**
+→ aba **Registros DNS**:
 
-Em cerca de 1 minuto o site sobe em `valedoivai-site.pages.dev`. **Esse endereço já
-funciona com HTTPS** — dá para testar tudo antes de mexer no domínio.
+**Apagar:**
 
-### Passo 2 — Ligar o domínio
+| Tipo | Nome | Aponta para |
+|---|---|---|
+| A | `@` | `2.57.91.91` (parking do Hostinger) |
 
-No projeto da Cloudflare: **Custom domains** → **Set up a domain** → digite
-`valedoivai.site`. A Cloudflare vai pedir para o domínio usar o DNS dela e mostrar
-**dois nameservers** (algo como `xxx.ns.cloudflare.com`).
+**Criar 4 registros A**, todos com nome `@`:
 
-No Hostinger: **hPanel** → **Domínios** → `valedoivai.site` → **DNS / Nameservers**
-→ trocar de "Nameservers do Hostinger" para **Personalizados** e colar os dois da
-Cloudflare.
+```
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
+```
 
-Hoje o domínio está nos nameservers de parking do Hostinger
-(`orbit.dns-parking.com` e `horizon.dns-parking.com`) — são esses que serão substituídos.
+São os IPs oficiais do GitHub Pages (conferidos na API do GitHub em 07/09/2026).
+Os quatro são necessários — é o balanceamento deles.
 
-A troca costuma valer em minutos, mas pode levar até algumas horas. Depois disso a
-Cloudflare emite o certificado HTTPS sozinha. Repita para `www.valedoivai.site`.
+**Ajustar o www:**
 
-### Passo 3 — Depois de publicar
+| Tipo | Nome | Aponta para |
+|---|---|---|
+| CNAME | `www` | `linikerperes.github.io` |
 
-- Abra `https://valedoivai.site` e confira
-- Mande o link para você mesmo no WhatsApp e veja se o card de preview aparece
-  (usa `assets/og-campanha.jpg`)
-- Faça **um Pix de teste de R$ 1,00** com o Copia e Cola e confirme no extrato
-- A página da diretoria fica em `https://valedoivai.site/relatorio.html`
-  (não é linkada em lugar nenhum, e está marcada como `noindex`)
+Hoje o `www` aponta para `valedoivai.site`. Trocar para `linikerperes.github.io`
+faz o GitHub emitir o certificado HTTPS para os dois endereços.
 
-### Como atualizar a arrecadação depois
+Não mexa nos nameservers — pode continuar nos do Hostinger.
+
+### Depois que o DNS propagar
+
+Costuma levar de minutos a algumas horas. Quando `valedoivai.site` abrir o site:
+
+1. No repositório → **Settings › Pages** → marcar **Enforce HTTPS**
+   (só aparece depois que o certificado é emitido, o que é automático)
+2. Testar o link no WhatsApp e ver se o card de preview aparece
+3. Fazer um **Pix de teste de R$ 1,00** com o Copia e Cola
+4. Conferir a página da diretoria em `valedoivai.site/relatorio.html`
+
+### Como atualizar a arrecadação
 
 1. GitHub → repositório → `dados.json` → ícone de lápis
-2. Mude `"arrecadado"` e `"atualizadoEm"`
+2. Mudar `"arrecadado"` e `"atualizadoEm"`
 3. **Commit changes**
 
-A Cloudflare republica sozinha em ~1 minuto. O arquivo `_headers` já garante que
-o `dados.json` revalida a cada 60 segundos, então o número novo aparece rápido —
-sem isso, ficaria preso no cache por horas. Funciona pelo navegador do celular.
+O GitHub Pages republica sozinho em ~1 minuto. Funciona pelo navegador do celular.
 
-### Se preferir hospedar no próprio Hostinger
+O número novo aparece em até ~10 minutos: o site busca o `dados.json` com
+`cache: "no-store"`, então o navegador de quem visita nunca guarda cópia velha, mas
+o CDN do GitHub segura por até 10 minutos.
 
-Só vale a pena se você já tiver um plano de hospedagem contratado. Nesse caso:
-hPanel → **Gerenciador de Arquivos** → pasta `public_html` → subir o conteúdo da
-pasta (não a pasta em si). Não precisa mexer em DNS.
+> **Sobre o arquivo `_headers`:** ele é específico do Cloudflare Pages e **não faz
+> efeito no GitHub Pages**. Deixei no repositório de propósito: se um dia migrar
+> para o Cloudflare, já está pronto. No GitHub Pages ele é simplesmente ignorado.
 
-Duas diferenças: o `_headers` **não funciona** no Hostinger (é específico da
-Cloudflare) — seria preciso um `.htaccess` equivalente, me peça que eu faço. E
-atualizar a arrecadação passa a ser upload manual do `dados.json`, em vez de editar
-pelo GitHub.
+### Se um dia quiser migrar para o Cloudflare Pages
+
+O site fica um pouco mais rápido no Brasil e o `_headers` passa a valer. Seria:
+criar conta na Cloudflare, conectar este mesmo repositório (build command vazio,
+output `/`), e trocar os nameservers no Hostinger pelos que a Cloudflare indicar.
 
 ---
 
