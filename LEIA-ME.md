@@ -347,57 +347,72 @@ O que foi feito:
 
 ## 5. Publicação
 
-### Domínio
-Preferência: **valedoivai.org.br**, registrado no [Registro.br](https://registro.br).
-Custo aproximado: **R$ 40/ano**. Verifique a disponibilidade antes.
+**Domínio:** `valedoivai.site`, comprado no Hostinger em 07/09/2026 (renova 07/09/2027).
+**Repositório:** <https://github.com/linikerperes/valedoivai-site> — privado, branch `main`.
 
-Evite um domínio com "2027" no nome — o site deve continuar existindo depois do
-Campori, virando o site institucional do clube.
+O site é estático, então não precisa de servidor, PHP nem banco. O caminho abaixo
+é gratuito e deixa você atualizar a arrecadação pelo celular.
 
-Estrutura futura sugerida:
-- `valedoivai.org.br` → site institucional
-- `valedoivai.org.br/campori` → esta campanha
+### Passo 1 — Cloudflare Pages (grátis)
 
-### Hospedagem — onde publicar
+1. Crie conta em <https://dash.cloudflare.com>
+2. **Workers & Pages** → **Create** → aba **Pages** → **Connect to Git**
+3. Autorize o GitHub e escolha o repositório **valedoivai-site**
+   (é privado; o app da Cloudflare pede permissão de acesso — pode conceder)
+4. Nas configurações de build, deixe assim:
+   - Framework preset: **None**
+   - Build command: **(vazio)**
+   - Build output directory: **`/`**
+5. **Save and Deploy**
 
-Este é um site **estático** (só HTML, CSS, JS e imagens). Não precisa de servidor,
-banco de dados nem PHP. Isso abre as opções gratuitas boas:
+Em cerca de 1 minuto o site sobe em `valedoivai-site.pages.dev`. **Esse endereço já
+funciona com HTTPS** — dá para testar tudo antes de mexer no domínio.
 
-| Onde | Custo | Prós | Contras |
-|---|---|---|---|
-| **Cloudflare Pages** *(recomendado)* | R$ 0 | HTTPS automático, CDN rápida no Brasil, tráfego ilimitado na prática, edita `dados.json` pelo painel | precisa de conta no GitHub |
-| Netlify | R$ 0 | igualmente simples, permite arrastar a pasta sem GitHub | 100 GB/mês de tráfego |
-| Vercel | R$ 0 | muito rápido | plano free é para uso não comercial |
-| GitHub Pages | R$ 0 | direto do repositório | sem edição pelo painel, CDN um pouco mais lenta |
-| Hospedagem tradicional (Hostinger, Locaweb…) | R$ 10–30/mês | você já pode ter uma | **não vale a pena aqui** — pagar por algo que o Cloudflare faz de graça e mais rápido |
+### Passo 2 — Ligar o domínio
 
-**Recomendação: Cloudflare Pages.** Motivo prático além do preço: você consegue
-editar o `dados.json` direto pelo navegador do celular para atualizar a
-arrecadação, sem precisar de computador.
+No projeto da Cloudflare: **Custom domains** → **Set up a domain** → digite
+`valedoivai.site`. A Cloudflare vai pedir para o domínio usar o DNS dela e mostrar
+**dois nameservers** (algo como `xxx.ns.cloudflare.com`).
 
-Passo a passo:
+No Hostinger: **hPanel** → **Domínios** → `valedoivai.site` → **DNS / Nameservers**
+→ trocar de "Nameservers do Hostinger" para **Personalizados** e colar os dois da
+Cloudflare.
 
-1. Crie uma conta no [GitHub](https://github.com) e suba esta pasta num repositório
-   (pode arrastar os arquivos pela própria página do GitHub).
-2. Crie uma conta no [Cloudflare](https://dash.cloudflare.com) → **Workers & Pages**
-   → **Create** → **Pages** → **Connect to Git**.
-3. Escolha o repositório. Em *Build settings*, deixe **Build command vazio** e
-   **Output directory** como `/`.
-4. **Save and Deploy.** Em cerca de 1 minuto o site está no ar num endereço
-   `.pages.dev`.
-5. **Custom domains** → adicione `valedoivai.org.br` e siga as instruções de DNS.
+Hoje o domínio está nos nameservers de parking do Hostinger
+(`orbit.dns-parking.com` e `horizon.dns-parking.com`) — são esses que serão substituídos.
 
-**Quer testar antes de comprar domínio?** O endereço `.pages.dev` que o Cloudflare
-dá já funciona e já tem HTTPS. Dá para mandar no WhatsApp e validar tudo antes de
-gastar com o domínio.
+A troca costuma valer em minutos, mas pode levar até algumas horas. Depois disso a
+Cloudflare emite o certificado HTTPS sozinha. Repita para `www.valedoivai.site`.
 
-### Se preferir sem GitHub
-No [Netlify Drop](https://app.netlify.com/drop) você arrasta a pasta e o site sobe
-na hora. Mais simples para começar, mas cada atualização exige arrastar de novo.
+### Passo 3 — Depois de publicar
 
-> Depois de publicar, teste o compartilhamento no WhatsApp: o preview usa
-> `assets/og-campanha.jpg`. Atualize as URLs `og:url` e `og:image` no
-> `index.html` para o domínio real.
+- Abra `https://valedoivai.site` e confira
+- Mande o link para você mesmo no WhatsApp e veja se o card de preview aparece
+  (usa `assets/og-campanha.jpg`)
+- Faça **um Pix de teste de R$ 1,00** com o Copia e Cola e confirme no extrato
+- A página da diretoria fica em `https://valedoivai.site/relatorio.html`
+  (não é linkada em lugar nenhum, e está marcada como `noindex`)
+
+### Como atualizar a arrecadação depois
+
+1. GitHub → repositório → `dados.json` → ícone de lápis
+2. Mude `"arrecadado"` e `"atualizadoEm"`
+3. **Commit changes**
+
+A Cloudflare republica sozinha em ~1 minuto. O arquivo `_headers` já garante que
+o `dados.json` revalida a cada 60 segundos, então o número novo aparece rápido —
+sem isso, ficaria preso no cache por horas. Funciona pelo navegador do celular.
+
+### Se preferir hospedar no próprio Hostinger
+
+Só vale a pena se você já tiver um plano de hospedagem contratado. Nesse caso:
+hPanel → **Gerenciador de Arquivos** → pasta `public_html` → subir o conteúdo da
+pasta (não a pasta em si). Não precisa mexer em DNS.
+
+Duas diferenças: o `_headers` **não funciona** no Hostinger (é específico da
+Cloudflare) — seria preciso um `.htaccess` equivalente, me peça que eu faço. E
+atualizar a arrecadação passa a ser upload manual do `dados.json`, em vez de editar
+pelo GitHub.
 
 ---
 
