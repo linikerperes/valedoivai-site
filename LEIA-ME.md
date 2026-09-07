@@ -159,7 +159,8 @@ Como foi conferido:
 - o código gerado foi relido campo a campo por um verificador independente:
   chave `iasd.paranavai@anp.org.br`, moeda `986` (BRL), país `BR`, valor no campo
   `54`, e o CRC recalculado bate;
-- trocando o trecho, o valor e o CRC mudam junto.
+- trocando o trecho, o valor e o CRC mudam junto;
+- e, acima de tudo, **um Pix real foi pago com sucesso** em 07/09/2026 (seção 3.3).
 
 **Conta recebedora:** conta oficial da Igreja Adventista do Sétimo Dia, chave
 `iasd.paranavai@anp.org.br`, em nome da **União Sul Brasileira da Igreja
@@ -206,10 +207,30 @@ O caminho **garantido** é o WhatsApp: cada pessoa manda o comprovante e a
 mensagem já vem com `🔖 Código: VALEJQ6QDW`, o valor e os quilômetros. Você casa
 com o extrato pelo valor e pelo horário.
 
-O `txid` também viaja dentro do Pix, mas **a visibilidade depende do banco**:
-alguns mostram como "Identificador" no detalhe da transação, outros só entregam
-via extrato em API/OFX. Confira no seu banco antes de depender só disso —
-por isso o WhatsApp continua sendo a conferência principal.
+**Confirmado em teste real (07/09/2026).** Um Pix de R$ 14,07 gerado pelo site foi
+pago e o comprovante do Bradesco trouxe:
+
+```
+Valor:         R$ 14,07
+Identificador: VALEKX7WLW
+Nome:          UNIAO SUL BRASILEIRA DA IGREJA ADVENTISTA
+CNPJ:          79.080.602/0014-70
+```
+
+Três coisas ficaram provadas de uma vez:
+
+1. **O código aparece como "Identificador"** no comprovante — é exatamente o
+   mecanismo de conferência que a campanha precisa.
+2. **O valor saiu certo**, R$ 14,07 = 1 km, sem ninguém digitar nada.
+3. **O banco mostrou o nome completo** da conta, e não o `UNIAO SUL BRASILEIRA`
+   abreviado que vai dentro do código. Confirma o que estava previsto: o campo 59
+   é informativo, quem determina o destino é a chave.
+
+> **O que ainda não foi verificado:** esse comprovante é do lado de **quem pagou**.
+> Se o identificador também aparece no **extrato de quem recebe** (a conta da
+> igreja), só dá para confirmar com acesso a esse extrato. Vale conferir com a
+> tesouraria. Na prática isso pouco muda, porque o doador manda esse mesmo
+> comprovante pelo WhatsApp — e ele já vem com o código.
 
 > **Limite honesto:** o site é estático e não tem servidor. Os códigos nascem no
 > celular de cada visitante, então **o site sozinho não consegue guardar uma lista
