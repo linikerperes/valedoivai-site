@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#081627">
+<title>Rumo ao Campori 2027 · Clube de Desbravadores Vale do Ivaí</title>
+
+<meta name="description" content="1.102 quilômetros separam Paranavaí do VI Campori Sul-Americano de Desbravadores, em Barretos. Adote quilômetros da viagem e leve o Clube Vale do Ivaí mais perto.">
+<link rel="canonical" href="https://valedoivai.org.br/campori">
+
+<!-- Preview em WhatsApp / Instagram / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Clube de Desbravadores Vale do Ivaí">
+<meta property="og:title" content="Rumo ao Campori 2027 · Vale do Ivaí">
+<meta property="og:description" content="Cada R$ 14,07 leva nosso ônibus 1 km mais perto de Barretos. Até onde você pode nos levar?">
+<meta property="og:url" content="https://valedoivai.org.br/campori">
+<meta property="og:image" content="https://valedoivai.org.br/assets/og-campanha.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/logo-sm.png">
+<link rel="apple-touch-icon" href="assets/logo-sm.png">
+
+<style>
+:root{
+  --navy:#081627;
+  --navy2:#0e2b4a;
+  --gold:#e3a94a;
+  --gold-soft:#f5d18a;
+  --red:#d8232f;
+  --green:#1c9b62;
+  --cream:#fdf7ec;
+  --ink:#0d1520;
+  --muted:#5d6b7d;
+  --line:#e2e8f0;
+  --bg:#f4f7fa;
+  --card:#ffffff;
+  --shadow:0 18px 44px rgba(6,20,40,.13);
+  --shadow-lg:0 30px 70px rgba(6,20,40,.22);
+  --r:22px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.5;
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-synthesis-weight:none;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+h1,h2,h3{line-height:1.06;letter-spacing:-.03em;margin:0;font-weight:860}
+p{margin:0 0 1em}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+
+.wrap{width:min(1120px,calc(100% - 34px));margin-inline:auto}
+section{padding:clamp(56px,9vw,104px) 0}
+.eyebrow{
+  text-transform:uppercase;letter-spacing:.2em;font-weight:800;
+  font-size:.7rem;color:var(--red);margin-bottom:12px;
+}
+.eyebrow.gold{color:var(--gold)}
+.head{max-width:760px;margin-bottom:clamp(28px,4vw,46px)}
+.head h2{font-size:clamp(2rem,5.6vw,3.3rem)}
+.lead{font-size:clamp(1rem,2.4vw,1.16rem);color:var(--muted);margin-top:16px}
+.lead.on-dark{color:#a9bed4}
+.fine{font-size:.78rem;color:var(--muted);line-height:1.55}
+.fine.on-dark{color:#8ba3bc}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:clamp(20px,3.4vw,30px);box-shadow:var(--shadow)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:16px 26px;border-radius:99px;border:0;cursor:pointer;
+  font-weight:800;font-size:1rem;letter-spacing:-.01em;
+  background:var(--red);color:#fff;
+  transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  box-shadow:0 10px 24px rgba(216,35,47,.3);
+  text-align:center;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(216,35,47,.36)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background:rgba(255,255,255,.1);color:#fff;box-shadow:none;border:1.5px solid rgba(255,255,255,.34)}
+.btn.ghost:hover{background:rgba(255,255,255,.18)}
+.btn.dark{background:var(--navy);box-shadow:0 10px 24px rgba(8,22,39,.3)}
+.btn.green{background:var(--green);box-shadow:0 10px 24px rgba(28,155,98,.3)}
+.btn.full{width:100%}
+.btn.suave{background:rgba(255,255,255,.13);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,.24)}
+.btn.suave:hover{background:rgba(255,255,255,.2);box-shadow:none}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ---------------- HERO ---------------- */
+.hero{
+  position:relative;color:#fff;padding:0;
+  background:
+    radial-gradient(90% 60% at 78% 12%, rgba(227,169,74,.22), transparent 62%),
+    radial-gradient(70% 50% at 12% 4%, rgba(216,35,47,.2), transparent 60%),
+    linear-gradient(160deg,#050f1c 0%,#0a2440 58%,#0f3157 100%);
+  overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;left:-8%;right:-8%;bottom:-140px;height:250px;
+  background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0;
+}
+.heroInner{position:relative;z-index:3;padding:clamp(26px,5vw,44px) 0 clamp(74px,10vw,120px)}
+.brandRow{display:flex;align-items:center;gap:14px;margin-bottom:clamp(30px,6vw,54px)}
+.brandLogo{
+  width:clamp(56px,12vw,74px);aspect-ratio:1;border-radius:50%;
+  object-fit:cover;background:#fff;
+  box-shadow:0 0 0 2px rgba(227,169,74,.75), 0 10px 26px rgba(0,0,0,.4);
+  flex:none;
+}
+.brandTxt strong{display:block;font-size:clamp(.9rem,2.6vw,1.02rem);letter-spacing:-.02em}
+.brandTxt span{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);font-weight:700}
+
+.heroTag{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  padding:8px 16px;border-radius:99px;font-size:.74rem;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;margin-bottom:22px;
+}
+.heroTag i{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+.hero h1{font-size:clamp(2.6rem,10.5vw,5.6rem);letter-spacing:-.045em}
+.hero h1 em{font-style:normal;color:var(--gold);display:block}
+.heroSub{font-size:clamp(1.02rem,3vw,1.3rem);color:#bcd0e6;max-width:600px;margin:22px 0 0}
+.heroSub b{color:#fff;font-weight:800}
+
+.heroStats{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin:clamp(28px,5vw,40px) 0 26px;max-width:620px;
+}
+.hStat{
+  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
+  border-radius:18px;padding:16px 18px;backdrop-filter:blur(6px);
+}
+.hStat span{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:#9db4cd;font-weight:800;margin-bottom:6px}
+.hStat b{font-size:clamp(1.35rem,5vw,1.95rem);font-weight:900;letter-spacing:-.035em;display:block;line-height:1.05}
+.hStat small{color:#93aac4;font-size:.76rem;font-weight:600}
+.hStat.wide{grid-column:1/-1}
+
+.progWrap{margin-top:4px}
+.progTop{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:9px;font-size:.78rem;color:#a9bed4;font-weight:700}
+.progTop b{color:var(--gold);font-size:1.25rem;font-weight:900;letter-spacing:-.03em}
+.progBar{height:13px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;position:relative}
+.progFill{
+  height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--red),var(--gold));
+  transition:width 1.5s cubic-bezier(.22,.9,.28,1);
+  position:relative;
+}
+.progFill::after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.24) 0 9px,transparent 9px 20px);
+  animation:slide 1.1s linear infinite;
+}
+@keyframes slide{to{background-position:20px 0}}
+
+.heroCta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+
+/* ---------------- ROTA ---------------- */
+.routeCard{padding:clamp(18px,3vw,28px);overflow:hidden}
+.routeHud{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;
+}
+.hud{background:#f6f9fc;border:1px solid var(--line);border-radius:16px;padding:13px 14px;text-align:center}
+.hud span{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:5px}
+.hud b{font-size:clamp(.98rem,3.7vw,1.5rem);font-weight:900;letter-spacing:-.04em;display:block;line-height:1.1;white-space:nowrap}
+
+.mapBox{
+  border-radius:20px;overflow:hidden;border:1px solid var(--line);
+  background:linear-gradient(180deg,#eaf5ff 0%,#f2f8ee 55%,#eef6e6 100%);
+}
+.mapBox svg{width:100%;height:auto;display:block}
+.routeStatus{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin-top:14px;padding:13px 18px;border-radius:99px;
+  background:var(--navy);color:#fff;font-weight:800;font-size:.9rem;text-align:center;
+}
+.routeStatus.win{background:var(--green)}
+
+.laneLabel{font:800 23px ui-sans-serif,system-ui,sans-serif;letter-spacing:.2em;fill:#8b9dae}
+.cityName{font:900 27px ui-sans-serif,system-ui,sans-serif;letter-spacing:-.025em;fill:#0d1520}
+.cityKm{font:700 22px ui-sans-serif,system-ui,sans-serif;fill:#75879a}
+.totalKm{font:900 34px ui-sans-serif,system-ui,sans-serif;letter-spacing:-.03em;fill:#b3c1d0}
+.totalSub{font:800 17px ui-sans-serif,system-ui,sans-serif;letter-spacing:.24em;fill:#c2cedb}
+
+#bus{transition:transform 1.6s cubic-bezier(.3,.85,.3,1)}
+#roadDone{transition:stroke-dashoffset 1.6s cubic-bezier(.3,.85,.3,1)}
+
+/* ---------------- ADOTAR KM ---------------- */
+.adoptGrid{display:grid;gap:18px}
+.kmGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0}
+.kmBtn{
+  border:2px solid var(--line);background:#fff;border-radius:15px;
+  padding:13px 6px;cursor:pointer;text-align:center;font-weight:900;
+  transition:all .16s ease;line-height:1.2;
+}
+.kmBtn small{display:block;font-weight:700;font-size:.71rem;color:var(--muted);margin-top:3px;letter-spacing:-.01em}
+.kmBtn:hover{border-color:var(--gold);transform:translateY(-2px)}
+.kmBtn[aria-pressed="true"]{border-color:var(--red);background:#fff5f5;color:var(--red)}
+.kmBtn[aria-pressed="true"] small{color:var(--red);opacity:.8}
+
+.fieldLbl{display:block;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:14px 0 7px}
+.input{
+  width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:14px;
+  background:#fff;outline:0;font-weight:700;transition:border-color .16s;
+}
+.input:focus{border-color:var(--gold)}
+
+.impact{
+  margin-top:18px;padding:22px;border-radius:18px;color:#fff;
+  background:linear-gradient(150deg,var(--navy),#123457);
+}
+.impact span{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.impact .val{font-size:clamp(2.1rem,8vw,2.9rem);font-weight:900;letter-spacing:-.045em;margin:6px 0 4px;line-height:1}
+.impact p{color:#bcd0e6;margin:0 0 18px;font-size:.94rem}
+.impact p b{color:#fff}
+
+/* ---------------- PIX ---------------- */
+.pixPanel{background:linear-gradient(150deg,#0a1e35,#123457);color:#fff;border:0}
+.pixSteps{display:grid;gap:11px;margin:20px 0}
+.pixStep{display:flex;gap:13px;align-items:flex-start}
+.pixStep i{
+  flex:none;width:27px;height:27px;border-radius:50%;background:var(--gold);color:var(--navy);
+  display:grid;place-items:center;font-weight:900;font-size:.82rem;font-style:normal;
+}
+.pixStep p{margin:0;color:#c3d5e8;font-size:.92rem;padding-top:2px}
+.pixKeyBox{
+  background:rgba(255,255,255,.09);border:1.5px dashed rgba(255,255,255,.35);
+  border-radius:14px;padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.92rem;word-break:break-all;margin-bottom:12px;text-align:center;font-weight:700;
+}
+.brBox{margin-top:16px;padding:15px;border-radius:16px;background:rgba(0,0,0,.26);border:1px solid rgba(255,255,255,.14)}
+.brBox.claro{background:#f5f8fb;border-color:#cfdae6}
+.brLabel{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:var(--gold);margin-bottom:9px}
+.brBox.claro .brLabel{color:#9a6a13}
+.codDoa{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  margin-bottom:10px;padding:9px 12px;border-radius:11px;
+  background:rgba(227,169,74,.15);border:1px solid rgba(227,169,74,.4);
+}
+.codDoa span{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--gold-soft)}
+.codDoa b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;font-weight:800;letter-spacing:.06em;color:#fff}
+.brBox.claro .codDoa{background:#fff6e5;border-color:#f0dcb6}
+.brBox.claro .codDoa span{color:#9a6a13}
+.brBox.claro .codDoa b{color:var(--ink)}
+.brCode{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:.66rem;line-height:1.5;word-break:break-all;
+  max-height:96px;overflow-y:auto;padding:11px;border-radius:11px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);color:#cfdcea;margin-bottom:11px;
+}
+.brBox.claro .brCode{background:#fff;border-color:#dce4ee;color:var(--ink)}
+.pendingBox{
+  background:rgba(227,169,74,.13);border:1.5px solid rgba(227,169,74,.45);
+  border-radius:14px;padding:16px;color:var(--gold-soft);font-size:.88rem;font-weight:700;text-align:center;
+}
+
+/* ---------------- FOTOS ---------------- */
+.dark{background:var(--navy);color:#fff}
+.dark h2{color:#fff}
+.rail{
+  display:grid;grid-auto-flow:column;grid-auto-columns:min(84%,420px);gap:14px;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;
+  scrollbar-width:thin;
+}
+.rail figure{
+  margin:0;position:relative;border-radius:20px;overflow:hidden;
+  aspect-ratio:4/3;scroll-snap-align:start;background:#12314f;
+}
+.rail img{width:100%;height:100%;object-fit:cover}
+.rail figcaption{
+  position:absolute;inset:auto 0 0 0;padding:44px 15px 13px;
+  background:linear-gradient(transparent,rgba(0,0,0,.86));
+  font-size:.74rem;color:#e8eef5;font-weight:600;
+}
+
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:26px}
+.fact{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:17px;padding:17px}
+.fact span{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:5px}
+.fact b{display:block;font-size:clamp(1.4rem,5.5vw,2rem);font-weight:900;letter-spacing:-.04em;line-height:1}
+.fact small{color:#93aac4;font-size:.74rem;font-weight:600}
+
+/* ---------------- VIDEOS ---------------- */
+.vidGrid{display:grid;gap:18px}
+.vidFrame{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:var(--shadow)}
+.vidFrame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* capa leve: o player do YouTube (cerca de 1 MB) só é baixado no clique */
+.ytCapa{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;cursor:pointer;background:#0a1622;display:block}
+.ytCapa img{width:100%;height:100%;object-fit:cover;opacity:.86;transition:opacity .2s,transform .3s}
+.ytCapa:hover img{opacity:1;transform:scale(1.03)}
+.ytPlay{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:68px;height:48px;border-radius:13px;background:rgba(216,35,47,.95);
+  display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.45);
+}
+.ytPlay::after{content:"";border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #fff;margin-left:3px}
+.vidSoon{
+  aspect-ratio:16/9;border-radius:18px;border:2px dashed var(--line);
+  display:grid;place-items:center;text-align:center;padding:22px;color:var(--muted);background:#fff;
+}
+
+/* ---------------- DEPOIMENTOS ---------------- */
+.quotes{display:grid;gap:15px}
+.quote{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 24px;
+  position:relative;box-shadow:var(--shadow);
+}
+.quote::before{
+  content:"“";position:absolute;top:-6px;left:18px;font-size:5rem;
+  color:var(--gold);opacity:.32;font-family:Georgia,serif;line-height:1;
+}
+.quote blockquote{margin:0 0 15px;font-size:1.04rem;font-weight:600;position:relative;letter-spacing:-.015em}
+.quote footer{font-size:.8rem;color:var(--muted);font-weight:700}
+.quote footer b{color:var(--ink)}
+
+/* ---------------- PARANAVAI ---------------- */
+.local{
+  background:linear-gradient(140deg,var(--red),#8f1620);color:#fff;
+  border-radius:26px;padding:clamp(28px,5vw,52px);
+}
+.local h3{font-size:clamp(1.6rem,5vw,2.5rem);margin-bottom:14px}
+.local p{color:#ffdbdf;margin:0;font-size:1.04rem}
+
+/* ---------------- MARCOS ---------------- */
+.miles{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.mile{
+  background:#fff;border:1.5px solid var(--line);border-radius:19px;padding:19px 16px;
+  text-align:center;transition:.2s;
+}
+.mile .ic{font-size:1.9rem;line-height:1;margin-bottom:8px;filter:grayscale(1);opacity:.42}
+.mile h3{font-size:1.18rem;margin-bottom:5px}
+.mile p{font-size:.79rem;color:var(--muted);margin:0 0 10px}
+.mile .tag{font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.mile.done{border-color:var(--green);background:#f2fbf6;box-shadow:0 10px 26px rgba(28,155,98,.15)}
+.mile.done .ic{filter:none;opacity:1}
+.mile.done .tag{color:var(--green)}
+
+/* ---------------- TRANSPARENCIA ---------------- */
+.tGrid{display:grid;gap:16px}
+.tLine{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+.tLine:last-child{border-bottom:0}
+.tLine span{color:var(--muted);font-weight:600;font-size:.92rem}
+.tLine b{font-size:1.14rem;font-weight:900;letter-spacing:-.03em;text-align:right}
+.trust{background:#fffaf0;border-color:#f0e2c4}
+.trust li{margin-bottom:9px;color:#4a3c1e;font-size:.92rem}
+
+/* ---------------- DIRETORIA ---------------- */
+.dirGrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.dirCard{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px 15px;box-shadow:var(--shadow)}
+.dirCargo{display:block;font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:800;margin-bottom:5px}
+.dirCard b{display:block;font-size:1rem;letter-spacing:-.025em;line-height:1.2}
+.dirZap{display:inline-block;margin-top:9px;font-size:.77rem;font-weight:800;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+.dirNota{display:block;margin-top:7px;font-size:.7rem;color:var(--muted);line-height:1.4}
+
+/* ---------------- MURAL ---------------- */
+.mural{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sup{
+  background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;
+  display:flex;align-items:center;gap:11px;
+}
+.sup .av{
+  flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg,var(--gold),#c98c2a);color:#fff;font-weight:900;font-size:.88rem;
+}
+.sup b{display:block;font-size:.88rem;letter-spacing:-.02em}
+.sup small{color:var(--red);font-weight:800;font-size:.78rem}
+.emptyState{
+  grid-column:1/-1;text-align:center;padding:34px 20px;border:2px dashed var(--line);
+  border-radius:19px;color:var(--muted);background:#fff;
+}
+
+/* ---------------- CERTIFICADO ---------------- */
+.certGrid{display:grid;gap:20px}
+.certPrev{
+  border-radius:20px;padding:30px 24px;text-align:center;color:#fff;
+  background:linear-gradient(150deg,var(--navy),#123457);
+  border:2px solid rgba(227,169,74,.42);box-shadow:var(--shadow-lg);
+}
+.certPrev img{width:76px;height:76px;border-radius:50%;object-fit:cover;margin:0 auto 16px;background:#fff;box-shadow:0 0 0 2px rgba(227,169,74,.7)}
+.certPrev .t{font-size:.66rem;letter-spacing:.19em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.certPrev .n{font-size:clamp(1.4rem,5.4vw,1.95rem);font-weight:900;letter-spacing:-.035em;margin:10px 0 12px;word-break:break-word}
+.certPrev .k{font-size:clamp(2.3rem,9vw,3.1rem);font-weight:900;color:var(--gold);letter-spacing:-.045em;line-height:1;margin:8px 0}
+.certPrev .s{color:#b6cade;font-size:.86rem;margin-top:12px}
+.certPrev .h{margin-top:16px;font-size:.78rem;letter-spacing:.13em;font-weight:800;color:var(--gold-soft)}
+
+/* ---------------- COMPARTILHAR ---------------- */
+.share{
+  background:linear-gradient(140deg,var(--red),#8f1620);color:#fff;
+  border:0;text-align:center;padding:clamp(30px,5vw,54px);
+}
+.share h2{font-size:clamp(1.6rem,5.2vw,2.6rem);margin-bottom:16px}
+.share p{color:#ffdbdf;max-width:600px;margin:0 auto 26px}
+
+/* ---------------- FOOTER + STICKY ---------------- */
+body>footer{background:var(--navy);color:#8ba3bc;padding:46px 0 calc(120px + var(--safe-b));font-size:.85rem}
+.fGrid{display:grid;gap:22px}
+body>footer strong{color:#fff;display:block;margin-bottom:5px}
+body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-offset:3px}
+
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;
+  padding:11px 15px calc(11px + var(--safe-b));
+  background:rgba(255,255,255,.93);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:flex;gap:11px;align-items:center;
+  transform:translateY(115%);transition:transform .35s cubic-bezier(.3,.9,.3,1);
+}
+.sticky.show{transform:translateY(0)}
+.sticky .info{flex:1;min-width:0}
+.sticky .info b{display:block;font-size:.95rem;font-weight:900;letter-spacing:-.03em}
+.sticky .info small{color:var(--muted);font-size:.72rem;font-weight:700}
+.sticky .btn{padding:14px 20px;font-size:.92rem;flex:none}
+
+/* ---------------- MODAL ---------------- */
+.modal{
+  position:fixed;inset:0;z-index:100;display:none;
+  background:rgba(5,14,26,.72);backdrop-filter:blur(5px);
+  align-items:flex-end;justify-content:center;
+}
+.modal.open{display:flex}
+.modalCard{
+  background:#fff;width:min(560px,100%);border-radius:26px 26px 0 0;
+  padding:26px 22px calc(26px + var(--safe-b));max-height:92vh;overflow-y:auto;
+  animation:up .3s cubic-bezier(.3,.9,.3,1);
+}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modalTop{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
+.modalTop h3{font-size:1.5rem}
+.xBtn{border:0;background:#f0f4f8;width:38px;height:38px;border-radius:50%;font-size:1.4rem;cursor:pointer;flex:none;line-height:1;color:var(--muted)}
+
+.toast{
+  position:fixed;left:50%;bottom:110px;transform:translate(-50%,20px);
+  background:var(--navy);color:#fff;padding:13px 22px;border-radius:99px;
+  font-weight:800;font-size:.9rem;z-index:200;opacity:0;pointer-events:none;
+  transition:.3s;box-shadow:var(--shadow-lg);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* O conteúdo só é escondido se o navegador realmente puder animá-lo (classe
+   jsReveal, definida no <head>). Sem JS ou sem IntersectionObserver, tudo
+   aparece normalmente — a página nunca fica em branco por causa da animação. */
+.reveal{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
+.jsReveal .reveal{opacity:0;transform:translateY(26px)}
+.jsReveal .reveal.in{opacity:1;transform:none}
+
+
+/* ---------------- HERO: rota vertical interativa ---------------- */
+.heroGrid{display:grid;gap:30px}
+.heroRoute{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;padding:20px 18px;backdrop-filter:blur(8px);
+}
+.hrTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px}
+.hrTop .t{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9db4cd;font-weight:800}
+.legBadge{
+  font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;font-weight:900;
+  padding:5px 11px;border-radius:99px;background:var(--gold);color:#241804;white-space:nowrap;
+}
+.legBadge.volta{background:var(--green);color:#fff}
+.hrHint{font-size:.72rem;color:#8ba3bc;margin:0 0 12px;line-height:1.4}
+
+.vroute{position:relative;height:360px;margin:16px 0 26px}
+.vtrack{position:absolute;left:13px;top:0;bottom:0;width:6px;border-radius:99px;background:rgba(255,255,255,.17)}
+.vfill{
+  position:absolute;left:13px;top:0;width:6px;border-radius:99px;height:0;
+  background:linear-gradient(180deg,var(--red),var(--gold));
+  transition:height 1.5s cubic-bezier(.22,.9,.28,1);
+}
+.vstop{
+  position:absolute;left:0;width:100%;transform:translateY(-50%);
+  display:block;padding:3px 0 3px 48px;   /* o texto começa depois da faixa do ônibus */
+  background:none;border:0;cursor:pointer;text-align:left;
+  color:inherit;font:inherit;border-radius:9px;
+}
+.vdot{
+  position:absolute;left:7px;top:50%;margin-top:-8.5px;
+  width:12px;height:12px;border-radius:50%;
+  background:#22405f;border:2.5px solid #7d97b3;
+  transition:transform .2s,background .2s,border-color .2s;
+}
+.vstop.passou .vdot{background:var(--gold);border-color:var(--gold)}
+.vstop[aria-pressed="true"] .vdot{transform:scale(1.5);background:var(--red);border-color:#fff}
+.vname{
+  display:block;font-size:.79rem;font-weight:800;letter-spacing:-.02em;color:#c6d6e6;
+  line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.vstop.passou .vname{color:#fff}
+.vstop:hover .vname,.vstop[aria-pressed="true"] .vname{color:#fff}
+.vkm{font-size:.72rem;color:#89a2bb;font-weight:700}
+.vstop.passou .vkm{color:#a9bed4}
+.vbus{
+  position:absolute;left:-2px;width:35px;height:35px;border-radius:50%;
+  display:grid;place-items:center;font-size:1rem;z-index:3;
+  background:var(--red);border:2.5px solid #fff;box-shadow:0 6px 18px rgba(216,35,47,.55);
+  transform:translateY(-50%);transition:top 1.6s cubic-bezier(.22,.9,.28,1);
+}
+.hrOut{margin-top:10px;padding:13px 14px;border-radius:15px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.13)}
+.hrOut>b{display:block;font-size:.9rem;letter-spacing:-.02em;line-height:1.3}
+.hrOut small{display:block;color:#a9bed4;font-size:.75rem;margin-top:4px;line-height:1.45}
+.hrOut .go{
+  display:inline-block;margin-top:9px;font-size:.79rem;font-weight:800;color:var(--gold);
+  background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+}
+
+/* ---------------- escolher trecho da estrada ---------------- */
+.segBox{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.segTabs{display:flex;gap:6px;background:#eef2f7;padding:5px;border-radius:14px;margin:2px 0 14px}
+.segTab{
+  flex:1;padding:10px 8px;border:0;background:none;border-radius:10px;
+  font-weight:800;font-size:.84rem;cursor:pointer;color:var(--muted);transition:.15s;
+}
+.segTab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(6,20,40,.13)}
+.segRow{display:grid;grid-template-columns:1fr;gap:10px}
+.segBar{position:relative;height:12px;border-radius:99px;background:#e3e9f0;margin:18px 0 8px;overflow:hidden}
+.segSel{position:absolute;top:0;bottom:0;border-radius:99px;left:0;width:0;background:linear-gradient(90deg,var(--red),var(--gold));transition:left .3s,width .3s}
+.segScale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--muted);font-weight:700}
+.segWarn{margin-top:12px;font-size:.79rem;font-weight:700;color:#9a6a13;background:#fff6e5;border:1px solid #f0dcb6;border-radius:12px;padding:10px 12px}
+.segNote{margin-top:10px}
+
+/* ---------------- BREAKPOINTS ---------------- */
+@media(min-width:700px){
+  .segRow{grid-template-columns:1fr 1fr}
+  /* sem isto o mapa cresce junto com o card e vira um bloco gigante no desktop */
+  .mapBox{max-width:580px;margin-inline:auto}
+  .heroStats{grid-template-columns:repeat(3,1fr)}
+  .hStat.wide{grid-column:1/-1}
+  .kmGrid{grid-template-columns:repeat(6,1fr)}
+  .facts{grid-template-columns:repeat(4,1fr)}
+  .miles{grid-template-columns:repeat(4,1fr)}
+  .quotes{grid-template-columns:repeat(2,1fr)}
+  .vidGrid{grid-template-columns:1fr 1fr}
+  .mural{grid-template-columns:repeat(3,1fr)}
+  .dirGrid{grid-template-columns:repeat(3,1fr)}
+  .fGrid{grid-template-columns:1fr 1fr 1fr}
+  .modal{align-items:center}
+  .modalCard{border-radius:26px}
+}
+@media(min-width:900px){
+  .heroGrid{grid-template-columns:minmax(0,1fr) 348px;column-gap:46px;align-items:start}
+  .heroMain{grid-column:1;grid-row:1}
+  .heroRoute{grid-column:2;grid-row:1/span 2;position:sticky;top:24px}
+  .heroBottom{grid-column:1;grid-row:2}
+}
+@media(min-width:960px){
+  .adoptGrid{grid-template-columns:1fr 1.15fr;align-items:start}
+  .tGrid{grid-template-columns:1fr 1fr}
+  .certGrid{grid-template-columns:1fr 1fr;align-items:center}
+  .sticky{display:none}
+  .quotes{grid-template-columns:repeat(4,1fr)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;scroll-behavior:auto !important;
+  }
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<script>
+  // Ativa o modo "revelar ao rolar" apenas quando o navegador consegue executá-lo.
+  if ("IntersectionObserver" in window &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("jsReveal");
+  }
+</script>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap heroInner">
+    <div class="brandRow">
+      <img class="brandLogo" src="assets/logo-vale-do-ivai.jpg"
+           alt="Emblema do Clube de Desbravadores Vale do Ivaí, Paranavaí, Paraná">
+      <div class="brandTxt">
+        <strong>Clube de Desbravadores Vale do Ivaí</strong>
+        <span>Paranavaí · Paraná</span>
+      </div>
+    </div>
+
+    <div class="heroGrid">
+    <div class="heroMain">
+    <div class="heroTag"><i></i> Campanha de transporte · Campori 2027</div>
+
+    <h1>Rumo ao<br>Campori <em>2027.</em></h1>
+
+    <p class="heroSub">
+      <b>1.102 quilômetros</b> separam Paranavaí do VI Campori Sul-Americano
+      de Desbravadores, em Barretos. Nós já começamos a viagem.
+      <b>Até onde você pode nos levar?</b>
+    </p>
+    </div>
+
+    <aside class="heroRoute" aria-labelledby="hrTitulo">
+      <div class="hrTop">
+        <span class="t" id="hrTitulo">A viagem, em tempo real</span>
+        <span class="legBadge" id="legBadge">Ida</span>
+      </div>
+      <div class="vroute" id="vroute">
+        <div class="vtrack"></div>
+        <div class="vfill" id="vfill"></div>
+        <div class="vbus" id="vbus" aria-hidden="true">🚌</div>
+      </div>
+
+      <div class="hrOut" id="hrOut" role="status" aria-live="polite">
+        <b id="hrTxt">Escolha uma cidade do trajeto.</b>
+        <small id="hrSub">São 15 cidades entre Paranavaí e Barretos.</small>
+        <button type="button" class="go" id="hrGo" hidden>Adotar este trecho →</button>
+      </div>
+    </aside>
+
+    <div class="heroBottom">
+    <div class="heroStats">
+      <div class="hStat">
+        <span>Arrecadado</span>
+        <b id="sRaised">R$ 0</b>
+        <small>de <span id="sGoal">R$ 15.500</span></small>
+      </div>
+      <div class="hStat">
+        <span>Estrada garantida</span>
+        <b id="sKm">0 km</b>
+        <small>de <span id="sKmTotal">1.102 km</span></small>
+      </div>
+      <div class="hStat">
+        <span>Faltam</span>
+        <b id="sLeftKm">1.102 km</b>
+        <small id="sLeftBRL">R$ 15.500</small>
+      </div>
+
+      <div class="hStat wide progWrap">
+        <div class="progTop"><span>Progresso da jornada</span><b id="sPct">0%</b></div>
+        <div class="progBar"><div class="progFill" id="sFill"></div></div>
+      </div>
+    </div>
+
+    <div class="heroCta">
+      <a class="btn" href="#adotar">Levar a gente +10 km 🚌</a>
+      <a class="btn ghost" href="#jornada">Ver a jornada</a>
+    </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= JORNADA ================= -->
+<section id="jornada">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">A jornada</div>
+      <h2>Você não doa só dinheiro.<br>Você <span style="color:var(--red)">move o ônibus.</span></h2>
+      <p class="lead">
+        São aproximadamente 551 km de Paranavaí até Barretos. Ida e volta: 1.102 km.
+        Dividimos a meta de transporte por essa estrada inteira — então
+        <strong style="color:var(--ink)">cada R$ 14,07 equivale a 1 km da missão</strong>.
+        O ônibus abaixo se move sozinho, conforme a campanha avança.
+      </p>
+    </div>
+
+    <div class="card routeCard reveal">
+      <div class="routeHud">
+        <div class="hud"><span>Posição</span><b id="hudKm">0 km</b></div>
+        <div class="hud"><span>Etapa</span><b id="hudLeg">Ida</b></div>
+        <div class="hud"><span>Concluído</span><b id="hudPct">0%</b></div>
+      </div>
+
+      <div class="mapBox">
+        <svg viewBox="0 0 560 460" role="img"
+             aria-labelledby="mapTitle mapDesc" id="routeSvg">
+          <title id="mapTitle">Mapa da jornada Paranavaí — Barretos — Paranavaí</title>
+          <desc id="mapDesc">Circuito fechado: a ida ocupa a faixa de cima e a volta a faixa de baixo. O ônibus avança conforme a arrecadação e viaja sempre para frente.</desc>
+
+          <defs>
+            <linearGradient id="gRoad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#d8232f"/>
+              <stop offset="1" stop-color="#e3a94a"/>
+            </linearGradient>
+          </defs>
+
+          <!-- estrada base -->
+          <path id="roadBase"
+                d="M 90 230 A 70 70 0 0 1 160 160 L 400 160 A 70 70 0 0 1 470 230 A 70 70 0 0 1 400 300 L 160 300 A 70 70 0 0 1 90 230"
+                fill="none" stroke="#c1cedc" stroke-width="26" stroke-linecap="round"/>
+          <!-- faixa central tracejada -->
+          <path d="M 90 230 A 70 70 0 0 1 160 160 L 400 160 A 70 70 0 0 1 470 230 A 70 70 0 0 1 400 300 L 160 300 A 70 70 0 0 1 90 230"
+                fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="11 13" opacity=".9"/>
+          <!-- progresso -->
+          <path id="roadDone"
+                d="M 90 230 A 70 70 0 0 1 160 160 L 400 160 A 70 70 0 0 1 470 230 A 70 70 0 0 1 400 300 L 160 300 A 70 70 0 0 1 90 230"
+                fill="none" stroke="url(#gRoad)" stroke-width="26" stroke-linecap="round"/>
+
+          <!-- distância total, no vazio central -->
+          <text class="totalKm"  x="280" y="238" text-anchor="middle">1.102 km</text>
+          <text class="totalSub" x="280" y="266" text-anchor="middle">IDA E VOLTA</text>
+
+          <!-- sentido de cada faixa -->
+          <text class="laneLabel" x="280" y="128" text-anchor="middle">IDA</text>
+          <path d="M 322 118 l 15 6 l -15 6 z" fill="#8b9dae"/>
+          <text class="laneLabel" x="280" y="352" text-anchor="middle">VOLTA</text>
+          <path d="M 222 342 l -15 6 l 15 6 z" fill="#8b9dae"/>
+
+          <!-- Paranavaí -->
+          <path d="M 90 250 L 90 376" stroke="#b9c6d4" stroke-width="2" stroke-dasharray="4 6"/>
+          <circle cx="90" cy="230" r="14" fill="#fff" stroke="#0d1520" stroke-width="5"/>
+          <circle cx="90" cy="230" r="4.5" fill="#0d1520"/>
+          <text class="cityName" x="90" y="404" text-anchor="middle">PARANAVAÍ</text>
+          <text class="cityKm"   x="90" y="430" text-anchor="middle">km 0 · 1.102</text>
+
+          <!-- Barretos -->
+          <path d="M 470 250 L 470 376" stroke="#e8b9bd" stroke-width="2" stroke-dasharray="4 6"/>
+          <circle cx="470" cy="230" r="14" fill="#fff" stroke="#d8232f" stroke-width="5"/>
+          <circle cx="470" cy="230" r="4.5" fill="#d8232f"/>
+          <text class="cityName" x="470" y="404" text-anchor="middle">BARRETOS</text>
+          <text class="cityKm"   x="470" y="430" text-anchor="middle">km 551</text>
+
+          <!-- ônibus: posição e ângulo vêm da tangente da estrada -->
+          <g id="bus">
+            <rect x="-25" y="-15" width="50" height="27" rx="7" fill="#d8232f"/>
+            <rect x="-25" y="-15" width="50" height="9"  rx="5" fill="#fff" opacity=".22"/>
+            <rect x="-19" y="-10" width="12" height="9" rx="2.5" fill="#bfe2ff"/>
+            <rect x="-4"  y="-10" width="12" height="9" rx="2.5" fill="#bfe2ff"/>
+            <rect x="11"  y="-10" width="10" height="9" rx="2.5" fill="#e8f4ff"/>
+            <circle cx="26" cy="-2" r="2.6" fill="#ffd76b"/>
+            <circle cx="-14" cy="13" r="5.4" fill="#12202e"/>
+            <circle cx="15"  cy="13" r="5.4" fill="#12202e"/>
+            <circle cx="-14" cy="13" r="2.1" fill="#7d8b99"/>
+            <circle cx="15"  cy="13" r="2.1" fill="#7d8b99"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="routeStatus" id="routeStatus">📍 Saindo de Paranavaí</div>
+
+      <p class="fine" style="margin:14px 0 0">
+        A ida ocupa a faixa de cima e a volta a faixa de baixo — o ônibus sempre viaja para frente.
+        Distância rodoviária aproximada, usada como referência da campanha.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DESTINO / FOTOS ================= -->
+<section class="dark">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow gold">O destino</div>
+      <h2>É isso que espera por eles.</h2>
+      <p class="lead on-dark">
+        Camporis de Desbravadores realizados no Parque do Peão, em Barretos:
+        arena lotada, milhares de barracas e clubes de todo o continente reunidos.
+      </p>
+    </div>
+
+    <div class="rail reveal">
+      <figure>
+        <img src="assets/fotos/campori-barretos-1.jpg" loading="lazy" decoding="async"
+             alt="Multidão de Desbravadores reunidos durante um Campori no Parque do Peão, em Barretos">
+        <figcaption>Campori em Barretos · foto: Notícias Adventistas</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/fotos/campori-barretos-2.jpg" loading="lazy" decoding="async"
+             alt="Vista do Parque do Peão de Barretos durante um Campori de Desbravadores">
+        <figcaption>Parque do Peão durante Campori · foto: Portal Bueno</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/fotos/campori-barretos-3.jpg" loading="lazy" decoding="async"
+             alt="Milhares de barracas montadas por clubes de Desbravadores acampados em Barretos">
+        <figcaption>Milhares de Desbravadores acampados · foto: Guaíra News</figcaption>
+      </figure>
+    </div>
+
+    <p class="fine on-dark" style="margin-top:14px">
+      Imagens de edições anteriores, exibidas com crédito à publicação de origem.
+      Antes da publicação definitiva, confirme a autorização de uso ou substitua por fotos
+      oficiais do Campori e do próprio Clube Vale do Ivaí.
+    </p>
+
+    <!-- Porte do evento -->
+    <div class="head reveal" style="margin-top:64px">
+      <div class="eyebrow gold">O tamanho da aventura</div>
+      <h2>Paranavaí dentro de um encontro sul-americano.</h2>
+      <p class="lead on-dark">
+        O VI Campori Sul-Americano de Desbravadores, com o tema <strong style="color:#fff">“Sempre Desbravador”</strong>,
+        será realizado no Parque do Peão, em Barretos (SP), em duas edições:
+        <strong style="color:#fff">Alpha, de 5 a 10 de janeiro de 2027</strong>, e
+        <strong style="color:#fff">Omega, de 12 a 17 de janeiro de 2027</strong>.
+      </p>
+    </div>
+
+    <div class="facts reveal">
+      <div class="fact"><span>Participantes</span><b>+120 mil</b><small>somando as duas edições</small></div>
+      <div class="fact"><span>Abrangência</span><b>8 países</b><small>da América do Sul</small></div>
+      <div class="fact"><span>Edição</span><b>6ª</b><small>Campori Sul-Americano</small></div>
+      <div class="fact"><span>Idades</span><b>10–15</b><small>anos, além da liderança</small></div>
+    </div>
+
+    <p class="fine on-dark" style="margin-top:14px">
+      Dados divulgados pela organização oficial do evento.
+      <a href="https://camporidsa.org/pt/" target="_blank" rel="noopener"
+         style="color:var(--gold-soft);text-decoration:underline">Conferir no site oficial do Campori ↗</a>
+    </p>
+  </div>
+</section>
+
+<!-- ================= VIDEOS ================= -->
+<section>
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Veja com seus olhos</div>
+      <h2>Entenda a missão em poucos minutos.</h2>
+    </div>
+    <div class="vidGrid reveal">
+      <div>
+        <div class="vidFrame">
+          <button type="button" class="ytCapa" data-yt="ZBojPLtE4eY" data-titulo="Vídeo sobre o Campori Sul-Americano de Desbravadores"
+                  aria-label="Assistir: Vídeo sobre o Campori Sul-Americano de Desbravadores">
+            <img src="https://i.ytimg.com/vi/ZBojPLtE4eY/hqdefault.jpg" alt="" loading="lazy" decoding="async"
+                 onerror="this.style.display='none'">
+            <span class="ytPlay" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="fine" style="margin-top:11px">O tamanho da experiência que espera nossos Desbravadores.</p>
+      </div>
+      <div>
+        <div class="vidFrame">
+          <button type="button" class="ytCapa" data-yt="-OGYc9zg9zE" data-titulo="Segundo vídeo sobre o Campori de Desbravadores"
+                  aria-label="Assistir: Segundo vídeo sobre o Campori de Desbravadores">
+            <img src="https://i.ytimg.com/vi/-OGYc9zg9zE/hqdefault.jpg" alt="" loading="lazy" decoding="async"
+                 onerror="this.style.display='none'">
+            <span class="ytPlay" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="fine" style="margin-top:11px">Uma segunda visão do Campori.</p>
+      </div>
+    </div>
+
+    <div class="vidSoon reveal" style="margin-top:18px">
+      <div>
+        <strong style="color:var(--ink);font-size:1.05rem">🎬 Espaço reservado: vídeo do Vale do Ivaí</strong>
+        <p class="fine" style="margin:8px auto 0;max-width:440px">
+          45 a 90 segundos com as crianças, o diretor e o motivo da viagem.
+          É o conteúdo que mais converte — grave e substitua este bloco.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEPOIMENTOS ================= -->
+<section style="background:#eaf0f6">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Na voz deles</div>
+      <h2>Quem vai viver essa história.</h2>
+      <p class="lead">
+        Quatro dos nossos Desbravadores, e o motivo de cada um querer estar em Barretos.
+      </p>
+    </div>
+    <div class="quotes reveal">
+      <article class="quote">
+        <blockquote>Eu gosto quando a gente ora junto no clube. Em Barretos vai ter um monte de desbravador orando na mesma hora, eu quero muito ver isso.</blockquote>
+        <footer><b>Lorenzo</b> · 11 anos</footer>
+      </article>
+      <article class="quote">
+        <blockquote>Meu pai fala que Deus cuida da gente na viagem. Eu quero ir pra Barretos e voltar contando que deu tudo certo.</blockquote>
+        <footer><b>João Vitor</b> · 11 anos</footer>
+      </article>
+      <article class="quote">
+        <blockquote>No Campori a gente estuda a Bíblia junto com gente de tudo quanto é lugar. Acho que isso faz a minha fé ficar maior.</blockquote>
+        <footer><b>Miguel</b> · 13 anos</footer>
+      </article>
+      <article class="quote">
+        <blockquote>Quero ir pra Barretos pra ficar mais perto de Deus e do meu clube ao mesmo tempo. Acho que é isso que faz o Campori ser diferente.</blockquote>
+        <footer><b>Nicolas</b> · 14 anos</footer>
+      </article>
+    </div>
+    <p class="fine" style="margin-top:16px">
+      Textos preliminares, escritos a partir do que eles contam nas reuniões.
+      Serão substituídos pelas gravações de cada Desbravador, com autorização das famílias.
+    </p>
+  </div>
+</section>
+
+<!-- ================= PARANAVAI ================= -->
+<section>
+  <div class="wrap">
+    <div class="local reveal">
+      <div class="eyebrow" style="color:#ffd0d4">Identidade</div>
+      <h3>Paranavaí estará em Barretos.</h3>
+      <p>
+        Um clube de Paranavaí vai atravessar 551 km para se juntar a Desbravadores de oito países.
+        Nossos jovens vão levar o nome da nossa cidade — e voltar com histórias que ficam para a vida inteira.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ADOTAR KM + PIX ================= -->
+<section id="adotar" style="background:#eaf0f6">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Adote seus quilômetros</div>
+      <h2>Quantos quilômetros você quer levar?</h2>
+      <p class="lead">Escolha um trecho da estrada. O valor correspondente aparece na hora, sem letras miúdas.</p>
+    </div>
+
+    <div class="adoptGrid">
+      <div class="card reveal">
+        <div class="eyebrow">Escolha seu trecho</div>
+        <div class="kmGrid" id="kmGrid" role="group" aria-label="Quantidade de quilômetros"></div>
+
+        <div class="segBox">
+          <div class="eyebrow">Ou escolha um trecho da estrada</div>
+          <p class="fine" style="margin:0 0 12px">
+            De onde até onde você quer levar o ônibus. As cidades são as do trajeto real
+            Paranavaí → Barretos.
+          </p>
+
+          <div class="segTabs" role="tablist" aria-label="Como escolher o trecho">
+            <button type="button" class="segTab" id="tabCidade" role="tab" aria-selected="true"
+                    aria-controls="paneCidade">Por cidade</button>
+            <button type="button" class="segTab" id="tabKm" role="tab" aria-selected="false"
+                    aria-controls="paneKm">Por quilômetro</button>
+          </div>
+
+          <div id="paneCidade" role="tabpanel" aria-labelledby="tabCidade">
+            <div class="segRow">
+              <div>
+                <label class="fieldLbl" for="selDe">De</label>
+                <select class="input" id="selDe"></select>
+              </div>
+              <div>
+                <label class="fieldLbl" for="selAte">Até</label>
+                <select class="input" id="selAte"></select>
+              </div>
+            </div>
+          </div>
+
+          <div id="paneKm" role="tabpanel" aria-labelledby="tabKm" hidden>
+            <div class="segRow">
+              <div>
+                <label class="fieldLbl" for="kmDe">Do km</label>
+                <input class="input" id="kmDe" type="number" min="0" max="551" step="1" value="0" inputmode="numeric">
+              </div>
+              <div>
+                <label class="fieldLbl" for="kmAte">Até o km</label>
+                <input class="input" id="kmAte" type="number" min="1" max="551" step="1" value="50" inputmode="numeric">
+              </div>
+            </div>
+          </div>
+
+          <div class="segBar"><div class="segSel" id="segSel"></div></div>
+          <div class="segScale"><span>Paranavaí · km 0</span><span>Barretos · km 551</span></div>
+
+          <div class="segWarn" id="segWarn" hidden></div>
+
+          <button type="button" class="btn full segNote" id="doOnde"
+                  style="background:#eef2f7;color:var(--ink);box-shadow:none">
+            📍 Começar de onde o ônibus está
+          </button>
+        </div>
+
+        <div class="impact">
+          <span>Seu impacto</span>
+          <div class="val" id="impactVal">R$ 140,65</div>
+          <p id="impactTxt">Você leva o Vale do Ivaí <b>10 km</b> mais perto de Barretos.</p>
+          <button class="btn full" id="openPix">Quero levar esse trecho 🚌</button>
+        </div>
+
+        <p class="fine" style="margin-top:14px">
+          A equivalência em quilômetros é apenas uma forma transparente de visualizar a meta.
+          Todo valor recebido é destinado ao transporte do clube para o Campori.
+        </p>
+      </div>
+
+      <div class="card pixPanel reveal" id="pix">
+        <div class="eyebrow gold">Como contribuir</div>
+        <h3 style="font-size:1.7rem;margin-bottom:6px">PIX em quatro passos</h3>
+
+        <div class="pixSteps">
+          <div class="pixStep"><i>1</i><p>Escolha quantos quilômetros quer adotar.</p></div>
+          <div class="pixStep"><i>2</i><p>Copie o código Pix já com o valor e cole no app do seu banco.</p></div>
+          <div class="pixStep"><i>3</i><p>Envie o comprovante pelo WhatsApp do clube — o código da sua doação já vai junto.</p></div>
+          <div class="pixStep"><i>4</i><p>Confirmado o recebimento, o ônibus avança na estrada e seu certificado fica disponível.</p></div>
+        </div>
+
+        <div id="pixReady" hidden>
+          <div class="brBox" style="margin-top:4px">
+            <span class="brLabel">Pix Copia e Cola · valor já preenchido</span>
+            <div class="codDoa"><span>Código desta doação</span><b id="codDoacao">—</b></div>
+            <div class="brCode" id="brcodeTxt"></div>
+            <button class="btn green full" id="copyBrcode">
+              <span>📋 Copiar código de <b id="brValor">R$ 140,65</b></span>
+            </button>
+            <p class="fine on-dark" style="margin:11px 0 0">
+              Cole no app do banco em <strong>Pix › Pix Copia e Cola</strong>.
+              O valor já vai junto, não precisa digitar nada.
+            </p>
+            <p class="fine on-dark" style="margin:9px 0 0">
+              O código acima identifica a sua doação e já vai junto na mensagem do
+              WhatsApp quando você enviar o comprovante.
+            </p>
+          </div>
+
+          <p class="fine on-dark" id="pixReceiver" style="text-align:center;margin:16px 0 0"></p>
+        </div>
+
+        <div id="pixPending">
+          <div class="pendingBox">
+            ⚠️ Chave PIX ainda não configurada.<br>
+            <span style="font-weight:600;opacity:.85">Preencha <code>pix.chave</code> e <code>pix.recebedor</code> em <code>dados.json</code>.</span>
+          </div>
+        </div>
+
+        <button class="btn green full" id="sendProof" style="margin-top:10px">📲 Enviar comprovante no WhatsApp</button>
+        <p class="fine on-dark" style="margin-top:12px">
+          O WhatsApp abre com a mensagem já escrita. Por segurança do próprio aplicativo,
+          o anexo do comprovante é feito por você na conversa.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MARCOS ================= -->
+<section>
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Marcos da estrada</div>
+      <h2>Cada trecho vira uma conquista.</h2>
+    </div>
+    <div class="miles reveal">
+      <div class="mile" data-mile="275"><div class="ic">🏁</div><h3>275 km</h3><p>Primeiro quarto da missão.</p><span class="tag">A desbloquear</span></div>
+      <div class="mile" data-mile="551"><div class="ic">🏕️</div><h3>551 km</h3><p>Chegada simbólica a Barretos.</p><span class="tag">A desbloquear</span></div>
+      <div class="mile" data-mile="826"><div class="ic">🔥</div><h3>826 km</h3><p>Três quartos da jornada.</p><span class="tag">A desbloquear</span></div>
+      <div class="mile" data-mile="1102"><div class="ic">🎉</div><h3>1.102 km</h3><p>Ida e volta garantidas.</p><span class="tag">A desbloquear</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRANSPARENCIA ================= -->
+<section id="transparencia" style="background:#eaf0f6">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Transparência</div>
+      <h2>Meta clara. Progresso visível.</h2>
+      <p class="lead">Quem contribui merece saber exatamente onde a campanha está.</p>
+    </div>
+    <div class="tGrid reveal">
+      <div class="card">
+        <div class="tLine"><span>Meta de transporte</span><b id="tGoal">R$ 15.500</b></div>
+        <div class="tLine"><span>Total recebido</span><b id="tRaised">R$ 0</b></div>
+        <div class="tLine"><span>Falta arrecadar</span><b id="tLeft">R$ 15.500</b></div>
+        <div class="tLine"><span>Estrada financiada</span><b id="tKm">0 / 1.102 km</b></div>
+        <div class="tLine"><span>Contribuições</span><b id="tCount">—</b></div>
+        <div class="tLine"><span>Última atualização</span><b id="tUpdate">—</b></div>
+      </div>
+      <div class="card trust">
+        <div class="eyebrow" style="color:#9a6a13">Prestação de contas</div>
+        <h3 style="font-size:1.4rem;margin-bottom:12px">Para onde vai o dinheiro</h3>
+        <p style="color:#4a3c1e;font-size:.95rem;margin-bottom:14px">
+          As contribuições vão para a <strong>conta oficial da Igreja Adventista do Sétimo Dia</strong>
+          — União Sul Brasileira —, pela chave Pix <strong>iasd.paranavai@anp.org.br</strong>.
+          Nenhum valor passa por conta pessoal.
+        </p>
+        <p style="color:#4a3c1e;font-size:.95rem;margin-bottom:14px">
+          Por ser uma conta institucional, que também recebe outros valores da igreja,
+          <strong>cada doação da campanha recebe um código próprio</strong> (começando com
+          <code>VALE</code>). É esse código que identifica a entrada e permite prestar
+          contas só do que é do Campori.
+        </p>
+        <h3 style="font-size:1.4rem;margin:18px 0 12px">O que será publicado aqui</h3>
+        <ul style="padding-left:19px;margin:0">
+          <li>Orçamento e contrato do transporte</li>
+          <li>Atualização periódica do total arrecadado</li>
+          <li>Comprovantes das despesas da viagem</li>
+          <li>Contato de um responsável pelo clube</li>
+          <li>Prestação de contas final após o Campori</li>
+        </ul>
+        <p class="fine" style="color:#7a6428;margin:14px 0 0">
+          Sem publicar dados pessoais, documentos com CPF ou informações bancárias sensíveis.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DIRETORIA ================= -->
+<section id="diretoria">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Quem está por trás</div>
+      <h2>A diretoria do clube.</h2>
+      <p class="lead">
+        São eles que organizam a viagem e respondem pela campanha.
+        Qualquer dúvida, é só chamar.
+      </p>
+    </div>
+
+    <div class="dirGrid reveal">
+      <div class="dirCard">
+        <span class="dirCargo">Diretor</span>
+        <b>Eder Dias</b>
+        <a class="dirZap" href="https://wa.me/5544997295175" target="_blank" rel="noopener">Falar no WhatsApp ↗</a>
+      </div>
+      <div class="dirCard">
+        <span class="dirCargo">Diretor associado</span>
+        <b>André Lima</b>
+      </div>
+      <div class="dirCard">
+        <span class="dirCargo">Capelão</span>
+        <b>Guilherme Mestriner</b>
+        <a class="dirZap" href="https://wa.me/5544984033799" target="_blank" rel="noopener">Falar no WhatsApp ↗</a>
+        <small class="dirNota">É para este número que vão os comprovantes.</small>
+      </div>
+      <div class="dirCard">
+        <span class="dirCargo">Tesoureira</span>
+        <b>Camila Nogueira</b>
+      </div>
+      <div class="dirCard">
+        <span class="dirCargo">Secretária</span>
+        <b>Isabelly Lima</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MURAL ================= -->
+<section>
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Mural</div>
+      <h2>Quem está colocando o ônibus na estrada.</h2>
+      <p class="lead">Quem contribui escolhe aparecer aqui ou permanecer anônimo.</p>
+    </div>
+    <div class="mural reveal" id="mural"></div>
+  </div>
+</section>
+
+<!-- ================= CERTIFICADO ================= -->
+<section style="background:#eaf0f6">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Depois de ajudar</div>
+      <h2>Leve sua parte da estrada com você.</h2>
+      <p class="lead">Gere uma arte para compartilhar no WhatsApp ou nos Stories. O valor doado não aparece — só os quilômetros.</p>
+    </div>
+
+    <div class="certGrid reveal">
+      <div class="card">
+        <label class="fieldLbl" for="certName">Seu nome ou da sua família</label>
+        <input class="input" id="certName" placeholder="Ex.: Família Silva" maxlength="30" autocomplete="name">
+
+        <label class="fieldLbl" for="certKm">Quilômetros que você levou</label>
+        <input class="input" id="certKm" type="number" min="1" max="1102" value="10" inputmode="numeric">
+
+        <label class="fieldLbl" for="certFmt">Formato da arte</label>
+        <select class="input" id="certFmt">
+          <option value="feed">Feed / WhatsApp — 1080 × 1350</option>
+          <option value="story">Stories — 1080 × 1920</option>
+        </select>
+
+        <button class="btn dark full" id="makeCert" style="margin-top:18px">⬇️ Gerar e compartilhar certificado</button>
+        <p class="fine" style="margin-top:12px">
+          No celular abre o menu de compartilhamento. No computador, a imagem é baixada.
+        </p>
+      </div>
+
+      <div class="certPrev">
+        <img src="assets/logo-vale-do-ivai.jpg" alt="">
+        <div class="t">Eu ajudei essa missão</div>
+        <div class="n" id="cName">SEU NOME</div>
+        <div style="font-size:.96rem;color:#b6cade">levou o Clube Vale do Ivaí</div>
+        <div class="k" id="cKm">10 KM</div>
+        <div style="font-size:.96rem;color:#b6cade">mais perto do Campori 2027</div>
+        <div class="s">Paranavaí → Barretos</div>
+        <div class="h">#EuLeveiOVale</div>
+      </div>
+    </div>
+    <canvas id="certCanvas" hidden></canvas>
+  </div>
+</section>
+
+<!-- ================= COMPARTILHAR ================= -->
+<section>
+  <div class="wrap">
+    <div class="card share reveal">
+      <div class="eyebrow" style="color:#ffd0d4">Efeito corrente</div>
+      <h2>Uma pessoa leva 1 km. Outra leva 50.<br>A estrada vai ficando menor.</h2>
+      <p>Se você não puder contribuir agora, compartilhar já ajuda a mover o ônibus.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:11px;justify-content:center">
+            <button class="btn green" id="shareBtn">Compartilhar no WhatsApp</button>
+            <button class="btn ghost" id="shareOutros">Outros apps</button>
+          </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap fGrid">
+    <div>
+      <strong>Clube de Desbravadores Vale do Ivaí</strong>
+      Paranavaí · Paraná · Brasil<br>ANP · USB
+    </div>
+    <div>
+      <strong>VI Campori Sul-Americano</strong>
+      “Sempre Desbravador” · janeiro de 2027<br>
+      Parque do Peão · Barretos — SP<br>
+      <a href="https://camporidsa.org/pt/" target="_blank" rel="noopener">camporidsa.org ↗</a>
+    </div>
+    <div>
+      <strong>Campanha de transporte</strong>
+      Meta: <span id="fGoal">R$ 15.500</span><br>
+      1.102 km · ida e volta<br>
+      <a href="#transparencia">Ver transparência</a>
+    </div>
+  </div>
+</footer>
+
+<!-- sticky mobile -->
+<div class="sticky" id="sticky">
+  <div class="info">
+    <b id="stkKm">0 km garantidos</b>
+    <small id="stkLeft">faltam 1.102 km</small>
+  </div>
+  <a class="btn" href="#adotar">Adotar km</a>
+</div>
+
+<!-- modal PIX -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div>
+        <div class="eyebrow">Adotar trecho</div>
+        <h3 id="mTitle">Você escolheu <span id="mKm">10 km</span></h3>
+      </div>
+      <button class="xBtn" id="closeModal" aria-label="Fechar">×</button>
+    </div>
+    <p style="color:var(--muted)">Valor correspondente: <b style="color:var(--ink);font-size:1.3rem" id="mVal">R$ 140,65</b></p>
+    <div id="mPixReady" hidden>
+      <div class="brBox claro" style="margin-top:4px">
+        <span class="brLabel">Pix Copia e Cola · valor já preenchido</span>
+        <div class="codDoa"><span>Código desta doação</span><b id="mCodDoacao">—</b></div>
+        <div class="brCode" id="mBrcode"></div>
+        <button class="btn green full" id="mCopyBrcode">
+          <span>📋 Copiar código de <b id="mBrValor">R$ 140,65</b></span>
+        </button>
+      </div>
+      <p class="fine" style="margin:12px 0">
+        Cole no app do banco em <strong>Pix › Pix Copia e Cola</strong>. O valor já vai preenchido.
+      </p>
+    </div>
+    <div id="mPixPending">
+      <div class="pendingBox" style="background:#fff6e5;border-color:#f0dcb6;color:#8a5f10">
+        ⚠️ A chave PIX oficial ainda não foi configurada nesta campanha.
+      </div>
+    </div>
+    <button class="btn green full" id="mProof" style="margin-top:10px">📲 Falar no WhatsApp e enviar comprovante</button>
+    <p class="fine" style="margin-top:14px">Este site não processa pagamentos. A transferência acontece no seu próprio banco.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* =======================================================================
+   CONFIGURAÇÃO
+   Os valores abaixo são o padrão. Se existir um arquivo dados.json ao lado
+   do index.html, ele sobrescreve estes campos — assim dá para atualizar a
+   campanha pelo celular sem tocar em código.
+   ======================================================================= */
+var CONFIG = {
+  meta: 15500,          // meta em reais
+  kmIda: 551,           // km de Paranavaí até Barretos
+  arrecadado: 0,        // total já recebido
+  atualizadoEm: "",     // ex.: "2026-09-07"
+  pix: { chave:"", tipo:"", recebedor:"", recebedorCurto:"", cidade:"", instituicao:"" },
+  whatsapp: "",         // ex.: "5544999999999"
+  edicao: "",           // "Alpha" ou "Omega" — deixe vazio se ainda não definido
+  dataEvento: "",       // ex.: "2027-01-05T08:00:00-03:00"
+  registroURL: "",      // opcional: URL da planilha que recebe os códigos gerados
+  totalApoiadores: null,// número real de contribuições, ou null
+  apoiadores: []        // [{nome:"Família Silva", km:10, anonimo:false}]
+};
+
+/* Cidades reais do trajeto rodoviário Paranavaí → Barretos.
+   Quilometragem obtida do traçado real da rota (OSRM/OpenStreetMap) e conferida
+   contra a posição de cada município — todas ficam a menos de 6 km da estrada.
+   A rota real dá 550,2 km; usamos 551 km, o número declarado da campanha.
+   `hero: true` marca as que aparecem na estrada vertical do topo (as demais
+   ficariam sobrepostas por estarem muito próximas umas das outras). */
+var CIDADES = [
+  { km:0,   n:"Paranavaí",             uf:"PR", hero:true },
+  { km:18,  n:"Alto Paraná",           uf:"PR" },
+  { km:58,  n:"Cruzeiro do Sul",       uf:"PR", hero:true },
+  { km:83,  n:"Colorado",              uf:"PR" },
+  { km:110, n:"Santo Inácio",          uf:"PR", hero:true },
+  { km:188, n:"Presidente Prudente",   uf:"SP", hero:true },
+  { km:198, n:"Regente Feijó",         uf:"SP" },
+  { km:213, n:"Martinópolis",          uf:"SP" },
+  { km:269, n:"Parapuã",               uf:"SP", hero:true },
+  { km:280, n:"Rinópolis",             uf:"SP" },
+  { km:356, n:"Penápolis",             uf:"SP", hero:true },
+  { km:415, n:"José Bonifácio",        uf:"SP", hero:true },
+  { km:461, n:"São José do Rio Preto", uf:"SP", hero:true },
+  { km:507, n:"Olímpia",               uf:"SP", hero:true },
+  { km:551, n:"Barretos",              uf:"SP", hero:true }
+];
+
+/* Identificador desta doação. Vai dentro do código Pix (campo txid), aparece na
+   tela e entra na mensagem do WhatsApp — é o que permite casar um Pix recebido
+   com a campanha, mesmo numa conta que recebe muitos outros Pix.
+   Alfabeto sem O/0/I/1 para ninguém errar ao ditar ou digitar.
+   Gerado uma vez por visita: se mudasse a cada valor, a pessoa poderia copiar um
+   código e mandar outro no WhatsApp. */
+var CODIGO_DOACAO = (function(){
+  var abc = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", s = "", i, a = new Uint8Array(6);
+  if(window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+  else for(i = 0; i < 6; i++) a[i] = Math.floor(Math.random() * 256);
+  for(i = 0; i < 6; i++) s += abc.charAt(a[i] % abc.length);
+  return "VALE" + s;
+})();
+
+var KM_TOTAL, PRECO_KM, kmFinanciados, pct;
+
+/* ---------------------- helpers ---------------------- */
+var money = function(n){
+  return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+};
+// valores redondos ficam sem centavos: "R$ 15.500" em vez de "R$ 15.500,00"
+var moneyShort = function(n){
+  return n % 1 === 0 ? "R$ " + n.toLocaleString("pt-BR") : money(n);
+};
+var num = function(n){ return Math.round(n).toLocaleString("pt-BR"); };
+var km  = function(n){ return num(Math.max(0,n)) + " km"; };
+var $   = function(id){ return document.getElementById(id); };
+var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function toast(msg){
+  var t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.classList.remove("show"); }, 2400);
+}
+
+function setText(id, txt){ var e = $(id); if(e) e.textContent = txt; }
+
+/* ---------------------- carga de dados ---------------------- */
+function loadData(){
+  return fetch("dados.json", {cache:"no-store"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if(!d) return;
+      // só sobrescreve o que veio preenchido — nunca inventa valor
+      if(typeof d.arrecadado === "number") CONFIG.arrecadado = d.arrecadado;
+      if(d.atualizadoEm) CONFIG.atualizadoEm = d.atualizadoEm;
+      if(d.pix && d.pix.chave) CONFIG.pix = d.pix;
+      if(d.whatsapp) CONFIG.whatsapp = d.whatsapp;
+      if(d.edicao) CONFIG.edicao = d.edicao;
+      if(d.dataEvento) CONFIG.dataEvento = d.dataEvento;
+      if(d.registroURL) CONFIG.registroURL = d.registroURL;
+      if(typeof d.totalApoiadores === "number") CONFIG.totalApoiadores = d.totalApoiadores;
+      if(Array.isArray(d.apoiadores)) CONFIG.apoiadores = d.apoiadores;
+    })
+    .catch(function(){ /* file:// ou arquivo ausente — segue com o padrão */ });
+}
+
+/* ---------------------- a estrada ---------------------- */
+/* O trajeto é um circuito fechado: a ida ocupa a faixa de cima, o retorno a
+   de baixo. A posição do ônibus vem de getPointAtLength() e o ângulo vem da
+   tangente entre dois pontos vizinhos — por isso o ônibus é matematicamente
+   incapaz de andar de ré, em qualquer ponto da estrada.                     */
+function drawRoute(){
+  var base = $("roadBase"), done = $("roadDone"), bus = $("bus");
+  var L = base.getTotalLength();
+  var frac = Math.min(1, Math.max(0, kmFinanciados / KM_TOTAL));
+  var at = L * frac;
+
+  done.style.strokeDasharray = L + " " + L;
+  done.style.strokeDashoffset = L;
+
+  var p  = base.getPointAtLength(at);
+  var p2 = base.getPointAtLength(Math.min(L, at + 1.2));
+  var p0 = base.getPointAtLength(Math.max(0, at - 1.2));
+  var ang = Math.atan2(p2.y - p0.y, p2.x - p0.x) * 180 / Math.PI;
+
+  // O ônibus é desenhado de perfil, então ele nunca gira de cabeça para baixo
+  // nem fica na vertical nas curvas: espelhamos quando a viagem é para a
+  // esquerda e limitamos a inclinação. O sentido vem sempre da tangente da
+  // estrada, então o ônibus nunca aponta para trás — em nenhum ponto da rota.
+  var paraEsquerda = Math.abs(ang) > 90;
+  var inclin = paraEsquerda ? (ang > 0 ? ang - 180 : ang + 180) : ang;
+  inclin = Math.max(-18, Math.min(18, inclin));
+
+  var t = "translate(" + p.x.toFixed(1) + "," + p.y.toFixed(1) + ")"
+        + " rotate(" + inclin.toFixed(1) + ")"
+        + (paraEsquerda ? " scale(-1,1)" : "");
+
+  if(reduced){
+    bus.style.transition = "none";
+    done.style.transition = "none";
+  }else{
+    // estado inicial + reflow forçado: o navegador registra o ponto de partida
+    // e anima até o destino pela transição CSS. Não depende de requestAnimationFrame,
+    // que não dispara com a aba em segundo plano — o ônibus nunca fica parado na saída.
+    bus.setAttribute("transform","translate(90,230) rotate(-90)");
+    base.getBoundingClientRect();
+  }
+  bus.setAttribute("transform", t);
+  done.style.strokeDashoffset = L - at;
+
+  // situação atual, em texto
+  var st = $("routeStatus"), ida = KM_TOTAL / 2, msg, win = false;
+  if(kmFinanciados < 1){
+    msg = "📍 Ainda em Paranavaí — o ônibus espera o primeiro quilômetro.";
+  }else if(kmFinanciados < ida - 10){
+    msg = "🚌 Ida · km " + num(kmFinanciados) + " de " + num(ida);
+  }else if(kmFinanciados < ida + 10){
+    msg = "🏕️ Chegamos simbolicamente a Barretos!"; win = true;
+  }else if(kmFinanciados < KM_TOTAL - 0.5){
+    var falta = KM_TOTAL - kmFinanciados;
+    msg = falta <= 100
+      ? "🔥 Faltam apenas " + km(falta) + " para fechar a viagem!"
+      : "🚌 Volta · faltam " + km(falta);
+  }else{
+    msg = "🎉 Ida e volta garantidas. Missão cumprida!"; win = true;
+  }
+  st.textContent = msg;
+  st.classList.toggle("win", win);
+
+  setText("hudKm", num(kmFinanciados) + " km");
+  setText("hudLeg", kmFinanciados >= ida ? "Volta" : "Ida");
+  setText("hudPct", pct.toFixed(0) + "%");
+}
+
+/* ---------------------- números da campanha ---------------------- */
+function renderNumbers(){
+  var falta = Math.max(0, CONFIG.meta - CONFIG.arrecadado);
+
+  setText("sRaised", moneyShort(CONFIG.arrecadado));
+  setText("sGoal",   moneyShort(CONFIG.meta));
+  setText("sKm",     km(kmFinanciados));
+  setText("sKmTotal",km(KM_TOTAL));
+  setText("sLeftKm", km(KM_TOTAL - kmFinanciados));
+  setText("sLeftBRL",moneyShort(falta));
+  setText("sPct",    pct.toFixed(0) + "%");
+
+  setText("tGoal",   moneyShort(CONFIG.meta));
+  setText("tRaised", moneyShort(CONFIG.arrecadado));
+  setText("tLeft",   moneyShort(falta));
+  setText("tKm",     num(kmFinanciados) + " / " + num(KM_TOTAL) + " km");
+  setText("fGoal",   moneyShort(CONFIG.meta));
+
+  // nunca inventa número de doadores
+  var n = CONFIG.totalApoiadores;
+  if(n === null || n === undefined) n = CONFIG.apoiadores.length || null;
+  setText("tCount", n ? (n + (n === 1 ? " contribuição" : " contribuições")) : "a publicar");
+
+  setText("tUpdate", CONFIG.atualizadoEm
+    ? new Date(CONFIG.atualizadoEm + "T12:00:00-03:00").toLocaleDateString("pt-BR")
+    : "a publicar");
+
+  setText("stkKm", km(kmFinanciados) + " garantidos");
+  setText("stkLeft","faltam " + km(KM_TOTAL - kmFinanciados));
+
+  setTimeout(function(){ $("sFill").style.width = pct + "%"; }, reduced ? 0 : 340);
+
+  document.querySelectorAll(".mile").forEach(function(el){
+    if(kmFinanciados >= Number(el.dataset.mile)){
+      el.classList.add("done");
+      el.querySelector(".tag").textContent = "✓ Desbloqueado";
+    }
+  });
+}
+
+/* ---------------------- adotar km ---------------------- */
+var escolhido = 10;
+
+function buildKmButtons(){
+  var opts = [1,5,10,25,50,100], html = "";
+  opts.forEach(function(k){
+    html += '<button type="button" class="kmBtn" data-km="' + k + '" aria-pressed="' + (k===10) + '">'
+          + k + ' km<small>' + money(k * PRECO_KM) + '</small></button>';
+  });
+  $("kmGrid").innerHTML = html;
+  $("kmGrid").addEventListener("click", function(e){
+    var b = e.target.closest(".kmBtn");
+    if(b) setKm(Number(b.dataset.km));
+  });
+}
+
+var trechoRotulo = "";   // "Cidade A → Cidade B", ou "" quando é só quantidade
+
+function setKm(k, fromInput){
+  trechoRotulo = "";       // escolher quantidade desfaz o trecho
+  escolhido = Math.max(1, Math.min(KM_TOTAL, Math.round(Number(k) || 1)));
+
+  document.querySelectorAll(".kmBtn").forEach(function(b){
+    b.setAttribute("aria-pressed", Number(b.dataset.km) === escolhido);
+  });
+  atualizarImpacto();
+}
+
+function atualizarImpacto(){
+  var v = money(escolhido * PRECO_KM);
+  setText("impactVal", v);
+  $("impactTxt").innerHTML = trechoRotulo
+    ? "Você leva o ônibus de <b>" + trechoRotulo + "</b> — " + num(escolhido) + " km da estrada."
+    : "Você leva o Vale do Ivaí <b>" + num(escolhido) + " km</b> mais perto de Barretos.";
+  setText("mKm", num(escolhido) + " km");
+  setText("mVal", v);
+  $("certKm").value = escolhido;
+  updateCert();
+  atualizarPixCodigo();
+}
+
+/* ---------------------- trecho da estrada ---------------------- */
+/* O ônibus percorre 0→551 na ida e 551→1102 na volta. `posEstrada` devolve
+   sempre a distância a partir de Paranavaí, que é o que as cidades usam. */
+function metadeIda(){ return KM_TOTAL / 2; }
+function naVolta(){ return kmFinanciados > metadeIda(); }
+function posEstrada(){
+  return naVolta() ? (KM_TOTAL - kmFinanciados) : kmFinanciados;
+}
+/* Se o ponto cai exatamente em uma cidade, usa o nome dela; senão, o km.
+   Assim "km 0 → km 18" vira "Paranavaí → Alto Paraná". */
+function rotuloPonto(k){
+  var achou = null;
+  CIDADES.forEach(function(c){ if(c.km === k) achou = c; });
+  return achou ? achou.n : ("km " + num(k));
+}
+
+function cidadeEm(k){
+  var melhor = CIDADES[0], d = Infinity;
+  CIDADES.forEach(function(c){
+    var dd = Math.abs(c.km - k);
+    if(dd < d){ d = dd; melhor = c; }
+  });
+  return melhor;
+}
+
+var tDe = 0, tAte = 58;
+
+function pintarBarra(de, ate){
+  var IDA = metadeIda();
+  $("segSel").style.left  = (de / IDA * 100) + "%";
+  $("segSel").style.width = ((ate - de) / IDA * 100) + "%";
+}
+
+function aplicarTrecho(de, ate, rotulo){
+  trechoRotulo = rotulo;
+  escolhido = Math.max(1, Math.round(ate - de));
+  document.querySelectorAll(".kmBtn").forEach(function(b){
+    b.setAttribute("aria-pressed", "false");
+  });
+  pintarBarra(de, ate);
+  atualizarImpacto();
+}
+
+function validarTrecho(porCidade){
+  var IDA = metadeIda(), aviso = $("segWarn");
+  tDe  = Math.max(0, Math.min(IDA, Math.round(tDe  || 0)));
+  tAte = Math.max(0, Math.min(IDA, Math.round(tAte || 0)));
+
+  if(tAte <= tDe){
+    aviso.hidden = false;
+    aviso.textContent = porCidade
+      ? "Escolha uma cidade de destino mais adiante no trajeto."
+      : "O km final precisa ser maior que o inicial.";
+    return;
+  }
+  aviso.hidden = true;
+
+  var rot = porCidade
+    ? (cidadeEm(tDe).n + " → " + cidadeEm(tAte).n)
+    : (rotuloPonto(tDe) + " → " + rotuloPonto(tAte));
+
+  // mantém os dois painéis coerentes
+  $("kmDe").value = tDe;
+  $("kmAte").value = tAte;
+  aplicarTrecho(tDe, tAte, rot);
+}
+
+function mostrarPane(qual){
+  var cid = qual === "cidade";
+  $("tabCidade").setAttribute("aria-selected", cid);
+  $("tabKm").setAttribute("aria-selected", !cid);
+  $("paneCidade").hidden = !cid;
+  $("paneKm").hidden = cid;
+}
+
+function buildTrecho(){
+  var opts = CIDADES.map(function(c){
+    return '<option value="' + c.km + '">' + c.n + " · km " + num(c.km) + "</option>";
+  }).join("");
+  $("selDe").innerHTML = opts;
+  $("selAte").innerHTML = opts;
+  $("selDe").value = "0";
+  $("selAte").value = "58";
+  $("kmDe").value = 0;
+  $("kmAte").value = 58;
+  $("kmDe").max = metadeIda();
+  $("kmAte").max = metadeIda();
+  pintarBarra(0, 58);
+}
+
+/* leva o trecho escolhido no topo da página para o formulário de doação */
+function irParaTrecho(de, ate){
+  tDe = Math.round(Math.min(de, ate));
+  tAte = Math.round(Math.max(de, ate));
+  mostrarPane("km");
+  validarTrecho(false);
+  var alvo = document.getElementById("adotar");
+  if(alvo) alvo.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+}
+
+/* ---------------------- estrada vertical do topo ---------------------- */
+var cidadeAlvo = null;
+
+function selecionarParada(c, btn){
+  // arredonda a posição aqui para o valor exibido bater com o do formulário
+  var pos = Math.round(posEstrada()), volta = naVolta();
+  document.querySelectorAll(".vstop").forEach(function(e){ e.setAttribute("aria-pressed","false"); });
+  btn.setAttribute("aria-pressed","true");
+
+  // na volta o ônibus caminha de Barretos de volta para Paranavaí
+  var adiante = volta ? (c.km < pos) : (c.km > pos);
+  var falta   = volta ? (pos - c.km) : (c.km - pos);
+
+  if(!adiante || falta <= 0.5){
+    $("hrTxt").textContent = "✓ O ônibus já passou por " + c.n + ".";
+    $("hrSub").textContent = "km " + num(c.km) + " do trajeto — trecho já garantido.";
+    $("hrGo").hidden = true;
+    cidadeAlvo = null;
+    return;
+  }
+
+  cidadeAlvo = c;
+  $("hrTxt").textContent = "Faltam " + km(falta) + " para chegar em " + c.n + ".";
+  $("hrSub").innerHTML = "Equivale a <b>" + money(falta * PRECO_KM) + "</b> — de onde o ônibus está até lá.";
+  $("hrGo").hidden = false;
+}
+
+function renderHeroRoute(){
+  var IDA = metadeIda(), pos = posEstrada(), volta = naVolta(), box = $("vroute");
+
+  $("legBadge").textContent = volta ? "Volta" : "Ida";
+  $("legBadge").classList.toggle("volta", volta);
+
+  box.querySelectorAll(".vstop").forEach(function(e){ e.remove(); });
+
+  CIDADES.filter(function(c){ return c.hero; }).forEach(function(c){
+    var passou = volta ? true : (c.km <= pos);
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "vstop" + (passou ? " passou" : "");
+    b.style.top = (c.km / IDA * 100) + "%";
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = '<span class="vdot"></span>'
+                + '<span class="vname">' + c.n
+                + ' <span class="vkm">· km ' + num(c.km) + '</span></span>';
+    b.addEventListener("click", function(){ selecionarParada(c, b); });
+    box.appendChild(b);
+  });
+
+  var p = Math.max(0, Math.min(100, pos / IDA * 100));
+  $("vbus").style.top = p + "%";
+  if(reduced){ $("vfill").style.height = p + "%"; }
+  else { setTimeout(function(){ $("vfill").style.height = p + "%"; }, 300); }
+
+  $("hrTxt").textContent = volta
+    ? "O ônibus está voltando para casa."
+    : (kmFinanciados < 1 ? "O ônibus ainda está em Paranavaí."
+                         : "O ônibus está no km " + num(pos) + ".");
+  $("hrSub").textContent = "Toque em uma cidade para ver quanto falta para chegar lá.";
+  $("hrGo").hidden = true;
+}
+
+/* ---------------------- PIX: Copia e Cola (BR Code) ----------------------
+   Monta o payload padrão do Banco Central (EMV MPM), o mesmo que os apps de
+   banco leem em "Pix Copia e Cola". Cada campo é <id><tamanho em 2 dígitos><valor>
+   e o código termina com um CRC16-CCITT calculado sobre tudo, inclusive o "6304".
+   Como o valor entra no campo 54, a pessoa não precisa digitar nada no banco.  */
+function crc16(str){
+  var crc = 0xFFFF;
+  for(var i = 0; i < str.length; i++){
+    crc ^= (str.charCodeAt(i) & 0xFF) << 8;
+    for(var j = 0; j < 8; j++){
+      crc = (crc & 0x8000) ? (((crc << 1) ^ 0x1021) & 0xFFFF) : ((crc << 1) & 0xFFFF);
+    }
+  }
+  var h = crc.toString(16).toUpperCase();
+  while(h.length < 4) h = "0" + h;
+  return h;
+}
+
+/* o padrão só aceita ASCII: tira acento e qualquer caractere fora da faixa */
+function soAscii(t){
+  return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x20-\x7E]/g, "");
+}
+
+function campoTLV(id, valor){
+  var n = String(valor.length);
+  while(n.length < 2) n = "0" + n;
+  return id + n + valor;
+}
+
+/* A chave precisa ir no formato que o Bacen espera. O tipo vem do dados.json
+   porque telefone e CPF têm 11 dígitos e não dá para adivinhar com segurança. */
+function chavePixFormatada(){
+  var k = (CONFIG.pix && CONFIG.pix.chave || "").trim();
+  if(!k) return "";
+  var tipo = (CONFIG.pix && CONFIG.pix.tipo || "").toLowerCase();
+  var digitos = k.replace(/\D/g, "");
+  if(tipo === "telefone") return "+55" + digitos.replace(/^55/, "");
+  if(tipo === "cpf" || tipo === "cnpj") return digitos;
+  return k;   // e-mail, chave aleatória ou já formatada
+}
+
+function pixCopiaCola(valor){
+  var chave = chavePixFormatada();
+  if(!chave) return "";
+
+  /* O campo 59 do padrão só aceita 25 caracteres. Nomes institucionais passam
+     disso, então usamos `recebedorCurto` quando existir — cortar no meio da
+     palavra deixaria o código feio no app do banco. */
+  var nome = soAscii(CONFIG.pix.recebedorCurto || CONFIG.pix.recebedor)
+               .toUpperCase().trim().slice(0, 25) || "RECEBEDOR";
+  var cidade = soAscii(CONFIG.pix.cidade || "PARANAVAI").toUpperCase().slice(0, 15) || "PARANAVAI";
+
+  var conta = campoTLV("00", "br.gov.bcb.pix") + campoTLV("01", chave);
+
+  var p = campoTLV("00", "01")
+        + campoTLV("26", conta)
+        + campoTLV("52", "0000")
+        + campoTLV("53", "986")
+        + (valor > 0 ? campoTLV("54", valor.toFixed(2)) : "")
+        + campoTLV("58", "BR")
+        + campoTLV("59", nome)
+        + campoTLV("60", cidade)
+        + campoTLV("62", campoTLV("05", CODIGO_DOACAO));
+
+  p += "6304";
+  return p + crc16(p);
+}
+
+/* Envio opcional para uma planilha. Só funciona se `registroURL` estiver
+   preenchido no dados.json; sem isso, não sai nenhuma requisição.
+   'no-cors' + text/plain evitam o preflight que o Apps Script não responde. */
+function registrar(evento){
+  if(!CONFIG.registroURL) return;
+  try{
+    fetch(CONFIG.registroURL, {
+      method: "POST",
+      mode: "no-cors",
+      keepalive: true,
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        codigo: CODIGO_DOACAO,
+        evento: evento,
+        km: escolhido,
+        valor: Number((escolhido * PRECO_KM).toFixed(2)),
+        trecho: trechoRotulo || "",
+        nome: ($("certName").value || "").trim().slice(0, 60),
+        quando: new Date().toISOString()
+      })
+    }).catch(function(){});
+  }catch(e){}
+}
+
+function atualizarPixCodigo(){
+  if(!(CONFIG.pix && CONFIG.pix.chave)) return;
+  var valor  = escolhido * PRECO_KM;
+  var codigo = pixCopiaCola(valor);
+  var rotulo = money(valor);
+  ["brcodeTxt", "mBrcode"].forEach(function(id){ if($(id)) $(id).textContent = codigo; });
+  ["brValor", "mBrValor"].forEach(function(id){ if($(id)) $(id).textContent = rotulo; });
+  ["codDoacao", "mCodDoacao"].forEach(function(id){ if($(id)) $(id).textContent = CODIGO_DOACAO; });
+}
+
+/* ---------------------- PIX ---------------------- */
+function renderPix(){
+  var ok = !!(CONFIG.pix && CONFIG.pix.chave);
+  $("pixReady").hidden = !ok;
+  $("pixPending").hidden = ok;
+  $("mPixReady").hidden = !ok;
+  $("mPixPending").hidden = ok;
+
+  if(ok){
+    setText("pixReceiver", CONFIG.pix.recebedor ? "Recebedor: " + CONFIG.pix.recebedor : "");
+  }
+
+  var hasWpp = !!CONFIG.whatsapp;
+  $("sendProof").disabled = !hasWpp;
+  $("mProof").disabled = !hasWpp;
+  if(!hasWpp){
+    $("sendProof").textContent = "WhatsApp ainda não configurado";
+    $("mProof").textContent = "WhatsApp ainda não configurado";
+  }
+}
+
+function copiar(texto, btn, rotuloOk, aviso){
+  if(!texto) return;
+  var original = btn.innerHTML;
+  var ok = function(){
+    btn.innerHTML = "✓ " + rotuloOk;
+    toast(aviso);
+    setTimeout(function(){ btn.innerHTML = original; }, 2200);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(texto).then(ok).catch(function(){ prompt("Copie:", texto); });
+  }else{
+    prompt("Copie:", texto);
+  }
+}
+
+function openWhats(){
+  if(!CONFIG.whatsapp) return;
+  registrar("whatsapp");
+  var nome = ($("certName").value || "").trim();
+  var k = escolhido;
+  var msg = "Olá! " + (nome ? "Sou " + nome + ". " : "")
+          + "Quero apoiar o Clube Vale do Ivaí na campanha Rumo ao Campori 2027.\n\n"
+          + "🔖 Código: " + CODIGO_DOACAO + "\n"
+          + "🚌 Quilômetros: " + num(k) + " km\n"
+          + (trechoRotulo ? "🛣️ Trecho: " + trechoRotulo + "\n" : "")
+          + "💛 Valor: " + money(k * PRECO_KM) + "\n\n"
+          + "Vou enviar meu comprovante nesta conversa.";
+  window.open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+}
+
+/* ---------------------- mural ---------------------- */
+function renderMural(){
+  var box = $("mural"), list = CONFIG.apoiadores || [];
+  if(!list.length){
+    box.innerHTML = '<div class="emptyState"><strong style="color:var(--ink);font-size:1.05rem">'
+      + 'Ainda não há apoiadores publicados.</strong>'
+      + '<p class="fine" style="margin:9px auto 0;max-width:420px">Assim que as primeiras contribuições forem '
+      + 'confirmadas, elas aparecem aqui — sempre com autorização de quem contribuiu.</p></div>';
+    return;
+  }
+  box.innerHTML = list.map(function(s){
+    var anon = s.anonimo || !s.nome;
+    var nome = anon ? "Apoiador anônimo" : String(s.nome);
+    var ini  = anon ? "★" : nome.trim().charAt(0).toUpperCase();
+    return '<div class="sup"><div class="av">' + ini + '</div><div>'
+         + '<b>' + nome.replace(/[<>]/g,"") + '</b>'
+         + '<small>+' + num(s.km || 0) + ' km</small></div></div>';
+  }).join("");
+}
+
+/* ---------------------- certificado ---------------------- */
+function updateCert(){
+  var n = ($("certName").value || "").trim().toUpperCase() || "SEU NOME";
+  setText("cName", n);
+  setText("cKm", num(Number($("certKm").value) || 1) + " KM");
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function makeCert(){
+  var story = $("certFmt").value === "story";
+  var W = 1080, H = story ? 1920 : 1350;
+  var c = $("certCanvas"); c.width = W; c.height = H;
+  var g = c.getContext("2d");
+
+  var grad = g.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,"#081627"); grad.addColorStop(.55,"#0e2b4a"); grad.addColorStop(1,"#123457");
+  g.fillStyle = grad; g.fillRect(0,0,W,H);
+
+  // brilho quente
+  var rg = g.createRadialGradient(W*.8,H*.16,0,W*.8,H*.16,W*.75);
+  rg.addColorStop(0,"rgba(227,169,74,.22)"); rg.addColorStop(1,"rgba(227,169,74,0)");
+  g.fillStyle = rg; g.fillRect(0,0,W,H);
+
+  g.strokeStyle = "#e3a94a"; g.lineWidth = 8;
+  roundRect(g,44,44,W-88,H-88,40); g.stroke();
+
+  var nome = (($("certName").value||"").trim().toUpperCase()) || "EU";
+  var k = Math.max(1, Math.round(Number($("certKm").value) || 1));
+  var cy = H/2;
+  var F = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
+  g.textAlign = "center";
+
+  var logo = new Image();
+  logo.onload = logo.onerror = function(){
+    if(logo.complete && logo.naturalWidth){
+      var d = story ? 230 : 200, lx = W/2, ly = cy - (story ? 520 : 400);
+      g.save();
+      g.beginPath(); g.arc(lx,ly,d/2,0,Math.PI*2); g.closePath(); g.clip();
+      g.fillStyle="#fff"; g.fillRect(lx-d/2,ly-d/2,d,d);
+      g.drawImage(logo, lx-d/2, ly-d/2, d, d);
+      g.restore();
+      g.strokeStyle="#e3a94a"; g.lineWidth=6;
+      g.beginPath(); g.arc(lx,ly,d/2,0,Math.PI*2); g.stroke();
+    }
+
+    g.fillStyle = "#e3a94a";
+    g.font = "800 40px " + F;
+    g.fillText("EU AJUDEI ESSA MISSÃO", W/2, cy - (story ? 300 : 210));
+
+    g.fillStyle = "#ffffff";
+    var fs = nome.length > 18 ? 74 : 96;
+    g.font = "900 " + fs + "px " + F;
+    g.fillText(nome.slice(0,28), W/2, cy - (story ? 170 : 90));
+
+    g.fillStyle = "#b6cade";
+    g.font = "600 42px " + F;
+    g.fillText("levou o Clube Vale do Ivaí", W/2, cy - (story ? 80 : 10));
+
+    g.fillStyle = "#e3a94a";
+    g.font = "900 190px " + F;
+    g.fillText(num(k) + " KM", W/2, cy + (story ? 110 : 150));
+
+    g.fillStyle = "#ffffff";
+    g.font = "700 46px " + F;
+    g.fillText("mais perto do Campori 2027", W/2, cy + (story ? 200 : 225));
+
+    g.fillStyle = "#8fa9c2";
+    g.font = "600 36px " + F;
+    g.fillText("PARANAVAÍ  →  BARRETOS", W/2, cy + (story ? 290 : 300));
+
+    if(trechoRotulo){
+      g.fillStyle = "#e3a94a";
+      g.font = "700 31px " + F;
+      g.fillText("Trecho: " + trechoRotulo, W/2, cy + (story ? 352 : 355));
+    }
+
+    g.fillStyle = "#e3a94a";
+    g.font = "800 42px " + F;
+    g.fillText("#EuLeveiOVale", W/2, H - (story ? 240 : 230));
+
+    g.fillStyle = "#6f88a1";
+    g.font = "600 28px " + F;
+    g.fillText("Clube de Desbravadores Vale do Ivaí · Paranavaí — PR", W/2, H - (story ? 165 : 140));
+
+    c.toBlob(function(blob){
+      if(!blob){ toast("Não foi possível gerar a imagem"); return; }
+      var file = new File([blob], "eu-levei-o-vale-" + k + "km.png", {type:"image/png"});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        navigator.share({
+          files:[file],
+          title:"Rumo ao Campori 2027",
+          text:"Eu levei o Clube Vale do Ivaí " + num(k) + " km mais perto de Barretos! #EuLeveiOVale"
+        }).catch(function(){});
+      }else{
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = file.name;
+        a.click();
+        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+        toast("Certificado baixado");
+      }
+    }, "image/png");
+  };
+  logo.src = "assets/logo-vale-do-ivai.jpg";
+}
+
+/* ---------------------- compartilhar ---------------------- */
+function textoCampanha(){
+  return "🚌 O Clube de Desbravadores Vale do Ivaí, de Paranavaí, está indo ao Campori 2027 em Barretos.\n\n"
+       + "São 1.102 km de ida e volta, e cada R$ " + PRECO_KM.toFixed(2).replace(".", ",")
+       + " leva o ônibus 1 km mais perto.\n\nAté onde você pode levar?\n" + location.href;
+}
+
+/* vai direto para o WhatsApp: é por lá que a campanha circula */
+function shareCampaign(){
+  window.open("https://wa.me/?text=" + encodeURIComponent(textoCampanha()), "_blank", "noopener");
+}
+
+/* menu do sistema (Instagram, e-mail, etc.), só quando o aparelho oferece */
+function shareOutros(){
+  if(navigator.share){
+    navigator.share({ title: "Rumo ao Campori 2027", text: textoCampanha() }).catch(function(){});
+  }else{
+    copiar(textoCampanha(), $("shareOutros"), "Texto copiado", "Texto da campanha copiado");
+  }
+}
+
+/* ---------------------- animações de entrada ---------------------- */
+function initReveal(){
+  var root = document.documentElement;
+  if(!root.classList.contains("jsReveal")) return; // já está tudo visível
+
+  var fired = false;
+  var io = new IntersectionObserver(function(entries){
+    fired = true;
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  }, {threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  document.querySelectorAll(".reveal").forEach(function(e){ io.observe(e); });
+
+  // rede de segurança: se o observer nunca rodar, mostra tudo
+  setTimeout(function(){ if(!fired) root.classList.remove("jsReveal"); }, 5000);
+}
+
+/* Troca a capa pelo player só quando a pessoa clica. Sem isso, cada vídeo
+   baixaria cerca de 1 MB de scripts do YouTube só por existir na página. */
+function initVideos(){
+  document.querySelectorAll(".ytCapa").forEach(function(capa){
+    capa.addEventListener("click", function(){
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + capa.dataset.yt + "?autoplay=1&rel=0";
+      f.title = capa.dataset.titulo || "Vídeo";
+      f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      f.setAttribute("allowfullscreen", "");
+      f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+      capa.replaceWith(f);
+    });
+  });
+}
+
+function initSticky(){
+  var s = $("sticky"), hero = document.querySelector(".hero");
+  if(!("IntersectionObserver" in window)) return;
+  new IntersectionObserver(function(e){
+    s.classList.toggle("show", !e[0].isIntersecting);
+  }, {threshold:0}).observe(hero);
+}
+
+/* ---------------------- ligações ---------------------- */
+function bind(){
+
+  $("tabCidade").addEventListener("click", function(){ mostrarPane("cidade"); });
+  $("tabKm").addEventListener("click", function(){ mostrarPane("km"); });
+
+  $("selDe").addEventListener("change", function(){
+    tDe = Number(this.value); tAte = Number($("selAte").value); validarTrecho(true);
+  });
+  $("selAte").addEventListener("change", function(){
+    tDe = Number($("selDe").value); tAte = Number(this.value); validarTrecho(true);
+  });
+  $("kmDe").addEventListener("input", function(){
+    tDe = Number(this.value); tAte = Number($("kmAte").value); validarTrecho(false);
+  });
+  $("kmAte").addEventListener("input", function(){
+    tDe = Number($("kmDe").value); tAte = Number(this.value); validarTrecho(false);
+  });
+
+  $("doOnde").addEventListener("click", function(){
+    var pos = Math.round(posEstrada());
+    var destino = null;
+    CIDADES.forEach(function(c){ if(destino === null && c.km > pos + 4) destino = c.km; });
+    if(destino === null) destino = metadeIda();
+    tDe = pos; tAte = destino;
+    mostrarPane("km");
+    validarTrecho(false);
+  });
+
+  $("hrGo").addEventListener("click", function(){
+    if(cidadeAlvo) irParaTrecho(Math.round(posEstrada()), cidadeAlvo.km);
+  });
+  $("certName").addEventListener("input", updateCert);
+  $("certKm").addEventListener("input", updateCert);
+  $("makeCert").addEventListener("click", makeCert);
+  $("shareBtn").addEventListener("click", shareCampaign);
+  $("shareOutros").addEventListener("click", shareOutros);
+  $("sendProof").addEventListener("click", openWhats);
+  $("mProof").addEventListener("click", openWhats);
+  $("copyBrcode").addEventListener("click", function(){
+    copiar($("brcodeTxt").textContent, this, "Código copiado", "Código Pix copiado com o valor");
+    registrar("copiou");
+  });
+  $("mCopyBrcode").addEventListener("click", function(){
+    copiar($("mBrcode").textContent, this, "Código copiado", "Código Pix copiado com o valor");
+    registrar("copiou");
+  });
+
+  var m = $("modal");
+  $("openPix").addEventListener("click", function(){ m.classList.add("open"); });
+  $("closeModal").addEventListener("click", function(){ m.classList.remove("open"); });
+  m.addEventListener("click", function(e){ if(e.target === m) m.classList.remove("open"); });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") m.classList.remove("open");
+  });
+}
+
+/* ---------------------- start ---------------------- */
+function start(){
+  KM_TOTAL = CONFIG.kmIda * 2;
+  PRECO_KM = CONFIG.meta / KM_TOTAL;
+  kmFinanciados = Math.min(KM_TOTAL, CONFIG.arrecadado / PRECO_KM);
+  pct = Math.min(100, Math.max(0, CONFIG.arrecadado / CONFIG.meta * 100));
+
+  buildKmButtons();
+  buildTrecho();
+  renderHeroRoute();
+  renderNumbers();
+  renderPix();
+  renderMural();
+  drawRoute();
+  setKm(10);
+  bind();
+  initReveal();
+  initSticky();
+  initVideos();
+}
+
+loadData().then(start);
+
+})();
+</script>
+</body>
+</html>

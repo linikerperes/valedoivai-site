@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#081627">
+<title>Conferência de doações · Vale do Ivaí</title>
+<link rel="icon" href="favicon.ico">
+<style>
+:root{
+  --navy:#081627; --gold:#e3a94a; --red:#d8232f; --green:#1c9b62;
+  --ink:#0d1520; --muted:#5d6b7d; --line:#e2e8f0; --bg:#f4f7fa; --card:#fff;
+  --shadow:0 12px 30px rgba(6,20,40,.1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  margin:0;background:var(--bg);color:var(--ink);line-height:1.5;
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{width:min(1080px,calc(100% - 28px));margin-inline:auto}
+header.top{background:var(--navy);color:#fff;padding:26px 0 22px}
+header.top h1{margin:0;font-size:1.5rem;letter-spacing:-.03em}
+header.top p{margin:6px 0 0;color:#a9bed4;font-size:.87rem}
+main{padding:22px 0 70px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
+h2{font-size:1.06rem;margin:0 0 4px;letter-spacing:-.02em}
+.hint{font-size:.81rem;color:var(--muted);margin:0 0 14px;line-height:1.5}
+
+.tot{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.tot div{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px}
+.tot span{display:block;font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:4px}
+.tot b{font-size:1.35rem;font-weight:900;letter-spacing:-.035em;display:block;line-height:1.1}
+.tot .ok b{color:var(--green)}
+
+label.lbl{display:block;font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:0 0 6px}
+input,textarea,button{font:inherit;color:inherit}
+.inp{width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:12px;background:#fff;outline:0;font-weight:600}
+.inp:focus{border-color:var(--gold)}
+textarea.inp{min-height:96px;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;font-weight:400}
+.row{display:grid;gap:10px;grid-template-columns:1fr}
+.btn{
+  border:0;border-radius:99px;padding:12px 20px;font-weight:800;cursor:pointer;
+  background:var(--navy);color:#fff;transition:.15s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.g{background:var(--green)}
+.btn.o{background:#eef2f7;color:var(--ink)}
+.btn.sm{padding:9px 15px;font-size:.85rem}
+.acoes{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+
+.tabelaBox{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:6px}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:.85rem}
+th{
+  text-align:left;font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);font-weight:800;padding:9px 10px;border-bottom:2px solid var(--line);white-space:nowrap;
+}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr.feito{background:#f2fbf6}
+tr.feito td.cod{color:var(--green)}
+td.cod{font-family:ui-monospace,Menlo,monospace;font-weight:800;letter-spacing:.04em;white-space:nowrap}
+td.val{font-weight:800;white-space:nowrap;text-align:right}
+td.chk{width:38px;text-align:center}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
+.vazio{text-align:center;padding:34px 16px;color:var(--muted);border:2px dashed var(--line);border-radius:16px}
+
+.aviso{background:#fff6e5;border:1px solid #f0dcb6;color:#7a5a10;border-radius:14px;padding:12px 14px;font-size:.83rem;line-height:1.5}
+.msg{margin-top:10px;font-size:.85rem;font-weight:700;color:var(--green)}
+.msg.erro{color:var(--red)}
+@media(min-width:720px){
+  .tot{grid-template-columns:repeat(4,1fr)}
+  .row.dois{grid-template-columns:1fr 1fr}
+  .row.tres{grid-template-columns:1fr 1fr auto}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Conferência de doações</h1>
+    <p>Rumo ao Campori 2027 · Clube Vale do Ivaí</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="aviso">
+    <strong>Esta página é só para a diretoria.</strong> Os dados ficam salvos
+    <strong>neste aparelho</strong>, no navegador — não sobem para lugar nenhum.
+    Se abrir em outro celular, a lista começa vazia. Use <em>Baixar CSV</em> para
+    guardar uma cópia ou passar para outra pessoa.
+  </div>
+
+  <div class="tot" style="margin-top:16px">
+    <div><span>Códigos na lista</span><b id="tGer">0</b></div>
+    <div class="ok"><span>Conferidos</span><b id="tCon">0</b></div>
+    <div class="ok"><span>Total conferido</span><b id="tSoma">R$ 0</b></div>
+    <div><span>Falta conferir</span><b id="tFalta">0</b></div>
+  </div>
+
+  <div class="card">
+    <h2>1. Trazer os códigos</h2>
+    <p class="hint">
+      Exporte a planilha do Google em <strong>Arquivo › Fazer download › CSV</strong> e
+      escolha o arquivo aqui. Ou copie as linhas da planilha e cole no campo de baixo.
+    </p>
+    <div class="row dois">
+      <div>
+        <label class="lbl" for="arq">Arquivo CSV</label>
+        <input class="inp" type="file" id="arq" accept=".csv,text/csv">
+      </div>
+      <div>
+        <label class="lbl" for="colar">Ou colar aqui</label>
+        <textarea class="inp" id="colar" placeholder="Quando,Codigo,Evento,Km,Valor,Trecho,Nome&#10;2026-09-07,VALEJQ6QDW,copiou,10,140.65,,Familia Silva"></textarea>
+      </div>
+    </div>
+    <div class="acoes">
+      <button class="btn" id="btnColar">Importar o que colei</button>
+      <button class="btn o sm" id="btnExemplo">Ver um exemplo</button>
+    </div>
+    <div class="msg" id="msgImp" hidden></div>
+  </div>
+
+  <div class="card">
+    <h2>2. Lançar à mão</h2>
+    <p class="hint">
+      Quando alguém mandar o comprovante pelo WhatsApp e o código não estiver na lista.
+    </p>
+    <div class="row tres">
+      <div>
+        <label class="lbl" for="mCod">Código</label>
+        <input class="inp" id="mCod" placeholder="VALEJQ6QDW" autocapitalize="characters">
+      </div>
+      <div>
+        <label class="lbl" for="mVal">Valor (R$)</label>
+        <input class="inp" id="mVal" type="text" inputmode="decimal" placeholder="140,65">
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button class="btn g" id="btnAdd" style="width:100%">Adicionar</button>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label class="lbl" for="mNome">Nome (opcional)</label>
+      <input class="inp" id="mNome" placeholder="Família Silva">
+    </div>
+    <div class="msg" id="msgAdd" hidden></div>
+  </div>
+
+  <div class="card">
+    <h2>3. Conferir com o extrato</h2>
+    <p class="hint">
+      Chegou um Pix na conta da igreja? Procure o código aqui e marque.
+      O total conferido é o que já entrou de verdade.
+    </p>
+    <input class="inp" id="busca" placeholder="🔎 Buscar por código, nome ou valor">
+    <div class="acoes">
+      <button class="btn o sm" id="btnCSV">Baixar CSV</button>
+      <button class="btn o sm" id="btnLimpar">Limpar tudo</button>
+    </div>
+
+    <div class="tabelaBox">
+      <table id="tabela" hidden>
+        <thead>
+          <tr>
+            <th class="chk">✓</th><th>Código</th><th>Valor</th><th>Km</th>
+            <th>Quando</th><th>Nome</th><th>Trecho</th><th>Evento</th>
+          </tr>
+        </thead>
+        <tbody id="corpo"></tbody>
+      </table>
+    </div>
+    <div class="vazio" id="vazio">
+      Nenhum código na lista ainda.<br>
+      <span style="font-size:.83rem">Importe a planilha acima ou lance à mão.</span>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+var CHAVE = "valeivai.conferencia.v1";
+var dados = [];          // {codigo, valor, km, quando, nome, trecho, evento, feito}
+var filtro = "";
+
+var $ = function(id){ return document.getElementById(id); };
+var money = function(n){ return (n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); };
+
+function carregar(){
+  try{ dados = JSON.parse(localStorage.getItem(CHAVE)) || []; }
+  catch(e){ dados = []; }
+  if(!Array.isArray(dados)) dados = [];
+}
+function salvar(){
+  try{ localStorage.setItem(CHAVE, JSON.stringify(dados)); }
+  catch(e){ aviso("msgImp","Não consegui salvar neste navegador.",true); }
+}
+
+function aviso(id, texto, erro){
+  var e = $(id);
+  e.textContent = texto;
+  e.classList.toggle("erro", !!erro);
+  e.hidden = false;
+  clearTimeout(e._t);
+  e._t = setTimeout(function(){ e.hidden = true; }, 5000);
+}
+
+/* aceita "140,65", "140.65", "R$ 1.406,53" */
+function paraNumero(v){
+  if(typeof v === "number") return v;
+  var t = String(v || "").replace(/[^\d,.-]/g, "");
+  if(t.indexOf(",") > -1) t = t.replace(/\./g, "").replace(",", ".");
+  var n = parseFloat(t);
+  return isNaN(n) ? 0 : n;
+}
+
+/* CSV com suporte a campo entre aspas e quebra de linha dentro do campo */
+function lerCSV(texto){
+  var linhas = [], campo = "", linha = [], dentro = false, i, c;
+  texto = String(texto).replace(/\r\n?/g, "\n");
+  for(i = 0; i < texto.length; i++){
+    c = texto.charAt(i);
+    if(dentro){
+      if(c === '"'){
+        if(texto.charAt(i+1) === '"'){ campo += '"'; i++; }
+        else dentro = false;
+      } else campo += c;
+    }else{
+      if(c === '"') dentro = true;
+      else if(c === "," || c === "\t"){ linha.push(campo); campo = ""; }
+      else if(c === "\n"){ linha.push(campo); linhas.push(linha); linha = []; campo = ""; }
+      else campo += c;
+    }
+  }
+  if(campo.length || linha.length){ linha.push(campo); linhas.push(linha); }
+  return linhas.filter(function(l){ return l.join("").trim() !== ""; });
+}
+
+function limpa(t){
+  return String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+}
+
+function importar(texto){
+  var linhas = lerCSV(texto);
+  if(!linhas.length){ aviso("msgImp","Não encontrei nenhuma linha.",true); return; }
+
+  // descobre as colunas pelo cabeçalho; se não houver, assume a ordem da planilha
+  var cab = linhas[0].map(limpa);
+  var temCab = cab.indexOf("codigo") > -1;
+  var idx = { quando:0, codigo:1, evento:2, km:3, valor:4, trecho:5, nome:6 };
+  if(temCab){
+    idx = {
+      quando: cab.indexOf("quando"), codigo: cab.indexOf("codigo"),
+      evento: cab.indexOf("evento"), km: cab.indexOf("km"),
+      valor:  cab.indexOf("valor"),  trecho: cab.indexOf("trecho"),
+      nome:   cab.indexOf("nome")
+    };
+    linhas = linhas.slice(1);
+  }
+  var pega = function(l, i){ return (i > -1 && l[i] !== undefined) ? String(l[i]).trim() : ""; };
+
+  var novos = 0, repetidos = 0;
+  linhas.forEach(function(l){
+    var cod = pega(l, idx.codigo).toUpperCase();
+    if(!cod) return;
+    var val = paraNumero(pega(l, idx.valor));
+    // mesma pessoa pode gerar o código e mudar de valor: só é repetido se código E valor batem
+    var jaTem = dados.some(function(d){
+      return d.codigo === cod && Math.abs(d.valor - val) < 0.005;
+    });
+    if(jaTem){ repetidos++; return; }
+    dados.push({
+      codigo: cod,
+      valor:  val,
+      km:     pega(l, idx.km),
+      quando: pega(l, idx.quando),
+      nome:   pega(l, idx.nome),
+      trecho: pega(l, idx.trecho),
+      evento: pega(l, idx.evento),
+      feito:  false
+    });
+    novos++;
+  });
+  salvar(); render();
+  aviso("msgImp", novos + (novos === 1 ? " código importado" : " códigos importados")
+        + (repetidos ? " · " + repetidos + " já estavam na lista" : ""));
+}
+
+function render(){
+  var f = limpa(filtro);
+  var vis = dados.filter(function(d){
+    if(!f) return true;
+    return limpa(d.codigo).indexOf(f) > -1
+        || limpa(d.nome).indexOf(f) > -1
+        || limpa(d.trecho).indexOf(f) > -1
+        || String(d.valor.toFixed(2)).indexOf(f.replace(",", ".")) > -1;
+  });
+
+  var corpo = $("corpo");
+  corpo.innerHTML = "";
+  vis.forEach(function(d){
+    var i = dados.indexOf(d);
+    var tr = document.createElement("tr");
+    if(d.feito) tr.className = "feito";
+    tr.innerHTML =
+      '<td class="chk"><input type="checkbox" data-i="' + i + '"' + (d.feito ? " checked" : "") +
+      ' aria-label="Marcar ' + d.codigo + ' como conferido"></td>' +
+      '<td class="cod">' + esc(d.codigo) + "</td>" +
+      '<td class="val">' + money(d.valor) + "</td>" +
+      "<td>" + esc(d.km) + "</td>" +
+      "<td>" + esc(formatarData(d.quando)) + "</td>" +
+      "<td>" + esc(d.nome) + "</td>" +
+      "<td>" + esc(d.trecho) + "</td>" +
+      "<td>" + esc(d.evento) + "</td>";
+    corpo.appendChild(tr);
+  });
+
+  $("tabela").hidden = dados.length === 0;
+  $("vazio").hidden  = dados.length !== 0;
+  if(dados.length && !vis.length){
+    $("vazio").hidden = false;
+    $("vazio").innerHTML = "Nenhum código bate com <strong>" + esc(filtro) + "</strong>.";
+  }
+
+  var conf = dados.filter(function(d){ return d.feito; });
+  $("tGer").textContent   = dados.length;
+  $("tCon").textContent   = conf.length;
+  $("tSoma").textContent  = money(conf.reduce(function(a,d){ return a + d.valor; }, 0));
+  $("tFalta").textContent = dados.length - conf.length;
+}
+
+function esc(t){
+  return String(t == null ? "" : t).replace(/[<>&"]/g, function(c){
+    return { "<":"&lt;", ">":"&gt;", "&":"&amp;", '"':"&quot;" }[c];
+  });
+}
+
+function formatarData(v){
+  if(!v) return "";
+  var d = new Date(v);
+  if(isNaN(d.getTime())) return v;
+  return d.toLocaleDateString("pt-BR") + " " +
+         d.toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" });
+}
+
+function baixarCSV(){
+  if(!dados.length){ aviso("msgImp","A lista está vazia.",true); return; }
+  var cab = ["Codigo","Valor","Km","Quando","Nome","Trecho","Evento","Conferido"];
+  var linhas = [cab].concat(dados.map(function(d){
+    return [d.codigo, d.valor.toFixed(2).replace(".", ","), d.km, d.quando,
+            d.nome, d.trecho, d.evento, d.feito ? "sim" : "nao"];
+  }));
+  var csv = linhas.map(function(l){
+    return l.map(function(c){ return '"' + String(c==null?"":c).replace(/"/g,'""') + '"'; }).join(",");
+  }).join("\n");
+  var blob = new Blob(["﻿" + csv], { type:"text/csv;charset=utf-8" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "conferencia-campori-" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+}
+
+/* ligações */
+$("arq").addEventListener("change", function(){
+  var f = this.files && this.files[0];
+  if(!f) return;
+  var r = new FileReader();
+  r.onload = function(){ importar(r.result); };
+  r.readAsText(f, "utf-8");
+  this.value = "";
+});
+$("btnColar").addEventListener("click", function(){
+  var t = $("colar").value.trim();
+  if(!t){ aviso("msgImp","Cole as linhas da planilha primeiro.",true); return; }
+  importar(t); $("colar").value = "";
+});
+$("btnExemplo").addEventListener("click", function(){
+  $("colar").value = "Quando,Codigo,Evento,Km,Valor,Trecho,Nome\n"
+    + new Date().toISOString() + ",VALEJQ6QDW,copiou,10,140.65,,Familia Silva\n"
+    + new Date().toISOString() + ",VALEK7M3QX,whatsapp,50,703.27,Paranavai > Cruzeiro do Sul,Padaria Central";
+});
+$("btnAdd").addEventListener("click", function(){
+  var cod = $("mCod").value.trim().toUpperCase();
+  var val = paraNumero($("mVal").value);
+  if(!cod){ aviso("msgAdd","Informe o código.",true); return; }
+  if(val <= 0){ aviso("msgAdd","Informe o valor.",true); return; }
+  dados.push({ codigo:cod, valor:val, km:"", quando:new Date().toISOString(),
+               nome:$("mNome").value.trim(), trecho:"", evento:"manual", feito:true });
+  salvar(); render();
+  $("mCod").value = ""; $("mVal").value = ""; $("mNome").value = "";
+  aviso("msgAdd", cod + " adicionado e já marcado como conferido.");
+});
+$("busca").addEventListener("input", function(){ filtro = this.value; render(); });
+$("corpo").addEventListener("change", function(e){
+  var c = e.target;
+  if(c.type !== "checkbox") return;
+  var i = Number(c.dataset.i);
+  if(dados[i]){ dados[i].feito = c.checked; salvar(); render(); }
+});
+$("btnCSV").addEventListener("click", baixarCSV);
+$("btnLimpar").addEventListener("click", function(){
+  if(!dados.length) return;
+  if(confirm("Apagar os " + dados.length + " códigos desta lista? Não dá para desfazer.")){
+    dados = []; salvar(); render();
+  }
+});
+
+carregar();
+render();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "_leia": "Edite SOMENTE este arquivo para atualizar a campanha. O site le estes dados automaticamente. Nao e preciso mexer no index.html.",
+
+  "arrecadado": 0,
+  "atualizadoEm": "",
+
+  "pix": {
+    "chave": "iasd.paranavai@anp.org.br",
+    "tipo": "email",
+    "recebedor": "União Sul Brasileira da Igreja Adventista do Sétimo Dia",
+    "recebedorCurto": "UNIAO SUL BRASILEIRA",
+    "cidade": "PARANAVAI",
+    "instituicao": ""
+  },
+
+  "whatsapp": "5544984033799",
+
+  "edicao": "",
+  "dataEvento": "",
+
+  "registroURL": "",
+
+  "totalApoiadores": null,
+  "apoiadores": []
+}

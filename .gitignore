@@ -1,0 +1,4 @@
+.DS_Store
+.claude-flow/
+node_modules/
+*.zip
