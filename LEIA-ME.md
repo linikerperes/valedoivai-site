@@ -368,76 +368,74 @@ O que foi feito:
 
 ## 5. Publicação
 
-**No ar em:** GitHub Pages · **Domínio:** `valedoivai.site` (Hostinger, renova 07/09/2027)
-**Repositório:** <https://github.com/linikerperes/valedoivai-site> — público, branch `main`
+**No ar em:** <https://valedoivai-site.linikerperes27.workers.dev> (Cloudflare)
+**Domínio a ligar:** `valedoivai.site` (Hostinger, renova 07/09/2027)
+**Repositório:** <https://github.com/linikerperes/valedoivai-site>
 
-O deploy já está feito e funcionando. Falta apenas o DNS apontar para o GitHub.
+Testado em 07/09/2026: página carrega em 0,12 s, todos os arquivos respondem,
+nenhum erro de console. O `_headers` **funciona** no Cloudflare — confirmado que o
+`dados.json` sai com `max-age=60` e o `relatorio` com `noindex`.
 
-### Os registros de DNS
+O endereço da página de conferência ficou **`/relatorio`** (sem `.html`) — o
+Cloudflare remove a extensão sozinho.
 
-No **hPanel do Hostinger** → **Domínios** → `valedoivai.site` → **DNS / Nameservers**
-→ aba **Registros DNS**:
+### Falta ligar o domínio
 
-**Apagar:**
+Enquanto isso não é feito, existe um efeito colateral concreto: as tags
+`og:image` e `og:url` apontam para `valedoivai.site`, que hoje é a página de
+parking do Hostinger. Ela responde `200` para qualquer endereço, mas devolve
+**HTML no lugar da imagem** — ou seja, **o card de preview do WhatsApp fica
+quebrado** até o domínio apontar para o Cloudflare.
 
-| Tipo | Nome | Aponta para |
-|---|---|---|
-| A | `@` | `2.57.91.91` (parking do Hostinger) |
+**1. Adicionar o domínio à sua conta Cloudflare**
 
-**Criar 4 registros A**, todos com nome `@`:
+No dashboard → **Add a domain** → `valedoivai.site` → plano **Free**.
+A Cloudflare vai varrer o DNS atual e mostrar **dois nameservers**
+(algo como `xxx.ns.cloudflare.com`).
 
-```
-185.199.108.153
-185.199.109.153
-185.199.110.153
-185.199.111.153
-```
+**2. Trocar os nameservers no Hostinger**
 
-São os IPs oficiais do GitHub Pages (conferidos na API do GitHub em 07/09/2026).
-Os quatro são necessários — é o balanceamento deles.
+**hPanel** → **Domínios** → **Gerenciar** em `valedoivai.site` → **DNS / Nameservers**
+→ trocar de "Nameservers do Hostinger" para **Personalizados** e colar os dois da
+Cloudflare.
 
-**Ajustar o www:**
+Hoje estão em `orbit.dns-parking.com` e `horizon.dns-parking.com` — são esses que saem.
+Aqui é o campo **Nameservers**, não a tabela de registros DNS.
 
-| Tipo | Nome | Aponta para |
-|---|---|---|
-| CNAME | `www` | `linikerperes.github.io` |
+**3. Apontar o domínio para o site**
 
-Hoje o `www` aponta para `valedoivai.site`. Trocar para `linikerperes.github.io`
-faz o GitHub emitir o certificado HTTPS para os dois endereços.
+Quando a Cloudflare marcar o domínio como *Active*: abra o projeto
+**valedoivai-site** → **Settings** → **Domains & Routes** → **Add** → **Custom domain**
+→ `valedoivai.site`. Repita para `www.valedoivai.site`.
 
-Não mexa nos nameservers — pode continuar nos do Hostinger.
+O certificado HTTPS é emitido automaticamente.
 
-### Depois que o DNS propagar
+**4. Conferir depois**
 
-Costuma levar de minutos a algumas horas. Quando `valedoivai.site` abrir o site:
-
-1. No repositório → **Settings › Pages** → marcar **Enforce HTTPS**
-   (só aparece depois que o certificado é emitido, o que é automático)
-2. Testar o link no WhatsApp e ver se o card de preview aparece
-3. Fazer um **Pix de teste de R$ 1,00** com o Copia e Cola
-4. Conferir a página da diretoria em `valedoivai.site/relatorio.html`
+- `https://valedoivai.site` abre o site
+- `https://valedoivai.site/assets/og-campanha.jpg` devolve **uma imagem** (hoje devolve HTML)
+- mandar o link no WhatsApp e ver o card de preview aparecer
+- `https://valedoivai.site/relatorio` abre a página da diretoria
 
 ### Como atualizar a arrecadação
 
-1. GitHub → repositório → `dados.json` → ícone de lápis
-2. Mudar `"arrecadado"` e `"atualizadoEm"`
-3. **Commit changes**
+Depende de como o deploy foi feito no Cloudflare:
 
-O GitHub Pages republica sozinho em ~1 minuto. Funciona pelo navegador do celular.
+- **Se o projeto está conectado ao GitHub:** edite `dados.json` pelo site do GitHub
+  (lápis → muda `arrecadado` e `atualizadoEm` → Commit) e o Cloudflare republica
+  sozinho em ~1 minuto. Funciona pelo celular.
+- **Se foi upload direto:** é preciso subir o arquivo de novo pelo painel do
+  Cloudflare a cada atualização.
 
-O número novo aparece em até ~10 minutos: o site busca o `dados.json` com
-`cache: "no-store"`, então o navegador de quem visita nunca guarda cópia velha, mas
-o CDN do GitHub segura por até 10 minutos.
+Vale confirmar qual dos dois é, porque o primeiro é bem mais prático no dia a dia.
 
-> **Sobre o arquivo `_headers`:** ele é específico do Cloudflare Pages e **não faz
-> efeito no GitHub Pages**. Deixei no repositório de propósito: se um dia migrar
-> para o Cloudflare, já está pronto. No GitHub Pages ele é simplesmente ignorado.
+O número novo aparece rápido: o site busca o `dados.json` com `cache: "no-store"`
+e o `_headers` limita o cache a 60 segundos.
 
-### Se um dia quiser migrar para o Cloudflare Pages
+### GitHub Pages
 
-O site fica um pouco mais rápido no Brasil e o `_headers` passa a valer. Seria:
-criar conta na Cloudflare, conectar este mesmo repositório (build command vazio,
-output `/`), e trocar os nameservers no Hostinger pelos que a Cloudflare indicar.
+Foi ativado antes, como alternativa, e **já está desligado**. O arquivo `CNAME`
+foi removido do repositório para não disputar o domínio com o Cloudflare.
 
 ---
 
