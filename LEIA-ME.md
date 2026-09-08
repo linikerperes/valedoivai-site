@@ -437,9 +437,17 @@ código antes de chegar nele. Por isso o nome é editável direto na tabela.
 O que dá para fazer nela:
 
 1. **Pelo comprovante** — manda a foto do comprovante do Pix. A página encolhe a
-   imagem, a planilha lê com OCR e devolve o código e o valor. Se o código já
-   está na lista, ela mostra o valor que já era conhecido e oferece marcar como
-   conferido; se não está, pré-preenche o lançamento à mão.
+   imagem, a planilha lê com OCR e devolve **o código, o valor e o nome de quem
+   pagou**. Se o código já está na lista, ela mostra o valor que já era conhecido
+   e oferece marcar como conferido — junto com o nome, quando a linha estava sem;
+   se não está, pré-preenche o lançamento à mão com os três campos.
+
+   > **Como o nome é achado:** o script procura o bloco do pagador (*Quem pagou*,
+   > *Pagador*, *Origem*, *Debitado de*) e pega a primeira linha ali que pareça um
+   > nome de pessoa, descartando rótulos (CPF, banco, agência) e o nome do
+   > recebedor. Bancos escrevem o comprovante de jeitos diferentes, então trate o
+   > nome como **sugestão**: ele aparece no cartão antes de você aceitar, e dá
+   > para corrigir na hora ou depois, direto na tabela.
 2. **Lançar à mão** — quando o comprovante não dá para ler ou o Pix veio por fora.
 3. **Conferir com o extrato** — chegou um Pix na conta? Busca o código (ou o nome,
    ou o valor) e marca. O painel mostra: quantos códigos, quantos conferidos,
