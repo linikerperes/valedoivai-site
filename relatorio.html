@@ -84,6 +84,18 @@ td.chk{width:38px;text-align:center}
 input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
 .vazio{text-align:center;padding:34px 16px;color:var(--muted);border:2px dashed var(--line);border-radius:16px}
 
+/* fila dos codigos copiados no site */
+.copLinha{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline;
+  padding:11px 13px;border:1px solid var(--line);border-radius:13px;margin-bottom:8px;background:#fff}
+.copLinha.feito{border-color:var(--green);background:#f2fbf6}
+.copLinha .cod{font-family:ui-monospace,Menlo,monospace;font-weight:800;letter-spacing:.04em}
+.copLinha .vl{font-weight:900;letter-spacing:-.03em;text-align:right}
+.copLinha .qd{font-size:.78rem;color:var(--muted);font-weight:600}
+.copLinha .st{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);text-align:right}
+.copLinha.feito .st{color:var(--green)}
+.copLinha.feito .cod{color:var(--green)}
+
 .aviso{background:#fff6e5;border:1px solid #f0dcb6;color:#7a5a10;border-radius:14px;padding:12px 14px;font-size:.83rem;line-height:1.5}
 .msg{margin-top:10px;font-size:.85rem;font-weight:700;color:var(--green)}
 .msg.erro{color:var(--red)}
@@ -175,18 +187,26 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
       Chegou um Pix na conta da igreja? Procure o código aqui e marque.
       O total conferido é o que já entrou de verdade.
     </p>
+    <label class="lbl" for="conferente">Quem está conferindo</label>
+    <input class="inp" id="conferente" placeholder="Seu nome — fica gravado neste aparelho">
+    <p class="hint" style="margin:6px 0 14px">
+      Esse nome vai junto com cada código que você marcar, para a diretoria saber
+      quem viu no extrato. Sem ele a marcação não é aceita.
+    </p>
     <input class="inp" id="busca" placeholder="🔎 Buscar por código, nome ou valor">
     <div class="acoes">
       <button class="btn o sm" id="btnCSV">Baixar CSV</button>
       <button class="btn o sm" id="btnLimpar">Limpar tudo</button>
     </div>
+    <div class="msg" id="msgConf" hidden></div>
 
     <div class="tabelaBox">
       <table id="tabela" hidden>
         <thead>
           <tr>
             <th class="chk">✓</th><th>Código</th><th>Valor</th><th>Km</th>
-            <th>Quando</th><th>Nome</th><th>Trecho</th><th>Evento</th><th></th>
+            <th>Quando</th><th>Nome</th><th>Trecho</th><th>Evento</th>
+            <th>Conferido por</th><th></th>
           </tr>
         </thead>
         <tbody id="corpo"></tbody>
@@ -198,6 +218,21 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
     </div>
   </div>
 
+  <div class="card">
+    <h2>Códigos copiados no site</h2>
+    <p class="hint">
+      Cada vez que alguém copia o Pix no site, o código cai aqui sozinho — é a
+      fila do que deve aparecer no extrato. Quem só compartilhou no WhatsApp
+      aparece na tabela acima, com o evento <code>whatsapp</code>.
+    </p>
+    <div class="tot" style="margin:0 0 14px">
+      <div><span>Copiados</span><b id="cCop">0</b></div>
+      <div class="ok"><span>Já conferidos</span><b id="cConf">0</b></div>
+      <div><span>Aguardando no extrato</span><b id="cFalta">0</b></div>
+    </div>
+    <div id="listaCopiados"></div>
+  </div>
+
 </main>
 
 <script>
@@ -206,9 +241,11 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
 
 var CHAVE = "valeivai.conferencia.v1";
 var CHAVE_URL = "valeivai.planilha.v1";
+var CHAVE_QUEM = "valeivai.conferente.v1";
 var dados = [];          // {codigo, valor, km, quando, nome, trecho, evento, feito}
 var filtro = "";
 var urlPlanilha = "";    // vazio = modo local (só neste aparelho)
+var conferente = "";     // quem está conferindo neste aparelho
 
 var $ = function(id){ return document.getElementById(id); };
 var money = function(n){ return (n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); };
@@ -218,6 +255,7 @@ function carregar(){
   catch(e){ dados = []; }
   if(!Array.isArray(dados)) dados = [];
   try{ urlPlanilha = localStorage.getItem(CHAVE_URL) || ""; }catch(e){ urlPlanilha = ""; }
+  try{ conferente = localStorage.getItem(CHAVE_QUEM) || ""; }catch(e){ conferente = ""; }
 }
 
 /* ---------- planilha compartilhada ----------
@@ -283,6 +321,7 @@ function baixarDaPlanilha(){
           nome:   d.nome || "",
           trecho: d.trecho || "",
           evento: d.evento || "",
+          porQuem: d.porQuem || "",
           feito:  d.feito === true || String(d.feito).toLowerCase() === "sim"
         };
       });
@@ -395,6 +434,7 @@ async function lerComprovante(file){
       if(!d.feito || nomeNovo){
         $("btnConfirmarAchado").addEventListener("click", function(){
           if(nomeNovo) dados[i].nome = nomeNovo;
+          if(conferente) dados[i].porQuem = conferente;
           dados[i].feito = true; salvar(); render(); marcarNaPlanilha(dados[i]);
           if(nomeNovo) gravarNome(dados[i]);
           mostrarAchado('<div class="cd">' + esc(d.codigo) + "</div><b>✓ Gravado.</b>");
@@ -453,7 +493,8 @@ function marcarNaPlanilha(d){
     method: "POST", mode: "no-cors", keepalive: true,
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify({ acao: "conferir", chave: pp.chave,
-                           codigo: d.codigo, valor: d.valor, feito: d.feito })
+                           codigo: d.codigo, valor: d.valor, feito: d.feito,
+                           porQuem: d.porQuem || "" })
   }).catch(function(){});
 }
 function salvar(){
@@ -513,6 +554,7 @@ function render(){
       '" placeholder="sem nome" aria-label="Nome de quem doou"></td>' +
       "<td>" + esc(d.trecho) + "</td>" +
       "<td>" + esc(d.evento) + "</td>" +
+      "<td>" + esc(d.porQuem) + "</td>" +
       '<td class="del"><button type="button" class="lixo" data-del="' + i +
       '" title="Apagar este código" aria-label="Apagar ' + esc(d.codigo) + '">🗑</button></td>';
     corpo.appendChild(tr);
@@ -530,6 +572,36 @@ function render(){
   $("tCon").textContent   = conf.length;
   $("tSoma").textContent  = money(conf.reduce(function(a,d){ return a + d.valor; }, 0));
   $("tFalta").textContent = dados.length - conf.length;
+
+  renderCopiados();
+}
+
+/* fila do que foi copiado no site e ainda deve cair no extrato.
+   Os mais novos primeiro: e a ordem em que o dinheiro tende a chegar. */
+function renderCopiados(){
+  var cop = dados.filter(function(d){ return d.evento === "copiou"; })
+                 .sort(function(a, b){ return String(b.quando).localeCompare(String(a.quando)); });
+  var feitos = cop.filter(function(d){ return d.feito; });
+  $("cCop").textContent   = cop.length;
+  $("cConf").textContent  = feitos.length;
+  $("cFalta").textContent = cop.length - feitos.length;
+
+  var alvo = $("listaCopiados");
+  if(!cop.length){
+    alvo.innerHTML = '<div class="vazio" style="margin:0">'
+      + "Ninguém copiou o Pix no site ainda.</div>";
+    return;
+  }
+  alvo.innerHTML = cop.map(function(d){
+    return '<div class="copLinha' + (d.feito ? " feito" : "") + '">'
+      + '<span class="cod">' + esc(d.codigo) + "</span>"
+      + '<span class="vl">' + money(d.valor) + "</span>"
+      + '<span class="qd">' + esc(formatarData(d.quando)) + "</span>"
+      + '<span class="st">' + (d.feito
+          ? "✓ conferido" + (d.porQuem ? " por " + esc(d.porQuem) : "")
+          : "aguardando no extrato") + "</span>"
+      + "</div>";
+  }).join("");
 }
 
 function esc(t){
@@ -548,10 +620,10 @@ function formatarData(v){
 
 function baixarCSV(){
   if(!dados.length){ aviso("msgFoto","A lista está vazia.",true); return; }
-  var cab = ["Codigo","Valor","Km","Quando","Nome","Trecho","Evento","Conferido"];
+  var cab = ["Codigo","Valor","Km","Quando","Nome","Trecho","Evento","Conferido","Conferido por"];
   var linhas = [cab].concat(dados.map(function(d){
     return [d.codigo, d.valor.toFixed(2).replace(".", ","), d.km, d.quando,
-            d.nome, d.trecho, d.evento, d.feito ? "sim" : "nao"];
+            d.nome, d.trecho, d.evento, d.feito ? "sim" : "nao", d.porQuem || ""];
   }));
   var csv = linhas.map(function(l){
     return l.map(function(c){ return '"' + String(c==null?"":c).replace(/"/g,'""') + '"'; }).join(",");
@@ -625,12 +697,34 @@ $("corpo").addEventListener("click", function(e){
 $("corpo").addEventListener("change", function(e){
   var c = e.target;
   if(c.type !== "checkbox") return;
-  var i = Number(c.dataset.i);
-  if(dados[i]){
-    dados[i].feito = c.checked;
-    salvar(); render();
-    marcarNaPlanilha(dados[i]);
+  var i = Number(c.dataset.i), d = dados[i];
+  if(!d) return;
+
+  // desmarcar e correcao: nao atrapalha. marcar e afirmar que viu no extrato.
+  if(c.checked){
+    if(!conferente){
+      c.checked = false;
+      aviso("msgConf", "Escreva seu nome em \u201cQuem está conferindo\u201d antes de marcar.", true);
+      $("conferente").focus();
+      return;
+    }
+    if(!confirm("Confere no extrato?\n\n" + d.codigo + "  ·  " + money(d.valor)
+                + "\n\nMarcar como conferido por " + conferente + ".")){
+      c.checked = false;
+      return;
+    }
+    d.porQuem = conferente;
+  }else{
+    d.porQuem = "";
   }
+  d.feito = c.checked;
+  salvar(); render();
+  marcarNaPlanilha(d);
+});
+
+$("conferente").addEventListener("input", function(){
+  conferente = this.value.trim();
+  try{ localStorage.setItem(CHAVE_QUEM, conferente); }catch(e){}
 });
 $("btnCSV").addEventListener("click", baixarCSV);
 $("btnLimpar").addEventListener("click", function(){
@@ -670,6 +764,7 @@ $("btnDesconectar").addEventListener("click", function(){
 
 carregar();
 pintarModo();
+$("conferente").value = conferente;
 render();
 if(conectado()) baixarDaPlanilha();
 
