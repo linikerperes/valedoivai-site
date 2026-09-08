@@ -239,6 +239,14 @@ Três coisas ficaram provadas de uma vez:
 
 ### A planilha compartilhada (aviso por e-mail + lista da diretoria)
 
+> ✅ **Já está configurado e funcionando** desde 07/09/2026. O que está abaixo é a
+> documentação de como foi feito — só serve se um dia precisar refazer, trocar de
+> planilha ou entender o funcionamento.
+>
+> Testado de ponta a ponta: copiar um código no site gerou a linha na planilha e
+> disparou o e-mail para a diretoria. Leitura sem chave e marcação sem chave foram
+> recusadas, como esperado.
+
 Esta é a peça que faz **duas coisas de uma vez**:
 
 1. te **avisa por e-mail** toda vez que alguém copia um código, com o valor — para
@@ -370,9 +378,22 @@ no fim do mes: soma o total conferido e atualiza o "arrecadado" no dados.json
 > diz "alguém pretende pagar R$ X" e serve para você saber o que procurar. Quem
 > confirma é o extrato.
 
-> **A URL funciona como senha.** Ela é longa e aleatória, e fica guardada no
-> aparelho de cada pessoa. Ela **não** está no código do site — se estivesse,
-> qualquer visitante teria acesso à lista de doadores. Só passe para a diretoria.
+### Os dois endereços — e por que são diferentes
+
+| Onde | Formato | O que permite |
+|---|---|---|
+| `dados.json` (público) | `.../exec` | **só gravar.** Qualquer visitante lê esse arquivo, então ele não pode dar acesso à lista. |
+| `/relatorio` (diretoria) | `.../exec?chave=SUACHAVE` | ler a lista e marcar conferido |
+
+> **A chave não está neste repositório**, que é público. Ela vive em dois lugares:
+> na constante `CHAVE` do seu Apps Script (privado) e no navegador de cada pessoa
+> da diretoria que colou o endereço completo.
+>
+> **Passe o endereço com `?chave=` só por mensagem direta**, nunca em grupo nem em
+> documento compartilhado. Quem tiver ele vê nomes e valores dos doadores.
+>
+> Se a chave vazar: troque a constante `CHAVE` no Apps Script, implante uma nova
+> versão e mande o endereço novo para a diretoria. O `dados.json` não muda.
 
 > **Limite do Gmail:** conta gratuita envia ~100 e-mails por dia. Passando disso,
 > os avisos param mas a planilha continua gravando. Se acontecer, esvazie o
