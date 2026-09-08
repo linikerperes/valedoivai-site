@@ -1421,16 +1421,30 @@ function loadData(){
    público. Se a planilha estiver fora do ar, continua valendo o `arrecadado`
    do dados.json, que é o número escrito à mão. */
 function loadTotal(){
-  if(!CONFIG.registroURL) return Promise.resolve();
-  return fetch(CONFIG.registroURL + "?acao=total", {cache:"no-store"})
+  if(!CONFIG.registroURL) return Promise.resolve(false);
+  // 5s e o teto: a pagina ja esta na tela, isso aqui so refina o numero
+  var prazo = new Promise(function(ok){ setTimeout(function(){ ok(null); }, 5000); });
+  var busca = fetch(CONFIG.registroURL + "?acao=total", {cache:"no-store"})
     .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(t){
-      if(!t || typeof t.total !== "number") return;
-      CONFIG.arrecadado = t.total;
-      var h = new Date(), d2 = function(n){ return (n < 10 ? "0" : "") + n; };
-      CONFIG.atualizadoEm = h.getFullYear() + "-" + d2(h.getMonth() + 1) + "-" + d2(h.getDate());
-    })
-    .catch(function(){ /* sem rede ou cota estourada: fica o valor do dados.json */ });
+    .catch(function(){ return null; });
+  return Promise.race([busca, prazo]).then(function(t){
+    if(!t || typeof t.total !== "number") return false;
+    CONFIG.arrecadado = t.total;
+    var h = new Date(), d2 = function(n){ return (n < 10 ? "0" : "") + n; };
+    CONFIG.atualizadoEm = h.getFullYear() + "-" + d2(h.getMonth() + 1) + "-" + d2(h.getDate());
+    return true;
+  });
+}
+
+/* Recalcula a viagem depois que o total real chega. Só os números e a estrada:
+   nada de refazer botões ou reatar eventos, que já estão de pé. */
+function aplicarTotal(){
+  kmFinanciados = Math.min(KM_TOTAL, CONFIG.arrecadado / PRECO_KM);
+  pct = Math.min(100, Math.max(0, CONFIG.arrecadado / CONFIG.meta * 100));
+  renderNumbers();
+  renderHeroRoute();
+  drawRoute();
+  renderContas();
 }
 
 /* ---------------------- a estrada ---------------------- */
@@ -2219,7 +2233,13 @@ function start(){
   initVideos();
 }
 
-loadData().then(loadTotal).then(start);
+/* A página desenha primeiro com o dados.json e só depois busca o total real na
+   planilha. Assim o site nunca fica em branco esperando o Google responder —
+   se a planilha estiver lenta ou bloqueada, o visitante já viu a campanha. */
+loadData().then(function(){
+  start();
+  loadTotal().then(function(mudou){ if(mudou) aplicarTotal(); });
+});
 
 })();
 </script>
