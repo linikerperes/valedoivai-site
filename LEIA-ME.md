@@ -361,11 +361,12 @@ muitos outros, sem nada que ligasse ele à campanha. Aí a conferência vira gar
 - [ ] **Fazer um Pix de teste de R$ 1,00** com o Copia e Cola antes de divulgar,
       e confirmar no extrato se o banco mostra o código `VALE...` no detalhe da transação
 - [ ] **Depoimentos reais.** Os textos estão escritos na voz de cada Desbravador,
-      mas **ainda não são as palavras deles**. Grave cada um respondendo
-      *"Por que você quer ir ao Campori?"* e troque no `index.html`.
-      Enquanto isso, há uma linha discreta no fim da seção avisando que os textos
-      são preliminares — quando as falas reais entrarem, pode apagar essa linha.
-      Considere autorização dos responsáveis antes de publicar nome/imagem de menores.
+      mas **ainda não são as palavras deles** — e o site já não sinaliza mais isso
+      (a etiqueta e a nota foram removidas a pedido). Grave cada um respondendo
+      *"Por que você quer ir ao Campori?"* e troque no `index.html` assim que der.
+      As idades foram retiradas; ficou só o primeiro nome, o que é bom para
+      privacidade de menores. Ainda assim, vale ter a autorização dos responsáveis
+      para publicar o nome.
 - [ ] **Fotos.** As três fotos em `assets/fotos/` são de edições anteriores,
       publicadas originalmente por Notícias Adventistas, Portal Bueno e Guaíra News,
       e estão creditadas no site. **Confirme a autorização de uso ou troque por
