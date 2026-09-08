@@ -380,16 +380,24 @@ async function lerComprovante(file){
     var i = dados.findIndex(function(d){ return d.codigo === r.codigo; });
     if(i > -1){
       var d = dados[i];
+      // quem copia o codigo quase nunca preenche o nome; o comprovante traz ele
+      var nomeNovo = (!d.nome && r.nome) ? r.nome : "";
       mostrarAchado(
         '<div class="cd">' + esc(d.codigo) + "</div>"
         + '<div class="vl">' + money(d.valor) + "</div>"
+        + (nomeNovo ? '<div style="font-size:.9rem;margin-top:4px">Quem pagou: <b>'
+                      + esc(nomeNovo) + "</b></div>" : "")
         + '<div style="font-size:.85rem;margin:8px 0 12px">Este código está na lista'
-        + (d.feito ? " e <b>já estava conferido</b>." : ". Confirme para marcar como conferido.") + "</div>"
-        + (d.feito ? "" : '<button class="btn g" id="btnConfirmarAchado">Confirmar e marcar</button>'));
-      if(!d.feito){
+        + (d.feito ? " e <b>já estava conferido</b>." : ". Confirme para marcar como conferido.")
+        + (nomeNovo ? " O nome vai junto — dá para corrigir depois na tabela." : "") + "</div>"
+        + (d.feito && !nomeNovo ? "" : '<button class="btn g" id="btnConfirmarAchado">'
+            + (d.feito ? "Gravar o nome" : "Confirmar e marcar") + "</button>"));
+      if(!d.feito || nomeNovo){
         $("btnConfirmarAchado").addEventListener("click", function(){
+          if(nomeNovo) dados[i].nome = nomeNovo;
           dados[i].feito = true; salvar(); render(); marcarNaPlanilha(dados[i]);
-          mostrarAchado('<div class="cd">' + esc(d.codigo) + "</div><b>✓ Marcado como conferido.</b>");
+          if(nomeNovo) gravarNome(dados[i]);
+          mostrarAchado('<div class="cd">' + esc(d.codigo) + "</div><b>✓ Gravado.</b>");
         });
       }
       aviso("msgFoto", "Código " + r.codigo + " encontrado na lista.");
@@ -402,6 +410,8 @@ async function lerComprovante(file){
       mostrarAchado(
         '<div class="cd">' + esc(r.codigo) + "</div>"
         + (r.valor ? '<div class="vl">' + money(r.valor) + "</div>" : "")
+        + (r.nome ? '<div style="font-size:.9rem;margin-top:4px">Quem pagou: <b>'
+                    + esc(r.nome) + "</b></div>" : "")
         + '<div style="font-size:.85rem;margin-top:6px">Não estava na lista — preenchi o '
         + "passo 2 com o que li. Confira e clique em <b>Adicionar</b>.</div>", true);
       aviso("msgFoto", "Código lido: " + r.codigo);
@@ -561,6 +571,19 @@ $("foto").addEventListener("change", function(){
   this.value = "";
 });
 
+/* grava o nome na planilha; usado pela edicao na tabela e pela leitura da foto */
+function gravarNome(d){
+  if(!conectado()) return;
+  var pp = planilhaPartes();
+  fetch(pp.base, {
+    method: "POST", mode: "no-cors", keepalive: true,
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ acao: "renomear", chave: pp.chave,
+                           codigo: d.codigo, valor: d.valor, nome: d.nome })
+  }).catch(function(){});
+  aviso("msgConexao", "Nome de " + d.codigo + " atualizado.");
+}
+
 /* nome editável direto na tabela */
 $("corpo").addEventListener("change", function(e){
   var inp = e.target.closest(".nomeEdit");
@@ -569,16 +592,7 @@ $("corpo").addEventListener("change", function(e){
   if(!d) return;
   d.nome = inp.value.trim();
   salvar();
-  if(conectado()){
-    var pp = planilhaPartes();
-    fetch(pp.base, {
-      method: "POST", mode: "no-cors", keepalive: true,
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ acao: "renomear", chave: pp.chave,
-                             codigo: d.codigo, valor: d.valor, nome: d.nome })
-    }).catch(function(){});
-    aviso("msgConexao", "Nome de " + d.codigo + " atualizado.");
-  }
+  gravarNome(d);
 });
 
 $("btnAdd").addEventListener("click", function(){
