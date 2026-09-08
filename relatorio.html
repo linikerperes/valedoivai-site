@@ -84,6 +84,13 @@ td.chk{width:38px;text-align:center}
 input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
 .vazio{text-align:center;padding:34px 16px;color:var(--muted);border:2px dashed var(--line);border-radius:16px}
 
+/* confirmar antes de marcar: dialogo nativo trava a pagina e some no celular */
+#confirmar{margin-top:12px;padding:14px;border-radius:14px;
+  border:2px solid var(--gold);background:#fffaf0}
+#confirmar .pg{font-size:.8rem;color:var(--muted);font-weight:700;margin:0 0 6px}
+#confirmar .cd{font-family:ui-monospace,Menlo,monospace;font-weight:800;letter-spacing:.04em}
+#confirmar .vl{font-weight:900;font-size:1.2rem;letter-spacing:-.03em;margin:2px 0 12px}
+
 /* fila dos codigos copiados no site */
 .copLinha{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline;
   padding:11px 13px;border:1px solid var(--line);border-radius:13px;margin-bottom:8px;background:#fff}
@@ -199,6 +206,7 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
       <button class="btn o sm" id="btnLimpar">Limpar tudo</button>
     </div>
     <div class="msg" id="msgConf" hidden></div>
+    <div id="confirmar" hidden></div>
 
     <div class="tabelaBox">
       <table id="tabela" hidden>
@@ -700,27 +708,44 @@ $("corpo").addEventListener("change", function(e){
   var i = Number(c.dataset.i), d = dados[i];
   if(!d) return;
 
-  // desmarcar e correcao: nao atrapalha. marcar e afirmar que viu no extrato.
-  if(c.checked){
-    if(!conferente){
-      c.checked = false;
-      aviso("msgConf", "Escreva seu nome em \u201cQuem está conferindo\u201d antes de marcar.", true);
-      $("conferente").focus();
-      return;
-    }
-    if(!confirm("Confere no extrato?\n\n" + d.codigo + "  ·  " + money(d.valor)
-                + "\n\nMarcar como conferido por " + conferente + ".")){
-      c.checked = false;
-      return;
-    }
-    d.porQuem = conferente;
-  }else{
-    d.porQuem = "";
+  // desmarcar e correcao, vale na hora. marcar e afirmar que viu no extrato.
+  if(!c.checked){
+    d.porQuem = ""; d.feito = false;
+    salvar(); render(); marcarNaPlanilha(d);
+    return;
   }
-  d.feito = c.checked;
-  salvar(); render();
-  marcarNaPlanilha(d);
+  c.checked = false;               // so marca de verdade depois de confirmar
+  if(!conferente){
+    aviso("msgConf", "Escreva seu nome em \u201cQuem está conferindo\u201d antes de marcar.", true);
+    $("conferente").focus();
+    return;
+  }
+  pedirConfirmacao(i);
 });
+
+/* Pergunta antes de marcar, dentro da página. Um confirm() do navegador
+   trava a aba enquanto está aberto e no celular vira um alerta feio. */
+function pedirConfirmacao(i){
+  var d = dados[i];
+  if(!d) return;
+  var cx = $("confirmar");
+  cx.innerHTML =
+      '<p class="pg">Confere com o extrato?</p>'
+    + '<div class="cd">' + esc(d.codigo) + "</div>"
+    + '<div class="vl">' + money(d.valor) + "</div>"
+    + '<div class="acoes"><button class="btn g" id="btnSim">Confirmar como '
+    + esc(conferente) + '</button>'
+    + '<button class="btn o" id="btnNao">Cancelar</button></div>';
+  cx.hidden = false;
+  $("btnNao").addEventListener("click", function(){ cx.hidden = true; });
+  $("btnSim").addEventListener("click", function(){
+    cx.hidden = true;
+    d.porQuem = conferente;
+    d.feito = true;
+    salvar(); render(); marcarNaPlanilha(d);
+    aviso("msgConf", d.codigo + " conferido por " + conferente + ".");
+  });
+}
 
 $("conferente").addEventListener("input", function(){
   conferente = this.value.trim();
