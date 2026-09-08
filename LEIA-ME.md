@@ -452,9 +452,25 @@ O que dá para fazer nela:
 3. **Conferir com o extrato** — chegou um Pix na conta? Busca o código (ou o nome,
    ou o valor) e marca. O painel mostra: quantos códigos, quantos conferidos,
    **quanto já entrou de verdade** e quanto falta conferir.
-4. **Corrigir e apagar** — o nome é editável na própria tabela, e cada linha tem
+
+   Antes de marcar, preencha **"Quem está conferindo"** com o seu nome. Ele fica
+   gravado no aparelho, então é uma vez só, e vai junto com cada código que você
+   marcar — aparece na coluna **Conferido por**, na planilha e no CSV. Como a
+   lista é da diretoria inteira, isso responde "quem viu esse valor no extrato?".
+
+   Marcar abre uma confirmação com o código e o valor à vista: é uma afirmação de
+   que o dinheiro está na conta, não um clique à toa. **Desmarcar não pergunta
+   nada** — desmarcar é corrigir um erro, e corrigir tem que ser fácil.
+
+4. **Códigos copiados no site** — a fila do que foi copiado no site e ainda deve
+   aparecer no extrato, do mais novo para o mais antigo, com os contadores de
+   copiados, já conferidos e aguardando. É por aqui que se acompanha o dia a dia:
+   alguém copiou o Pix agora, então esse valor deve cair na conta em seguida.
+   Quem só compartilhou no WhatsApp não entra nessa fila — aparece na tabela com
+   o evento `whatsapp`.
+5. **Corrigir e apagar** — o nome é editável na própria tabela, e cada linha tem
    um botão de apagar. As duas coisas gravam na planilha compartilhada.
-5. **Baixar CSV** com tudo, inclusive a coluna `Conferido`.
+6. **Baixar CSV** com tudo, inclusive as colunas `Conferido` e `Conferido por`.
 
 Ela ignora repetição: a mesma pessoa aparece na planilha duas vezes (uma quando
 copia o código, outra quando abre o WhatsApp). Se o código **e** o valor forem
