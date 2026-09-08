@@ -805,11 +805,6 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       </figure>
     </div>
 
-    <p class="fine on-dark" style="margin-top:14px">
-      Imagens de edições anteriores, exibidas com crédito à publicação de origem.
-      Antes da publicação definitiva, confirme a autorização de uso ou substitua por fotos
-      oficiais do Campori e do próprio Clube Vale do Ivaí.
-    </p>
 
     <!-- Porte do evento -->
     <div class="head reveal" style="margin-top:64px">
@@ -870,15 +865,6 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       </div>
     </div>
 
-    <div class="vidSoon reveal" style="margin-top:18px">
-      <div>
-        <strong style="color:var(--ink);font-size:1.05rem">🎬 Espaço reservado: vídeo do Vale do Ivaí</strong>
-        <p class="fine" style="margin:8px auto 0;max-width:440px">
-          45 a 90 segundos com as crianças, o diretor e o motivo da viagem.
-          É o conteúdo que mais converte — grave e substitua este bloco.
-        </p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1168,7 +1154,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 </section>
 
 <!-- ================= MURAL ================= -->
-<section>
+<section id="secMural" hidden>
   <div class="wrap">
     <div class="head reveal">
       <div class="eyebrow">Mural</div>
@@ -1960,13 +1946,11 @@ function esc(t){
 /* ---------------------- mural ---------------------- */
 function renderMural(){
   var box = $("mural"), list = CONFIG.apoiadores || [];
-  if(!list.length){
-    box.innerHTML = '<div class="emptyState"><strong style="color:var(--ink);font-size:1.05rem">'
-      + 'Ainda não há apoiadores publicados.</strong>'
-      + '<p class="fine" style="margin:9px auto 0;max-width:420px">Assim que as primeiras contribuições forem '
-      + 'confirmadas, elas aparecem aqui — sempre com autorização de quem contribuiu.</p></div>';
-    return;
-  }
+  // Sem apoiadores, a seção inteira some: um mural vazio anuncia que ninguém
+  // doou ainda, o que trabalha contra a campanha. Volta sozinha no primeiro nome.
+  var sec = $("secMural");
+  if(sec) sec.hidden = !list.length;
+  if(!list.length){ box.innerHTML = ""; return; }
   box.innerHTML = list.map(function(s){
     var anon = s.anonimo || !s.nome;
     var nome = anon ? "Apoiador anônimo" : String(s.nome);
