@@ -1408,14 +1408,16 @@ function loadData(){
    do dados.json, que é o número escrito à mão. */
 function loadTotal(){
   if(!CONFIG.registroURL) return Promise.resolve(false);
-  // 5s e o teto: a pagina ja esta na tela, isso aqui so refina o numero
-  var prazo = new Promise(function(ok){ setTimeout(function(){ ok(null); }, 5000); });
+  // A pagina ja esta na tela, entao da para esperar: o Apps Script demora
+  // alguns segundos quando esta "frio". O teto existe so para nao ficar preso.
+  var prazo = new Promise(function(ok){ setTimeout(function(){ ok(null); }, 15000); });
   var busca = fetch(CONFIG.registroURL + "?acao=total", {cache:"no-store"})
     .then(function(r){ return r.ok ? r.json() : null; })
     .catch(function(){ return null; });
   return Promise.race([busca, prazo]).then(function(t){
     if(!t || typeof t.total !== "number") return false;
     CONFIG.arrecadado = t.total;
+    try{ localStorage.setItem("valeivai.total", String(t.total)); }catch(e){}
     var h = new Date(), d2 = function(n){ return (n < 10 ? "0" : "") + n; };
     CONFIG.atualizadoEm = h.getFullYear() + "-" + d2(h.getMonth() + 1) + "-" + d2(h.getDate());
     return true;
@@ -2221,6 +2223,10 @@ function start(){
    planilha. Assim o site nunca fica em branco esperando o Google responder —
    se a planilha estiver lenta ou bloqueada, o visitante já viu a campanha. */
 loadData().then(function(){
+  // o guardado so levanta a primeira pintura, nunca abaixa: o valor real
+  // chega logo em seguida e manda em qualquer caso
+  var guardado = totalGuardado();
+  if(guardado !== null && guardado > CONFIG.arrecadado) CONFIG.arrecadado = guardado;
   start();
   loadTotal().then(function(mudou){ if(mudou) aplicarTotal(); });
 });
