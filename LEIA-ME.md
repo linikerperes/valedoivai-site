@@ -399,51 +399,64 @@ no fim do mes: soma o total conferido e atualiza o "arrecadado" no dados.json
 > os avisos param mas a planilha continua gravando. Se acontecer, esvazie o
 > `AVISAR_EMAIL` e acompanhe pela planilha.
 
-> **O que eu não consegui testar:** o script acima roda no Google, e eu não tenho
-> acesso a uma conta Google para executá-lo de ponta a ponta. O que testei foi o
-> lado do site, contra um servidor que responde exatamente igual ao que este
-> script devolve: carregar a lista, marcar como conferido e lançar à mão — os três
-> gravaram certo. Se algo falhar na sua configuração, me diga a mensagem de erro
-> que eu ajusto.
+> **O que já foi testado de ponta a ponta**, contra a planilha de verdade:
+> registrar um código copiado no site, listar com a chave, recusar a leitura sem
+> a chave, marcar como conferido, renomear e apagar uma linha. Um Pix real de
+> R$ 14,07 caiu com o identificador `VALEKX7WLW` e apareceu na lista sozinho.
+> A leitura por foto (OCR) depende da autorização do Drive descrita mais abaixo.
 
 ### A página de conferência (`relatorio.html`)
 
 A planilha te dá a lista crua. Para **controlar a entrada do dinheiro** na conta
 da igreja, o projeto inclui uma página só da diretoria:
 
-**`valedoivai.org.br/relatorio.html`**
+**`valedoivai.site/relatorio`**
 
-Ela não é linkada em lugar nenhum do site — só quem tem o endereço abre.
+Ela não é linkada em lugar nenhum do site, e o `_headers` manda os buscadores
+não indexarem — só quem tem o endereço abre.
 
 **Ela funciona em dois modos:**
 
 - **Sem planilha conectada:** a lista fica salva só no navegador daquele aparelho.
   Serve para uma pessoa só.
-- **Com a planilha conectada** (colando a URL no campo *Planilha compartilhada*):
-  todo mundo da diretoria vê e marca **a mesma lista**, em tempo real. É esse o
-  modo para usar em equipe.
+- **Com a planilha conectada** (colando no campo *Planilha compartilhada* a URL
+  que termina em `/exec?chave=...`): todo mundo da diretoria vê e marca **a mesma
+  lista**. É esse o modo para usar em equipe.
+
+> **A chave é o que protege a lista.** A URL sem `?chave=` só escreve — é ela que
+> vai no `dados.json` público, para o site conseguir registrar os códigos copiados.
+> Ler e editar a lista exige a chave. Por isso o endereço com `?chave=` só se
+> passa **no particular, para a diretoria** — nunca em grupo nem em documento.
+
+**Não é preciso digitar código nenhum.** Quando alguém copia o Pix no site, o
+código já entra na lista sozinho, com valor, km e trecho. O trabalho da diretoria
+é só **conferir, aceitar e corrigir o nome** — o nome quase sempre chega vazio,
+porque o campo dele fica lá embaixo, na parte do certificado, e a maioria copia o
+código antes de chegar nele. Por isso o nome é editável direto na tabela.
 
 O que dá para fazer nela:
 
-1. **Trazer os códigos** — escolher o CSV baixado da planilha (*Arquivo › Fazer
-   download › CSV*) ou colar as linhas direto. Ela entende acento, aspas e valor
-   tanto `140.65` quanto `R$ 1.406,53`.
-2. **Lançar à mão** — quando alguém manda o comprovante pelo WhatsApp e o código
-   não está na planilha.
+1. **Pelo comprovante** — manda a foto do comprovante do Pix. A página encolhe a
+   imagem, a planilha lê com OCR e devolve o código e o valor. Se o código já
+   está na lista, ela mostra o valor que já era conhecido e oferece marcar como
+   conferido; se não está, pré-preenche o lançamento à mão.
+2. **Lançar à mão** — quando o comprovante não dá para ler ou o Pix veio por fora.
 3. **Conferir com o extrato** — chegou um Pix na conta? Busca o código (ou o nome,
    ou o valor) e marca. O painel mostra: quantos códigos, quantos conferidos,
    **quanto já entrou de verdade** e quanto falta conferir.
-4. **Baixar CSV** com tudo, inclusive a coluna `Conferido`.
+4. **Corrigir e apagar** — o nome é editável na própria tabela, e cada linha tem
+   um botão de apagar. As duas coisas gravam na planilha compartilhada.
+5. **Baixar CSV** com tudo, inclusive a coluna `Conferido`.
 
 Ela ignora repetição: a mesma pessoa aparece na planilha duas vezes (uma quando
 copia o código, outra quando abre o WhatsApp). Se o código **e** o valor forem
 iguais, entra uma linha só. Se a pessoa mudou de valor no meio, as duas entram —
 porque aí você precisa saber qual valor caiu.
 
-> **Onde os dados ficam:** no navegador do aparelho onde você abrir, e só ali.
-> Não sobe para servidor nenhum. Se abrir em outro celular, a lista começa vazia —
-> use *Baixar CSV* para passar de um aparelho para outro. Isso é de propósito:
-> evita expor nome de doador em página pública.
+> **O OCR precisa do Drive.** A leitura da foto usa o serviço avançado **Drive
+> (v2)** do Apps Script — a v3 não tem `Files.insert` com OCR. Depois de ligar o
+> serviço, é preciso **rodar uma função no editor uma vez e autorizar de novo**,
+> senão a chamada volta com *"não tem permissão para chamar drive.files.insert"*.
 
 E o total que vale para o site continua sendo o `arrecadado` do `dados.json` —
 a conferência é o seu controle interno, não muda o número que aparece na campanha.
