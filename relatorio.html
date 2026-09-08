@@ -360,7 +360,10 @@ async function lerComprovante(file){
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({ acao: "ocr", chave: pp.chave, imagem: b64 })
     });
-    var r = await resp.json();
+    var bruto = await resp.text();
+    var r;
+    try{ r = JSON.parse(bruto); }
+    catch(e){ throw new Error("a planilha respondeu algo que nao e JSON: " + bruto.slice(0, 90)); }
 
     if(r.erro){ aviso("msgFoto", explicarErroOcr(r.erro), true); return; }
 
@@ -404,7 +407,10 @@ async function lerComprovante(file){
       aviso("msgFoto", "Código lido: " + r.codigo);
     }
   }catch(e){
-    aviso("msgFoto", "Não consegui ler a imagem. Tente uma foto mais nítida.", true);
+    // dizer o motivo: "tente uma foto mais nitida" mandava caçar o problema errado
+    console.error("lerComprovante:", e);
+    aviso("msgFoto", "Não consegui ler a imagem: "
+          + (e && e.message ? e.message : e), true);
   }
 }
 
