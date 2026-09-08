@@ -1600,8 +1600,9 @@ function pintarBarra(de, ate){
 function aplicarTrecho(de, ate, rotulo){
   trechoRotulo = rotulo;
   escolhido = Math.max(1, Math.round(ate - de));
+  // se o trecho der exatamente um dos atalhos, o botão acende junto
   document.querySelectorAll(".kmBtn").forEach(function(b){
-    b.setAttribute("aria-pressed", "false");
+    b.setAttribute("aria-pressed", Number(b.dataset.km) === escolhido);
   });
   pintarBarra(de, ate);
   atualizarImpacto();
@@ -1645,13 +1646,21 @@ function buildTrecho(){
   }).join("");
   $("selDe").innerHTML = opts;
   $("selAte").innerHTML = opts;
-  $("selDe").value = "0";
-  $("selAte").value = "58";
-  $("kmDe").value = 0;
-  $("kmAte").value = 58;
   $("kmDe").max = metadeIda();
   $("kmAte").max = metadeIda();
-  pintarBarra(0, 58);
+
+  /* Abre já valendo: 5 km a partir de onde o ônibus está.
+     É a continuação natural da viagem — a pessoa não precisa escolher nada
+     para ver um valor coerente com o momento da campanha. */
+  var IDA = metadeIda();
+  tDe  = Math.min(Math.round(posEstrada()), IDA - 5);
+  tDe  = Math.max(0, tDe);
+  tAte = Math.min(IDA, tDe + 5);
+
+  $("selDe").value  = String(cidadeEm(tDe).km);
+  $("selAte").value = String(cidadeEm(tAte).km);
+  mostrarPane("km");
+  validarTrecho(false);
 }
 
 /* leva o trecho escolhido no topo da página para o formulário de doação */
@@ -2179,14 +2188,13 @@ function start(){
   pct = Math.min(100, Math.max(0, CONFIG.arrecadado / CONFIG.meta * 100));
 
   buildKmButtons();
-  buildTrecho();
+  buildTrecho();   // já define o trecho inicial de 5 km
   renderHeroRoute();
   renderNumbers();
   renderPix();
   renderMural();
   renderContas();
   drawRoute();
-  setKm(10);
   bind();
   initReveal();
   initSticky();

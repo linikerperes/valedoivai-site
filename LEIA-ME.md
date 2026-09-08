@@ -237,43 +237,81 @@ Três coisas ficaram provadas de uma vez:
 > celular de cada visitante, então **o site sozinho não consegue guardar uma lista
 > central** do que foi gerado. Se você quiser essa lista automática, veja abaixo.
 
-### Relatório automático em planilha (opcional, grátis)
+### Ser avisado quando alguém copia um código
 
-Dá para fazer cada código gerado cair sozinho numa planilha do Google.
-**Custo: R$ 0.** Leva uns 10 minutos para configurar.
+É isto que permite conferir o extrato rápido: você recebe **um e-mail na hora**
+em que alguém copia um código Pix, com o valor e o código. Aí é só procurar esse
+valor no extrato da conta da igreja.
 
-1. Crie uma planilha nova no Google Sheets.
-2. Menu **Extensões › Apps Script**. Apague o que estiver lá e cole:
+**Custo: R$ 0.** Leva uns 10 minutos, uma vez só.
+
+**1.** Crie uma planilha nova no Google Sheets.
+
+**2.** Menu **Extensões › Apps Script**. Apague o que estiver lá e cole:
 
 ```javascript
+// Troque pelo e-mail que deve receber o aviso.
+// Deixe '' (vazio) se quiser só a planilha, sem e-mail.
+var AVISAR_EMAIL = 'seu@email.com';
+
 function doPost(e) {
   var ss  = SpreadsheetApp.getActiveSpreadsheet();
   var aba = ss.getSheetByName('Codigos') || ss.insertSheet('Codigos');
   if (aba.getLastRow() === 0) {
     aba.appendRow(['Quando', 'Codigo', 'Evento', 'Km', 'Valor', 'Trecho', 'Nome']);
   }
+
   var d = JSON.parse(e.postData.contents);
   aba.appendRow([new Date(), d.codigo, d.evento, d.km, d.valor, d.trecho, d.nome]);
+
+  // avisa só no "copiou", que é quando a pessoa vai de fato pagar
+  if (AVISAR_EMAIL && d.evento === 'copiou') {
+    MailApp.sendEmail({
+      to: AVISAR_EMAIL,
+      subject: 'Campori: ' + d.codigo + ' - R$ ' + Number(d.valor).toFixed(2),
+      body: 'Alguem copiou um codigo Pix da campanha.\n\n'
+          + 'Codigo: ' + d.codigo + '\n'
+          + 'Valor:  R$ ' + Number(d.valor).toFixed(2) + '\n'
+          + 'Km:     ' + d.km + '\n'
+          + (d.trecho ? 'Trecho: ' + d.trecho + '\n' : '')
+          + (d.nome   ? 'Nome:   ' + d.nome + '\n' : '')
+          + '\nATENCAO: isso NAO confirma pagamento. '
+          + 'Serve para voce procurar esse valor no extrato.\n\n'
+          + 'Planilha: ' + ss.getUrl()
+    });
+  }
+
   return ContentService.createTextOutput('ok');
 }
 ```
 
-3. **Implantar › Nova implantação › App da Web**
-   · Executar como: **Eu**
-   · Quem pode acessar: **Qualquer pessoa**
-4. Copie a URL que aparece e cole no `dados.json`:
+**3.** Troque `seu@email.com` pelo seu e-mail de verdade.
+
+**4.** **Implantar › Nova implantação › App da Web**
+· Executar como: **Eu**
+· Quem pode acessar: **Qualquer pessoa**
+Na primeira vez o Google pede autorização — aceite (é o seu próprio script).
+
+**5.** Copie a URL que aparece (termina em `/exec`) e cole no `dados.json`:
 
 ```json
 "registroURL": "https://script.google.com/macros/s/AKfy.../exec"
 ```
 
-Pronto. Cada vez que alguém copiar o código Pix ou abrir o WhatsApp, entra uma
-linha na planilha com data, código, valor, trecho e nome.
+Pronto. A partir daí, cada cópia de código gera uma linha na planilha e um e-mail.
 
-**O que esperar dessa lista:** ela registra códigos *gerados*, não pagamentos
-confirmados. Muita gente vai copiar e não pagar — é normal. A planilha serve para
-você procurar um código que chegou, não para contar arrecadação. O total oficial
-continua sendo o que você coloca em `arrecadado`.
+**Como usar no dia a dia:** chegou o e-mail dizendo `VALEKX7WLW - R$ 70,33`?
+Procure **R$ 70,33** no extrato da conta. Achou? Abre o `/relatorio`, lança o
+código e marca como conferido.
+
+> **O aviso não é confirmação de pagamento.** Muita gente copia e desiste — é
+> normal. O e-mail diz "alguém pretende pagar R$ X", e serve para você saber o
+> que procurar no extrato. Quem confirma é o extrato, sempre.
+
+> **Limite do Gmail:** conta gratuita envia até ~100 e-mails por dia. Se a
+> campanha viralizar e passar disso, os avisos param (a planilha continua
+> gravando normal). Se acontecer, é só esvaziar o `AVISAR_EMAIL` e passar a
+> acompanhar direto pela planilha.
 
 Enquanto `registroURL` estiver vazio, **o site não envia nada para lugar nenhum**.
 
