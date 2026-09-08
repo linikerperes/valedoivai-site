@@ -445,6 +445,13 @@ function paraNumero(v){
   return isNaN(n) ? 0 : n;
 }
 
+/* busca sem acento e sem caixa: digitar "familia" acha "Família" */
+function limpa(t){
+  return String(t == null ? "" : t)
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().trim();
+}
+
 function render(){
   var f = limpa(filtro);
   var vis = dados.filter(function(d){
