@@ -255,8 +255,9 @@ Esta é a peça que faz **duas coisas de uma vez**:
 
 ```javascript
 // ===== Planilha da campanha Rumo ao Campori 2027 =====
-// Troque pelo e-mail que recebe o aviso. Deixe '' para não receber e-mail.
-var AVISAR_EMAIL = 'seu@email.com';
+// Quem recebe o aviso. Para mais de um, separe por vírgula.
+// Deixe '' para não receber e-mail.
+var AVISAR_EMAIL = 'primeiro@email.com, segundo@email.com';
 
 var CABECALHO = ['Quando','Codigo','Evento','Km','Valor','Trecho','Nome','Conferido'];
 
@@ -325,7 +326,12 @@ function doPost(e) {
 }
 ```
 
-**3.** Troque `seu@email.com` pelo e-mail de verdade.
+**3.** Troque os e-mails da primeira linha pelos de verdade. Pode colocar
+quantos quiser, separados por vírgula — todos recebem o mesmo aviso.
+
+> Os e-mails ficam **só dentro do seu Apps Script**, que é privado.
+> Não os coloque em nenhum arquivo deste repositório: ele é público e
+> robôs de spam varrem o GitHub atrás de endereços.
 
 **4.** **Implantar › Nova implantação › App da Web**
 · Executar como: **Eu**
