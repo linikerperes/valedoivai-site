@@ -108,8 +108,13 @@ section{padding:clamp(56px,9vw,104px) 0}
     linear-gradient(160deg,#050f1c 0%,#0a2440 58%,#0f3157 100%);
   overflow:hidden;
 }
+/* A curva que emenda o hero com a secao clara. O quanto ela sobe no centro
+   precisa acompanhar a largura da tela: uma subida fixa de 110px e 8% da
+   largura no desktop (curva suave) mas 25% no celular, virando uma cupula
+   que invade os botoes. Amarrando em vw, a curva fica igual em toda tela. */
 .hero::after{
-  content:"";position:absolute;left:-8%;right:-8%;bottom:-140px;height:250px;
+  content:"";position:absolute;left:-8%;right:-8%;height:250px;
+  bottom:calc(-250px + clamp(28px, 8vw, 110px));
   background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0;
 }
 .heroInner{position:relative;z-index:3;padding:clamp(26px,5vw,44px) 0 clamp(74px,10vw,120px)}
