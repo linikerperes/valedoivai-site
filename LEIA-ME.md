@@ -496,8 +496,38 @@ porque aí você precisa saber qual valor caiu.
 > *"User rate limit exceeded for OCR"*; a página traduz isso e manda esperar
 > alguns minutos ou lançar à mão. Para o volume da campanha isso não incomoda.
 
-E o total que vale para o site continua sendo o `arrecadado` do `dados.json` —
-a conferência é o seu controle interno, não muda o número que aparece na campanha.
+### O ônibus anda com o que você confere
+
+**A conferência é o que move o ônibus.** Quando alguém marca um código como
+conferido no `/relatorio`, o total sobe e o site anda — sem ninguém editar
+arquivo nenhum.
+
+```
+/relatorio: marcar "conferido"
+        ↓
+planilha: coluna Conferido = sim
+        ↓
+site chama ?acao=total  →  soma só do que foi conferido
+        ↓
+÷ R$ 14,0653 por km  →  posição do ônibus
+```
+
+Leva **até 1 minuto** para aparecer: o script guarda o total em cache por 60
+segundos, para o site não gastar cota do Apps Script a cada visita.
+
+> **O endpoint `?acao=total` é o único que dispensa a chave**, e por um motivo:
+> ele devolve **apenas** a soma e a contagem — `{"total":14.07,"conferidos":1}`.
+> Nunca nomes, códigos ou valores individuais. A lista de doadores continua
+> exigindo a chave; teste você mesmo abrindo a URL sem `?chave=`.
+
+**O `arrecadado` do `dados.json` virou rede de segurança.** Ele só é usado se a
+planilha não responder (sem rede, cota estourada). Enquanto a planilha estiver
+de pé, quem manda é ela — então não adianta editar aquele número esperando o
+ônibus andar.
+
+**Dinheiro que chegou sem código** (em espécie, ou um Pix sem identificador):
+lance à mão no passo 2 com um código inventado (`DINHEIRO01`, por exemplo) e
+marque como conferido. Assim ele entra na conta do ônibus como qualquer outro.
 
 ---
 
