@@ -366,7 +366,11 @@ section{padding:clamp(56px,9vw,104px) 0}
 .dirCard{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px 15px;box-shadow:var(--shadow)}
 .dirCargo{display:block;font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:800;margin-bottom:5px}
 .dirCard b{display:block;font-size:1rem;letter-spacing:-.025em;line-height:1.2}
-.dirZap{display:inline-block;margin-top:9px;font-size:.77rem;font-weight:800;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+.dirZap{
+  display:inline-flex;align-items:center;min-height:44px;margin-top:3px;
+  font-size:.77rem;font-weight:800;color:var(--green);
+  text-decoration:underline;text-underline-offset:3px;
+}
 .dirNota{display:block;margin-top:7px;font-size:.7rem;color:var(--muted);line-height:1.4}
 
 /* ---------------- PRESTAÇÃO DE CONTAS ---------------- */
@@ -488,7 +492,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 .legBadge.volta{background:var(--green);color:#fff}
 .hrHint{font-size:.72rem;color:#8ba3bc;margin:0 0 12px;line-height:1.4}
 
-.vroute{position:relative;height:360px;margin:16px 0 26px}
+.vroute{position:relative;height:470px;margin:16px 0 26px}
 .vtrack{position:absolute;left:13px;top:0;bottom:0;width:6px;border-radius:99px;background:rgba(255,255,255,.17)}
 .vfill{
   position:absolute;left:13px;top:0;width:6px;border-radius:99px;height:0;
@@ -497,7 +501,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 }
 .vstop{
   position:absolute;left:0;width:100%;transform:translateY(-50%);
-  display:block;padding:3px 0 3px 48px;   /* o texto começa depois da faixa do ônibus */
+  display:block;padding:10px 0 10px 48px; /* o texto começa depois da faixa do ônibus */
   background:none;border:0;cursor:pointer;text-align:left;
   color:inherit;font:inherit;border-radius:9px;
 }
@@ -535,7 +539,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 .segBox{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
 .segTabs{display:flex;gap:6px;background:#eef2f7;padding:5px;border-radius:14px;margin:2px 0 14px}
 .segTab{
-  flex:1;padding:10px 8px;border:0;background:none;border-radius:10px;
+  flex:1;padding:13px 8px;border:0;background:none;border-radius:10px;
   font-weight:800;font-size:.84rem;cursor:pointer;color:var(--muted);transition:.15s;
 }
 .segTab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(6,20,40,.13)}
@@ -545,6 +549,11 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 .segScale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--muted);font-weight:700}
 .segWarn{margin-top:12px;font-size:.79rem;font-weight:700;color:#9a6a13;background:#fff6e5;border:1px solid #f0dcb6;border-radius:12px;padding:10px 12px}
 .segNote{margin-top:10px}
+
+/* Links soltos ficam com ~15px de altura, e o dedo tem uns 9mm. Padding
+   vertical em elemento inline cresce a area clicavel sem mexer no layout.
+   So nos links isolados: numa lista densa isso faria alvos se sobreporem. */
+.fine a, .fGrid a{padding-block:12px}
 
 /* ---------------- BREAKPOINTS ---------------- */
 @media(min-width:700px){
@@ -565,6 +574,8 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   .modalCard{border-radius:26px}
 }
 @media(min-width:900px){
+  /* no desktop o painel e uma coluna fixa e o mouse acerta alvo pequeno */
+  .vroute{height:360px}
   .heroGrid{grid-template-columns:minmax(0,1fr) 348px;column-gap:46px;align-items:start}
   .heroMain{grid-column:1;grid-row:1}
   .heroRoute{grid-column:2;grid-row:1/span 2;position:sticky;top:24px}
