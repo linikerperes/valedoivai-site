@@ -93,12 +93,13 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
   <div class="card" id="cardConexao">
     <h2>Planilha compartilhada</h2>
     <p class="hint">
-      Cole aqui o endereço da planilha da campanha (aquele que termina em <code>/exec</code>).
-      A partir daí, todo mundo da diretoria que colar esse mesmo endereço vê e marca
-      <strong>a mesma lista</strong>.
+      Cole aqui o endereço da planilha <strong>com a chave no fim</strong>
+      (<code>.../exec?chave=SUACHAVE</code>). Todo mundo da diretoria que colar esse
+      mesmo endereço vê e marca <strong>a mesma lista</strong>.
+      A chave é o que impede visitantes do site de abrirem a lista de doadores.
     </p>
     <label class="lbl" for="urlPlanilha">Endereço da planilha</label>
-    <input class="inp" id="urlPlanilha" placeholder="https://script.google.com/macros/s/.../exec">
+    <input class="inp" id="urlPlanilha" placeholder="https://script.google.com/macros/s/.../exec?chave=SUACHAVE">
     <div class="acoes">
       <button class="btn g" id="btnConectar">Conectar</button>
       <button class="btn o sm" id="btnAtualizar" hidden>↻ Atualizar lista</button>
@@ -219,6 +220,20 @@ function carregar(){
    senão qualquer visitante teria acesso à lista de doadores. */
 function conectado(){ return !!urlPlanilha; }
 
+/* A URL que a diretoria cola vem no formato .../exec?chave=SEGREDO.
+   A chave protege a LEITURA da lista: o endereço sozinho, que fica público no
+   dados.json para o site registrar as cópias, não abre a lista de doadores. */
+function planilhaPartes(){
+  var i = urlPlanilha.indexOf("?");
+  if(i < 0) return { base: urlPlanilha, chave: "" };
+  var chave = "";
+  urlPlanilha.slice(i + 1).split("&").forEach(function(par){
+    var kv = par.split("=");
+    if(kv[0] === "chave") chave = decodeURIComponent(kv[1] || "");
+  });
+  return { base: urlPlanilha.slice(0, i), chave: chave };
+}
+
 function pintarModo(){
   var a = $("avisoModo");
   if(conectado()){
@@ -237,7 +252,8 @@ function pintarModo(){
 function baixarDaPlanilha(){
   if(!conectado()) return Promise.resolve();
   aviso("msgConexao", "Buscando a lista...");
-  return fetch(urlPlanilha + "?acao=listar", { cache: "no-store" })
+  var pp = planilhaPartes();
+  return fetch(pp.base + "?acao=listar&chave=" + encodeURIComponent(pp.chave), { cache: "no-store" })
     .then(function(r){ return r.json(); })
     .then(function(linhas){
       if(!Array.isArray(linhas)) throw new Error("resposta inesperada");
@@ -257,18 +273,21 @@ function baixarDaPlanilha(){
       aviso("msgConexao", dados.length + " códigos carregados da planilha.");
     })
     .catch(function(err){
-      aviso("msgConexao", "Não consegui ler a planilha. Confira o endereço e se a "
-            + "implantação está como 'Qualquer pessoa'.", true);
+      aviso("msgConexao", "Não consegui ler a planilha. Confira três coisas: o endereço "
+            + "está completo (com ?chave=), a implantação está como 'Qualquer pessoa', "
+            + "e a chave do script bate com a do endereço.", true);
     });
 }
 
 /* grava de volta na planilha; se falhar, a marcação continua valendo neste aparelho */
 function marcarNaPlanilha(d){
   if(!conectado()) return;
-  fetch(urlPlanilha, {
+  var pp = planilhaPartes();
+  fetch(pp.base, {
     method: "POST", mode: "no-cors", keepalive: true,
     headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ acao: "conferir", codigo: d.codigo, valor: d.valor, feito: d.feito })
+    body: JSON.stringify({ acao: "conferir", chave: pp.chave,
+                           codigo: d.codigo, valor: d.valor, feito: d.feito })
   }).catch(function(){});
 }
 function salvar(){
@@ -470,10 +489,11 @@ $("btnAdd").addEventListener("click", function(){
   dados.push(novo);
   salvar(); render();
   if(conectado()){
-    fetch(urlPlanilha, {
+    var pp = planilhaPartes();
+    fetch(pp.base, {
       method:"POST", mode:"no-cors", keepalive:true,
       headers:{ "Content-Type":"text/plain;charset=utf-8" },
-      body: JSON.stringify({ codigo:novo.codigo, evento:"manual", km:"",
+      body: JSON.stringify({ chave: pp.chave, codigo:novo.codigo, evento:"manual", km:"",
                              valor:novo.valor, trecho:"", nome:novo.nome, feito:true })
     }).catch(function(){});
   }
@@ -501,9 +521,14 @@ $("btnLimpar").addEventListener("click", function(){
 
 $("btnConectar").addEventListener("click", function(){
   var u = $("urlPlanilha").value.trim();
-  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^\s]+\/exec$/.test(u)){
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^\s?]+\/exec(\?.*)?$/.test(u)){
     aviso("msgConexao", "O endereço precisa começar com https://script.google.com/macros/s/ "
-          + "e terminar em /exec.", true);
+          + "e conter /exec.", true);
+    return;
+  }
+  if(u.indexOf("chave=") < 0){
+    aviso("msgConexao", "Falta a chave no fim do endereço (…/exec?chave=SUACHAVE). "
+          + "Sem ela a planilha não deixa ler a lista.", true);
     return;
   }
   urlPlanilha = u;
