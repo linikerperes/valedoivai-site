@@ -50,6 +50,23 @@ textarea.inp{min-height:96px;font-family:ui-monospace,Menlo,monospace;font-size:
 .btn.g{background:var(--green)}
 .btn.o{background:#eef2f7;color:var(--ink)}
 .btn.sm{padding:9px 15px;font-size:.85rem}
+td.del{width:44px;text-align:center}
+.lixo{
+  border:0;background:none;cursor:pointer;font-size:1rem;line-height:1;
+  padding:6px 8px;border-radius:9px;opacity:.4;transition:.15s;
+}
+.lixo:hover{opacity:1;background:#ffe9ea}
+.nomeEdit{
+  width:100%;min-width:120px;border:1px solid transparent;background:transparent;
+  border-radius:8px;padding:5px 7px;font:inherit;font-size:.85rem;
+}
+.nomeEdit:hover{border-color:var(--line);background:#fff}
+.nomeEdit:focus{border-color:var(--gold);background:#fff;outline:0}
+.nomeEdit::placeholder{color:#a9b4c2;font-style:italic}
+#achado{margin-top:14px;padding:15px;border-radius:14px;border:2px solid var(--green);background:#f2fbf6}
+#achado .cd{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:1.05rem;letter-spacing:.04em}
+#achado .vl{font-weight:900;font-size:1.25rem;letter-spacing:-.03em}
+#achado.naoAchou{border-color:#f0dcb6;background:#fff6e5}
 .acoes{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
 
 .tabelaBox{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:6px}
@@ -116,32 +133,21 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
   </div>
 
   <div class="card">
-    <h2>1. Trazer os códigos</h2>
+    <h2>1. Pelo comprovante</h2>
     <p class="hint">
-      Exporte a planilha do Google em <strong>Arquivo › Fazer download › CSV</strong> e
-      escolha o arquivo aqui. Ou copie as linhas da planilha e cole no campo de baixo.
+      Recebeu o comprovante no WhatsApp? Escolha a foto (ou o print) que eu leio o
+      código e o valor sozinho. Você só confere e confirma.
     </p>
-    <div class="row dois">
-      <div>
-        <label class="lbl" for="arq">Arquivo CSV</label>
-        <input class="inp" type="file" id="arq" accept=".csv,text/csv">
-      </div>
-      <div>
-        <label class="lbl" for="colar">Ou colar aqui</label>
-        <textarea class="inp" id="colar" placeholder="Quando,Codigo,Evento,Km,Valor,Trecho,Nome&#10;2026-09-07,VALEJQ6QDW,copiou,10,140.65,,Familia Silva"></textarea>
-      </div>
-    </div>
-    <div class="acoes">
-      <button class="btn" id="btnColar">Importar o que colei</button>
-      <button class="btn o sm" id="btnExemplo">Ver um exemplo</button>
-    </div>
-    <div class="msg" id="msgImp" hidden></div>
+    <label class="lbl" for="foto">Foto do comprovante</label>
+    <input class="inp" type="file" id="foto" accept="image/*">
+    <div class="msg" id="msgFoto" hidden></div>
+    <div id="achado" hidden></div>
   </div>
 
   <div class="card">
     <h2>2. Lançar à mão</h2>
     <p class="hint">
-      Quando alguém mandar o comprovante pelo WhatsApp e o código não estiver na lista.
+      Quando a foto não der certo, ou quando você já sabe o código e o valor.
     </p>
     <div class="row tres">
       <div>
@@ -180,7 +186,7 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
         <thead>
           <tr>
             <th class="chk">✓</th><th>Código</th><th>Valor</th><th>Km</th>
-            <th>Quando</th><th>Nome</th><th>Trecho</th><th>Evento</th>
+            <th>Quando</th><th>Nome</th><th>Trecho</th><th>Evento</th><th></th>
           </tr>
         </thead>
         <tbody id="corpo"></tbody>
@@ -246,6 +252,8 @@ function pintarModo(){
   }
   $("btnAtualizar").hidden = !conectado();
   $("btnDesconectar").hidden = !conectado();
+  // conectado, a fonte da verdade é a planilha: limpar só a cópia local confundiria
+  $("btnLimpar").hidden = conectado();
   $("urlPlanilha").value = urlPlanilha;
 }
 
@@ -280,6 +288,120 @@ function baixarDaPlanilha(){
 }
 
 /* grava de volta na planilha; se falhar, a marcação continua valendo neste aparelho */
+/* ---------- comprovante por foto ----------
+   A foto é reduzida no próprio celular antes de subir: um retrato de 4 MB vira
+   uns 150 KB, o que evita estourar o limite do Apps Script e economiza dados.
+   Quem faz a leitura é o OCR do Google Drive, do lado da planilha. */
+function encolherFoto(file){
+  return new Promise(function(ok, falhou){
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function(){
+      var lado = Math.max(img.width, img.height);
+      var esc = Math.min(1, 1400 / lado);
+      var c = document.createElement("canvas");
+      c.width  = Math.round(img.width  * esc);
+      c.height = Math.round(img.height * esc);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      ok(c.toDataURL("image/jpeg", 0.75).split(",")[1]);
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); falhou(new Error("imagem inválida")); };
+    img.src = url;
+  });
+}
+
+function mostrarAchado(html, naoAchou){
+  var box = $("achado");
+  box.innerHTML = html;
+  box.classList.toggle("naoAchou", !!naoAchou);
+  box.hidden = false;
+}
+
+async function lerComprovante(file){
+  if(!conectado()){
+    aviso("msgFoto", "Conecte a planilha primeiro — é ela que faz a leitura da foto.", true);
+    return;
+  }
+  $("achado").hidden = true;
+  aviso("msgFoto", "Lendo o comprovante...");
+  try{
+    var b64 = await encolherFoto(file);
+    var pp = planilhaPartes();
+    var resp = await fetch(pp.base, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ acao: "ocr", chave: pp.chave, imagem: b64 })
+    });
+    var r = await resp.json();
+
+    if(r.erro){ aviso("msgFoto", "A planilha recusou: " + r.erro, true); return; }
+
+    if(!r.codigo){
+      aviso("msgFoto", "Não achei nenhum código no comprovante.", true);
+      mostrarAchado("<b>Não encontrei o código nessa imagem.</b>"
+        + "<div style=\"font-size:.85rem;margin-top:6px\">Pode ser foto tremida, cortada "
+        + "ou de baixa qualidade. Lance à mão no passo 2"
+        + (r.valor ? " — o valor que li foi <b>" + money(r.valor) + "</b>." : ".") + "</div>", true);
+      return;
+    }
+
+    // o código é único: se já está na lista, o valor certo já veio de quando foi copiado
+    var i = dados.findIndex(function(d){ return d.codigo === r.codigo; });
+    if(i > -1){
+      var d = dados[i];
+      mostrarAchado(
+        '<div class="cd">' + esc(d.codigo) + "</div>"
+        + '<div class="vl">' + money(d.valor) + "</div>"
+        + '<div style="font-size:.85rem;margin:8px 0 12px">Este código está na lista'
+        + (d.feito ? " e <b>já estava conferido</b>." : ". Confirme para marcar como conferido.") + "</div>"
+        + (d.feito ? "" : '<button class="btn g" id="btnConfirmarAchado">Confirmar e marcar</button>'));
+      if(!d.feito){
+        $("btnConfirmarAchado").addEventListener("click", function(){
+          dados[i].feito = true; salvar(); render(); marcarNaPlanilha(dados[i]);
+          mostrarAchado('<div class="cd">' + esc(d.codigo) + "</div><b>✓ Marcado como conferido.</b>");
+        });
+      }
+      aviso("msgFoto", "Código " + r.codigo + " encontrado na lista.");
+      // destaca na busca para a pessoa ver a linha
+      $("busca").value = r.codigo; filtro = r.codigo; render();
+    }else{
+      $("mCod").value = r.codigo;
+      if(r.valor) $("mVal").value = String(r.valor).replace(".", ",");
+      if(r.nome)  $("mNome").value = r.nome;
+      mostrarAchado(
+        '<div class="cd">' + esc(r.codigo) + "</div>"
+        + (r.valor ? '<div class="vl">' + money(r.valor) + "</div>" : "")
+        + '<div style="font-size:.85rem;margin-top:6px">Não estava na lista — preenchi o '
+        + "passo 2 com o que li. Confira e clique em <b>Adicionar</b>.</div>", true);
+      aviso("msgFoto", "Código lido: " + r.codigo);
+    }
+  }catch(e){
+    aviso("msgFoto", "Não consegui ler a imagem. Tente uma foto mais nítida.", true);
+  }
+}
+
+/* apaga uma linha só — na tela e, se conectado, também na planilha */
+function apagarLinha(i){
+  var d = dados[i];
+  if(!d) return;
+  var onde = conectado() ? "da planilha (todo mundo deixa de ver)" : "desta lista";
+  if(!confirm("Apagar " + d.codigo + " — " + money(d.valor) + " " + onde + "?\n\nNão dá para desfazer.")) return;
+
+  dados.splice(i, 1);
+  salvar(); render();
+
+  if(conectado()){
+    var pp = planilhaPartes();
+    fetch(pp.base, {
+      method: "POST", mode: "no-cors", keepalive: true,
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ acao: "apagar", chave: pp.chave,
+                             codigo: d.codigo, valor: d.valor })
+    }).catch(function(){});
+    aviso("msgConexao", d.codigo + " apagado da planilha.");
+  }
+}
+
 function marcarNaPlanilha(d){
   if(!conectado()) return;
   var pp = planilhaPartes();
@@ -292,7 +414,7 @@ function marcarNaPlanilha(d){
 }
 function salvar(){
   try{ localStorage.setItem(CHAVE, JSON.stringify(dados)); }
-  catch(e){ aviso("msgImp","Não consegui salvar neste navegador.",true); }
+  catch(e){ aviso("msgFoto","Não consegui salvar neste navegador.",true); }
 }
 
 function aviso(id, texto, erro){
@@ -311,78 +433,6 @@ function paraNumero(v){
   if(t.indexOf(",") > -1) t = t.replace(/\./g, "").replace(",", ".");
   var n = parseFloat(t);
   return isNaN(n) ? 0 : n;
-}
-
-/* CSV com suporte a campo entre aspas e quebra de linha dentro do campo */
-function lerCSV(texto){
-  var linhas = [], campo = "", linha = [], dentro = false, i, c;
-  texto = String(texto).replace(/\r\n?/g, "\n");
-  for(i = 0; i < texto.length; i++){
-    c = texto.charAt(i);
-    if(dentro){
-      if(c === '"'){
-        if(texto.charAt(i+1) === '"'){ campo += '"'; i++; }
-        else dentro = false;
-      } else campo += c;
-    }else{
-      if(c === '"') dentro = true;
-      else if(c === "," || c === "\t"){ linha.push(campo); campo = ""; }
-      else if(c === "\n"){ linha.push(campo); linhas.push(linha); linha = []; campo = ""; }
-      else campo += c;
-    }
-  }
-  if(campo.length || linha.length){ linha.push(campo); linhas.push(linha); }
-  return linhas.filter(function(l){ return l.join("").trim() !== ""; });
-}
-
-function limpa(t){
-  return String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
-}
-
-function importar(texto){
-  var linhas = lerCSV(texto);
-  if(!linhas.length){ aviso("msgImp","Não encontrei nenhuma linha.",true); return; }
-
-  // descobre as colunas pelo cabeçalho; se não houver, assume a ordem da planilha
-  var cab = linhas[0].map(limpa);
-  var temCab = cab.indexOf("codigo") > -1;
-  var idx = { quando:0, codigo:1, evento:2, km:3, valor:4, trecho:5, nome:6 };
-  if(temCab){
-    idx = {
-      quando: cab.indexOf("quando"), codigo: cab.indexOf("codigo"),
-      evento: cab.indexOf("evento"), km: cab.indexOf("km"),
-      valor:  cab.indexOf("valor"),  trecho: cab.indexOf("trecho"),
-      nome:   cab.indexOf("nome")
-    };
-    linhas = linhas.slice(1);
-  }
-  var pega = function(l, i){ return (i > -1 && l[i] !== undefined) ? String(l[i]).trim() : ""; };
-
-  var novos = 0, repetidos = 0;
-  linhas.forEach(function(l){
-    var cod = pega(l, idx.codigo).toUpperCase();
-    if(!cod) return;
-    var val = paraNumero(pega(l, idx.valor));
-    // mesma pessoa pode gerar o código e mudar de valor: só é repetido se código E valor batem
-    var jaTem = dados.some(function(d){
-      return d.codigo === cod && Math.abs(d.valor - val) < 0.005;
-    });
-    if(jaTem){ repetidos++; return; }
-    dados.push({
-      codigo: cod,
-      valor:  val,
-      km:     pega(l, idx.km),
-      quando: pega(l, idx.quando),
-      nome:   pega(l, idx.nome),
-      trecho: pega(l, idx.trecho),
-      evento: pega(l, idx.evento),
-      feito:  false
-    });
-    novos++;
-  });
-  salvar(); render();
-  aviso("msgImp", novos + (novos === 1 ? " código importado" : " códigos importados")
-        + (repetidos ? " · " + repetidos + " já estavam na lista" : ""));
 }
 
 function render(){
@@ -408,9 +458,12 @@ function render(){
       '<td class="val">' + money(d.valor) + "</td>" +
       "<td>" + esc(d.km) + "</td>" +
       "<td>" + esc(formatarData(d.quando)) + "</td>" +
-      "<td>" + esc(d.nome) + "</td>" +
+      '<td><input class="nomeEdit" data-nome="' + i + '" value="' + esc(d.nome) +
+      '" placeholder="sem nome" aria-label="Nome de quem doou"></td>' +
       "<td>" + esc(d.trecho) + "</td>" +
-      "<td>" + esc(d.evento) + "</td>";
+      "<td>" + esc(d.evento) + "</td>" +
+      '<td class="del"><button type="button" class="lixo" data-del="' + i +
+      '" title="Apagar este código" aria-label="Apagar ' + esc(d.codigo) + '">🗑</button></td>';
     corpo.appendChild(tr);
   });
 
@@ -443,7 +496,7 @@ function formatarData(v){
 }
 
 function baixarCSV(){
-  if(!dados.length){ aviso("msgImp","A lista está vazia.",true); return; }
+  if(!dados.length){ aviso("msgFoto","A lista está vazia.",true); return; }
   var cab = ["Codigo","Valor","Km","Quando","Nome","Trecho","Evento","Conferido"];
   var linhas = [cab].concat(dados.map(function(d){
     return [d.codigo, d.valor.toFixed(2).replace(".", ","), d.km, d.quando,
@@ -461,24 +514,32 @@ function baixarCSV(){
 }
 
 /* ligações */
-$("arq").addEventListener("change", function(){
+$("foto").addEventListener("change", function(){
   var f = this.files && this.files[0];
-  if(!f) return;
-  var r = new FileReader();
-  r.onload = function(){ importar(r.result); };
-  r.readAsText(f, "utf-8");
+  if(f) lerComprovante(f);
   this.value = "";
 });
-$("btnColar").addEventListener("click", function(){
-  var t = $("colar").value.trim();
-  if(!t){ aviso("msgImp","Cole as linhas da planilha primeiro.",true); return; }
-  importar(t); $("colar").value = "";
+
+/* nome editável direto na tabela */
+$("corpo").addEventListener("change", function(e){
+  var inp = e.target.closest(".nomeEdit");
+  if(!inp) return;
+  var i = Number(inp.dataset.nome), d = dados[i];
+  if(!d) return;
+  d.nome = inp.value.trim();
+  salvar();
+  if(conectado()){
+    var pp = planilhaPartes();
+    fetch(pp.base, {
+      method: "POST", mode: "no-cors", keepalive: true,
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ acao: "renomear", chave: pp.chave,
+                             codigo: d.codigo, valor: d.valor, nome: d.nome })
+    }).catch(function(){});
+    aviso("msgConexao", "Nome de " + d.codigo + " atualizado.");
+  }
 });
-$("btnExemplo").addEventListener("click", function(){
-  $("colar").value = "Quando,Codigo,Evento,Km,Valor,Trecho,Nome\n"
-    + new Date().toISOString() + ",VALEJQ6QDW,copiou,10,140.65,,Familia Silva\n"
-    + new Date().toISOString() + ",VALEK7M3QX,whatsapp,50,703.27,Paranavai > Cruzeiro do Sul,Padaria Central";
-});
+
 $("btnAdd").addEventListener("click", function(){
   var cod = $("mCod").value.trim().toUpperCase();
   var val = paraNumero($("mVal").value);
@@ -501,6 +562,11 @@ $("btnAdd").addEventListener("click", function(){
   aviso("msgAdd", cod + " adicionado e já marcado como conferido.");
 });
 $("busca").addEventListener("input", function(){ filtro = this.value; render(); });
+$("corpo").addEventListener("click", function(e){
+  var b = e.target.closest(".lixo");
+  if(b) apagarLinha(Number(b.dataset.del));
+});
+
 $("corpo").addEventListener("change", function(e){
   var c = e.target;
   if(c.type !== "checkbox") return;
