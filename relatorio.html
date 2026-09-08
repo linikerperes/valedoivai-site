@@ -327,6 +327,24 @@ function mostrarAchado(html, naoAchou){
   box.hidden = false;
 }
 
+/* O Google devolve o erro em ingles e cheio de jargao. Aqui vira portugues
+   com o proximo passo, porque quem le e a diretoria, nao um programador. */
+function explicarErroOcr(erro){
+  var e = String(erro);
+  if(e.indexOf("rate limit") > -1 || e.indexOf("Rate Limit") > -1){
+    return "O Google limitou a leitura de fotos por agora. Espere uns minutos "
+         + "e tente de novo, ou lance a mao no passo 2.";
+  }
+  if(e.indexOf("chave invalida") > -1){
+    return "A chave do endereco nao bate com a do script.";
+  }
+  if(e.indexOf("permission") > -1 || e.indexOf("permissao") > -1 || e.indexOf("permissão") > -1){
+    return "A planilha ainda nao autorizou a leitura de fotos. Abra o Apps Script, "
+         + "rode a funcao doGet uma vez e aceite as permissoes.";
+  }
+  return "A planilha recusou: " + e;
+}
+
 async function lerComprovante(file){
   if(!conectado()){
     aviso("msgFoto", "Conecte a planilha primeiro — é ela que faz a leitura da foto.", true);
@@ -344,7 +362,7 @@ async function lerComprovante(file){
     });
     var r = await resp.json();
 
-    if(r.erro){ aviso("msgFoto", "A planilha recusou: " + r.erro, true); return; }
+    if(r.erro){ aviso("msgFoto", explicarErroOcr(r.erro), true); return; }
 
     if(!r.codigo){
       aviso("msgFoto", "Não achei nenhum código no comprovante.", true);
