@@ -168,6 +168,10 @@ section{padding:clamp(56px,9vw,104px) 0}
 @keyframes slide{to{background-position:20px 0}}
 
 .heroCta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+/* CTA principal, no alto: cheio no celular para virar o maior alvo da tela */
+.ctaTopo{margin-top:26px}
+.ctaTopo .btn{width:100%;font-size:1.06rem;padding:18px 26px}
+@media(min-width:700px){.ctaTopo .btn{width:auto}}
 
 /* ---------------- ROTA ---------------- */
 .routeCard{padding:clamp(18px,3vw,28px);overflow:hidden}
@@ -616,6 +620,10 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       de Desbravadores, em Barretos. Nós já começamos a viagem.
       <b>Até onde você pode nos levar?</b>
     </p>
+
+    <div class="ctaTopo">
+      <a class="btn" href="#adotar">Doe seus quilômetros 🚌</a>
+    </div>
     </div>
 
     <aside class="heroRoute" aria-labelledby="hrTitulo">
