@@ -453,10 +453,24 @@ copia o código, outra quando abre o WhatsApp). Se o código **e** o valor forem
 iguais, entra uma linha só. Se a pessoa mudou de valor no meio, as duas entram —
 porque aí você precisa saber qual valor caiu.
 
-> **O OCR precisa do Drive.** A leitura da foto usa o serviço avançado **Drive
-> (v2)** do Apps Script — a v3 não tem `Files.insert` com OCR. Depois de ligar o
-> serviço, é preciso **rodar uma função no editor uma vez e autorizar de novo**,
-> senão a chamada volta com *"não tem permissão para chamar drive.files.insert"*.
+> **Como o OCR foi montado** (custou três armadilhas, ficam registradas):
+>
+> 1. Usa o serviço avançado **Drive v2** — a v3 não tem `Files.insert` com OCR.
+> 2. A chamada é `Drive.Files.insert({title:'ocr-temp'}, blob, {ocr:true,
+>    ocrLanguage:'pt', convert:true})`. O `mimeType` do *recurso*, se informado,
+>    é o da **origem** (`image/jpeg`) — pôr o do destino
+>    (`application/vnd.google-apps.document`) devolve *"OCR is not supported for
+>    files of type..."*. Quem cria o documento é o `convert:true`; sem ele o
+>    arquivo sobe como imagem e o texto volta vazio.
+> 3. São **duas autorizações**, e a segunda só aparece depois que a primeira
+>    passa: `drive` para subir a imagem e `documents` para o `DocumentApp` ler o
+>    texto. Para renovar: no Apps Script, com `doGet` selecionado, clique em
+>    **Executar** — rodar o `doGet` à mão não faz nada além de chamar
+>    `autorizar()`, que existe só para disparar o pedido de permissão.
+>
+> **Limite de uso:** o OCR do Drive tem cota. Muitas fotos seguidas devolvem
+> *"User rate limit exceeded for OCR"*; a página traduz isso e manda esperar
+> alguns minutos ou lançar à mão. Para o volume da campanha isso não incomoda.
 
 E o total que vale para o site continua sendo o `arrecadado` do `dados.json` —
 a conferência é o seu controle interno, não muda o número que aparece na campanha.
