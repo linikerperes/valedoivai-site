@@ -1415,6 +1415,24 @@ function loadData(){
     .catch(function(){ /* file:// ou arquivo ausente — segue com o padrão */ });
 }
 
+/* O que move o ônibus é o total JÁ CONFERIDO no extrato, que a diretoria marca
+   na página /relatorio. Este endpoint devolve só a soma — nunca nomes, códigos
+   ou valores individuais —, por isso pode ser chamado sem a chave, de um site
+   público. Se a planilha estiver fora do ar, continua valendo o `arrecadado`
+   do dados.json, que é o número escrito à mão. */
+function loadTotal(){
+  if(!CONFIG.registroURL) return Promise.resolve();
+  return fetch(CONFIG.registroURL + "?acao=total", {cache:"no-store"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(t){
+      if(!t || typeof t.total !== "number") return;
+      CONFIG.arrecadado = t.total;
+      var h = new Date(), d2 = function(n){ return (n < 10 ? "0" : "") + n; };
+      CONFIG.atualizadoEm = h.getFullYear() + "-" + d2(h.getMonth() + 1) + "-" + d2(h.getDate());
+    })
+    .catch(function(){ /* sem rede ou cota estourada: fica o valor do dados.json */ });
+}
+
 /* ---------------------- a estrada ---------------------- */
 /* O trajeto é um circuito fechado: a ida ocupa a faixa de cima, o retorno a
    de baixo. A posição do ônibus vem de getPointAtLength() e o ângulo vem da
@@ -2201,7 +2219,7 @@ function start(){
   initVideos();
 }
 
-loadData().then(start);
+loadData().then(loadTotal).then(start);
 
 })();
 </script>
