@@ -22,7 +22,14 @@
 /
   Cache-Control: public, max-age=0, must-revalidate
 
-# página da diretoria: fora dos buscadores
+# página da diretoria: fora dos buscadores.
+# O Cloudflare serve em /relatorio (sem .html) e redireciona /relatorio.html
+# para lá — as duas regras precisam existir, senão o cabeçalho só valeria
+# no endereço que ninguém acessa de fato.
+/relatorio
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: public, max-age=0, must-revalidate
+
 /relatorio.html
   X-Robots-Tag: noindex, nofollow
   Cache-Control: public, max-age=0, must-revalidate
