@@ -365,6 +365,18 @@ section{padding:clamp(56px,9vw,104px) 0}
 .dirZap{display:inline-block;margin-top:9px;font-size:.77rem;font-weight:800;color:var(--green);text-decoration:underline;text-underline-offset:3px}
 .dirNota{display:block;margin-top:7px;font-size:.7rem;color:var(--muted);line-height:1.4}
 
+/* ---------------- PRESTAÇÃO DE CONTAS ---------------- */
+.despLinha{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.despLinha:last-child{border-bottom:0}
+.despLinha .d{min-width:0}
+.despLinha b{display:block;font-size:.94rem;letter-spacing:-.02em}
+.despLinha small{color:var(--muted);font-size:.76rem;font-weight:700}
+.despLinha .v{font-weight:900;letter-spacing:-.03em;white-space:nowrap;font-size:1rem}
+.despTotais{margin-top:16px;padding-top:14px;border-top:2px solid var(--line)}
+.despTotais .tLine{padding:9px 0}
+.despTotais .saldo b{color:var(--green);font-size:1.25rem}
+.despVazio{padding:22px 18px;border:2px dashed var(--line);border-radius:16px;color:var(--muted);font-size:.9rem;line-height:1.55;background:#fafbfd}
+
 /* ---------------- MURAL ---------------- */
 .mural{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .sup{
@@ -1004,7 +1016,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
           <div class="brBox" style="margin-top:4px">
             <span class="brLabel">Pix Copia e Cola · valor já preenchido</span>
             <div class="codDoa"><span>Código desta doação</span><b id="codDoacao">—</b></div>
-            <div class="brCode" id="brcodeTxt"></div>
+            <div class="brCode" id="brcodeTxt" hidden></div>
             <button class="btn green full" id="copyBrcode">
               <span>📋 Copiar código de <b id="brValor">R$ 140,65</b></span>
             </button>
@@ -1014,7 +1026,8 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
             </p>
             <p class="fine on-dark" style="margin:9px 0 0">
               O código acima identifica a sua doação e já vai junto na mensagem do
-              WhatsApp quando você enviar o comprovante.
+              WhatsApp quando você enviar o comprovante. É por ele que conseguimos
+              achar a sua contribuição no extrato e prestar contas certinho.
             </p>
           </div>
 
@@ -1071,13 +1084,22 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
         <div class="tLine"><span>Contribuições</span><b id="tCount">—</b></div>
         <div class="tLine"><span>Última atualização</span><b id="tUpdate">—</b></div>
       </div>
+      <div class="card contas" style="grid-column:1/-1">
+        <div class="eyebrow" style="color:#9a6a13">Prestação de contas</div>
+        <h3 style="font-size:1.4rem;margin-bottom:6px">Para onde o dinheiro foi</h3>
+        <p class="fine" style="margin:0 0 16px">
+          Cada saída do caixa da campanha aparece aqui, com data e valor.
+        </p>
+        <div id="despesasBox"></div>
+      </div>
+
       <div class="card trust">
         <div class="eyebrow" style="color:#9a6a13">Prestação de contas</div>
         <h3 style="font-size:1.4rem;margin-bottom:12px">Para onde vai o dinheiro</h3>
         <p style="color:#4a3c1e;font-size:.95rem;margin-bottom:14px">
           As contribuições vão para a <strong>conta oficial da Igreja Adventista do Sétimo Dia</strong>
-          — União Sul Brasileira —, pela chave Pix <strong>iasd.paranavai@anp.org.br</strong>.
-          Nenhum valor passa por conta pessoal.
+          — União Sul Brasileira. Nenhum valor passa por conta pessoal. O nome do
+          recebedor aparece no seu app na hora de confirmar o Pix.
         </p>
         <p style="color:#4a3c1e;font-size:.95rem;margin-bottom:14px">
           Por ser uma conta institucional, que também recebe outros valores da igreja,
@@ -1259,7 +1281,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       <div class="brBox claro" style="margin-top:4px">
         <span class="brLabel">Pix Copia e Cola · valor já preenchido</span>
         <div class="codDoa"><span>Código desta doação</span><b id="mCodDoacao">—</b></div>
-        <div class="brCode" id="mBrcode"></div>
+        <div class="brCode" id="mBrcode" hidden></div>
         <button class="btn green full" id="mCopyBrcode">
           <span>📋 Copiar código de <b id="mBrValor">R$ 140,65</b></span>
         </button>
@@ -1300,6 +1322,7 @@ var CONFIG = {
   edicao: "",           // "Alpha" ou "Omega" — deixe vazio se ainda não definido
   dataEvento: "",       // ex.: "2027-01-05T08:00:00-03:00"
   registroURL: "",      // opcional: URL da planilha que recebe os códigos gerados
+  despesas: [],         // [{descricao:"Sinal do ônibus", valor:5000, data:"2026-10-15"}]
   totalApoiadores: null,// número real de contribuições, ou null
   apoiadores: []        // [{nome:"Família Silva", km:10, anonimo:false}]
 };
@@ -1381,6 +1404,7 @@ function loadData(){
       if(d.edicao) CONFIG.edicao = d.edicao;
       if(d.dataEvento) CONFIG.dataEvento = d.dataEvento;
       if(d.registroURL) CONFIG.registroURL = d.registroURL;
+      if(Array.isArray(d.despesas)) CONFIG.despesas = d.despesas;
       if(typeof d.totalApoiadores === "number") CONFIG.totalApoiadores = d.totalApoiadores;
       if(Array.isArray(d.apoiadores)) CONFIG.apoiadores = d.apoiadores;
     })
@@ -1851,6 +1875,43 @@ function openWhats(){
   window.open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
 }
 
+/* ---------------------- prestação de contas ---------------------- */
+function renderContas(){
+  var box = $("despesasBox");
+  if(!box) return;
+  var lista = (CONFIG.despesas || []).filter(function(d){ return d && Number(d.valor) > 0; });
+  var gasto = lista.reduce(function(a,d){ return a + Number(d.valor); }, 0);
+  var saldo = CONFIG.arrecadado - gasto;
+
+  var html = "";
+  if(!lista.length){
+    html += '<div class="despVazio">Nenhuma despesa lançada ainda. Assim que o clube fizer o '
+          + 'primeiro pagamento do transporte, ele aparece aqui — com data, valor e descrição.</div>';
+  }else{
+    html += lista.map(function(d){
+      var quando = d.data
+        ? new Date(d.data + "T12:00:00-03:00").toLocaleDateString("pt-BR")
+        : "";
+      return '<div class="despLinha"><div class="d"><b>' + esc(d.descricao || "Despesa") + "</b>"
+           + (quando ? "<small>" + quando + "</small>" : "")
+           + '</div><span class="v">' + money(Number(d.valor)) + "</span></div>";
+    }).join("");
+  }
+
+  html += '<div class="despTotais">'
+        + '<div class="tLine"><span>Total recebido</span><b>' + moneyShort(CONFIG.arrecadado) + "</b></div>"
+        + '<div class="tLine"><span>Total gasto</span><b>' + moneyShort(gasto) + "</b></div>"
+        + '<div class="tLine saldo"><span>Saldo em caixa</span><b>' + moneyShort(saldo) + "</b></div>"
+        + "</div>";
+  box.innerHTML = html;
+}
+
+function esc(t){
+  return String(t == null ? "" : t).replace(/[<>&"]/g, function(c){
+    return { "<":"&lt;", ">":"&gt;", "&":"&amp;", '"':"&quot;" }[c];
+  });
+}
+
 /* ---------------------- mural ---------------------- */
 function renderMural(){
   var box = $("mural"), list = CONFIG.apoiadores || [];
@@ -2119,6 +2180,7 @@ function start(){
   renderNumbers();
   renderPix();
   renderMural();
+  renderContas();
   drawRoute();
   setKm(10);
   bind();

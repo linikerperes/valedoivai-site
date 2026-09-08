@@ -51,6 +51,7 @@ Regras dos campos:
 | `registroURL` | Opcional. URL da planilha que recebe os códigos gerados (seção 3.3). Vazio = o site não envia nada para lugar nenhum. |
 | `totalApoiadores` | Número real de contribuições. Deixe `null` se ainda não quiser publicar. |
 | `apoiadores` | Só entra quem autorizou. Use `"anonimo": true` para quem não quer o nome. |
+| `despesas` | Prestação de contas. Cada saída do caixa vira uma linha no site. |
 
 Dá para editar pelo celular, direto no painel do Cloudflare Pages ou do GitHub.
 
@@ -308,6 +309,46 @@ porque aí você precisa saber qual valor caiu.
 
 E o total que vale para o site continua sendo o `arrecadado` do `dados.json` —
 a conferência é o seu controle interno, não muda o número que aparece na campanha.
+
+---
+
+## 3.4. Prestação de contas
+
+A seção de transparência mostra **para onde o dinheiro foi**, não só quanto entrou.
+Basta lançar cada saída no `dados.json`:
+
+```json
+"despesas": [
+  { "descricao": "Sinal do ônibus (30%)",  "valor": 4650, "data": "2026-10-15" },
+  { "descricao": "Seguro viagem do grupo", "valor": 820,  "data": "2026-11-02" }
+]
+```
+
+O site calcula sozinho e publica:
+
+```
+Total recebido    R$ 8.200
+Total gasto       R$ 5.470
+Saldo em caixa    R$ 2.730
+```
+
+Enquanto a lista estiver vazia, aparece um aviso dizendo que nenhuma despesa foi
+lançada ainda — em vez de um espaço em branco.
+
+## 3.5. Por que a chave Pix não aparece na tela
+
+A chave **não é mostrada em lugar nenhum** do site. A única forma de doar é pelo
+botão *Copiar código*, que já leva o valor e o código da doação embutidos.
+
+O motivo é de controle: com a chave à vista, qualquer pessoa mandaria um valor
+arbitrário, sem código nenhum — e esse Pix cairia na conta da igreja, no meio de
+muitos outros, sem nada que ligasse ele à campanha. Aí a conferência vira garimpo.
+
+> **Até onde isso protege:** a chave continua existindo **dentro** do código Copia
+> e Cola, porque é assim que o Pix funciona — não há como gerar um código válido
+> sem ela. Alguém que cole o código num editor de texto consegue lê-la. O que
+> mudou é que ninguém faz isso **sem querer**: o caminho fácil e óbvio passou a ser
+> o fluxo com valor e código certos.
 
 ---
 
