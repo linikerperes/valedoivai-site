@@ -262,9 +262,18 @@ function baixarDaPlanilha(){
   aviso("msgConexao", "Buscando a lista...");
   var pp = planilhaPartes();
   return fetch(pp.base + "?acao=listar&chave=" + encodeURIComponent(pp.chave), { cache: "no-store" })
-    .then(function(r){ return r.json(); })
-    .then(function(linhas){
-      if(!Array.isArray(linhas)) throw new Error("resposta inesperada");
+    .then(function(r){ return r.text(); })
+    .then(function(txt){
+      var linhas;
+      try{ linhas = JSON.parse(txt); }
+      catch(e){ throw new Error("a planilha respondeu algo que nao e JSON: " + txt.slice(0, 90)); }
+      // o script recusa a leitura devolvendo {erro:...}, nao um erro de rede
+      if(linhas && linhas.erro){
+        throw new Error(linhas.erro === "chave invalida"
+          ? "a chave do endereco nao bate com a do script"
+          : String(linhas.erro));
+      }
+      if(!Array.isArray(linhas)) throw new Error("resposta inesperada da planilha");
       dados = linhas.map(function(d){
         return {
           codigo: String(d.codigo || "").toUpperCase(),
@@ -281,9 +290,10 @@ function baixarDaPlanilha(){
       aviso("msgConexao", dados.length + " códigos carregados da planilha.");
     })
     .catch(function(err){
-      aviso("msgConexao", "Não consegui ler a planilha. Confira três coisas: o endereço "
-            + "está completo (com ?chave=), a implantação está como 'Qualquer pessoa', "
-            + "e a chave do script bate com a do endereço.", true);
+      // dizer o motivo de verdade: a mensagem generica manda conferir a coisa errada
+      console.error("baixarDaPlanilha:", err);
+      aviso("msgConexao", "Não consegui ler a planilha: "
+            + (err && err.message ? err.message : err), true);
     });
 }
 
