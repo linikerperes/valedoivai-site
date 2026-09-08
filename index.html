@@ -1406,6 +1406,17 @@ function loadData(){
    ou valores individuais —, por isso pode ser chamado sem a chave, de um site
    público. Se a planilha estiver fora do ar, continua valendo o `arrecadado`
    do dados.json, que é o número escrito à mão. */
+/* O Apps Script leva alguns segundos para acordar. Sem isto, o visitante ve
+   "R$ 0 - 0 km" no primeiro instante e so depois o valor real aparece — numa
+   pagina de arrecadacao, essa e a pior primeira impressao possivel. Guardamos
+   o ultimo total no aparelho de quem ja visitou, so para a primeira pintura. */
+function totalGuardado(){
+  try{
+    var v = parseFloat(localStorage.getItem("valeivai.total"));
+    return isNaN(v) ? null : v;
+  }catch(e){ return null; }
+}
+
 function loadTotal(){
   if(!CONFIG.registroURL) return Promise.resolve(false);
   // A pagina ja esta na tela, entao da para esperar: o Apps Script demora
