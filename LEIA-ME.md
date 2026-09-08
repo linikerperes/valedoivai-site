@@ -237,34 +237,74 @@ Três coisas ficaram provadas de uma vez:
 > celular de cada visitante, então **o site sozinho não consegue guardar uma lista
 > central** do que foi gerado. Se você quiser essa lista automática, veja abaixo.
 
-### Ser avisado quando alguém copia um código
+### A planilha compartilhada (aviso por e-mail + lista da diretoria)
 
-É isto que permite conferir o extrato rápido: você recebe **um e-mail na hora**
-em que alguém copia um código Pix, com o valor e o código. Aí é só procurar esse
-valor no extrato da conta da igreja.
+Esta é a peça que faz **duas coisas de uma vez**:
 
-**Custo: R$ 0.** Leva uns 10 minutos, uma vez só.
+1. te **avisa por e-mail** toda vez que alguém copia um código, com o valor — para
+   você procurar no extrato;
+2. serve de **lista compartilhada** para o `/relatorio`, para que Eder, Camila e
+   Guilherme vejam e marquem a mesma coisa.
 
-**1.** Crie uma planilha nova no Google Sheets.
+**Custo: R$ 0.** Uns 10 minutos, uma vez só.
+
+**1.** Crie uma planilha nova no Google Sheets. Dê um nome, por exemplo
+*Doações Campori 2027*.
 
 **2.** Menu **Extensões › Apps Script**. Apague o que estiver lá e cole:
 
 ```javascript
-// Troque pelo e-mail que deve receber o aviso.
-// Deixe '' (vazio) se quiser só a planilha, sem e-mail.
+// ===== Planilha da campanha Rumo ao Campori 2027 =====
+// Troque pelo e-mail que recebe o aviso. Deixe '' para não receber e-mail.
 var AVISAR_EMAIL = 'seu@email.com';
 
+var CABECALHO = ['Quando','Codigo','Evento','Km','Valor','Trecho','Nome','Conferido'];
+
+function aba_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var a = ss.getSheetByName('Codigos') || ss.insertSheet('Codigos');
+  if (a.getLastRow() === 0) a.appendRow(CABECALHO);
+  return a;
+}
+
+function json_(o) {
+  return ContentService.createTextOutput(JSON.stringify(o))
+                       .setMimeType(ContentService.MimeType.JSON);
+}
+
+// a pagina /relatorio le a lista por aqui
+function doGet(e) {
+  var a = aba_();
+  if (a.getLastRow() < 2) return json_([]);
+  var v = a.getRange(2, 1, a.getLastRow() - 1, CABECALHO.length).getValues();
+  return json_(v.map(function (r) {
+    return { quando: r[0], codigo: r[1], evento: r[2], km: r[3],
+             valor: r[4], trecho: r[5], nome: r[6],
+             feito: String(r[7]).toLowerCase() === 'sim' };
+  }));
+}
+
 function doPost(e) {
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName('Codigos') || ss.insertSheet('Codigos');
-  if (aba.getLastRow() === 0) {
-    aba.appendRow(['Quando', 'Codigo', 'Evento', 'Km', 'Valor', 'Trecho', 'Nome']);
+  var d = JSON.parse(e.postData.contents);
+  var a = aba_();
+
+  // marcar/desmarcar como conferido, vindo da pagina /relatorio
+  if (d.acao === 'conferir') {
+    var v = a.getDataRange().getValues();
+    for (var i = 1; i < v.length; i++) {
+      if (String(v[i][1]) === d.codigo &&
+          Math.abs(Number(v[i][4]) - Number(d.valor)) < 0.005) {
+        a.getRange(i + 1, 8).setValue(d.feito ? 'sim' : '');
+        break;
+      }
+    }
+    return ContentService.createTextOutput('ok');
   }
 
-  var d = JSON.parse(e.postData.contents);
-  aba.appendRow([new Date(), d.codigo, d.evento, d.km, d.valor, d.trecho, d.nome]);
+  // registro novo: vem do site quando alguem copia, ou do lancamento manual
+  a.appendRow([new Date(), d.codigo, d.evento, d.km, d.valor,
+               d.trecho, d.nome, d.feito ? 'sim' : '']);
 
-  // avisa só no "copiou", que é quando a pessoa vai de fato pagar
   if (AVISAR_EMAIL && d.evento === 'copiou') {
     MailApp.sendEmail({
       to: AVISAR_EMAIL,
@@ -275,9 +315,9 @@ function doPost(e) {
           + 'Km:     ' + d.km + '\n'
           + (d.trecho ? 'Trecho: ' + d.trecho + '\n' : '')
           + (d.nome   ? 'Nome:   ' + d.nome + '\n' : '')
-          + '\nATENCAO: isso NAO confirma pagamento. '
+          + '\nATENCAO: isso NAO confirma pagamento.\n'
           + 'Serve para voce procurar esse valor no extrato.\n\n'
-          + 'Planilha: ' + ss.getUrl()
+          + 'Planilha: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl()
     });
   }
 
@@ -285,35 +325,59 @@ function doPost(e) {
 }
 ```
 
-**3.** Troque `seu@email.com` pelo seu e-mail de verdade.
+**3.** Troque `seu@email.com` pelo e-mail de verdade.
 
 **4.** **Implantar › Nova implantação › App da Web**
 · Executar como: **Eu**
 · Quem pode acessar: **Qualquer pessoa**
-Na primeira vez o Google pede autorização — aceite (é o seu próprio script).
 
-**5.** Copie a URL que aparece (termina em `/exec`) e cole no `dados.json`:
+Na primeira vez o Google pede autorização — é o seu próprio script, pode aceitar.
 
-```json
-"registroURL": "https://script.google.com/macros/s/AKfy.../exec"
+**5.** Copie a URL que aparece (termina em `/exec`). Ela é usada em **dois lugares**:
+
+- no `dados.json`, para o site registrar as cópias:
+  ```json
+  "registroURL": "https://script.google.com/macros/s/AKfy.../exec"
+  ```
+- na página `valedoivai.site/relatorio`, no campo **Planilha compartilhada** —
+  cada pessoa da diretoria cola uma vez, no aparelho dela.
+
+**6.** Se quiser que a diretoria veja a planilha crua também, compartilhe pelo
+botão **Compartilhar** do próprio Google Sheets.
+
+### Como fica o dia a dia
+
+```
+alguem copia o codigo  →  linha na planilha + e-mail pra voce
+                          "VALEKX7WLW - R$ 70,33"
+        ↓
+voce procura R$ 70,33 no extrato da conta da igreja
+        ↓
+achou? abre valedoivai.site/relatorio, marca o codigo
+        ↓
+Camila e Guilherme veem a marcacao na hora
+        ↓
+no fim do mes: soma o total conferido e atualiza o "arrecadado" no dados.json
 ```
 
-Pronto. A partir daí, cada cópia de código gera uma linha na planilha e um e-mail.
+> **O e-mail não é confirmação de pagamento.** Muita gente copia e desiste. Ele
+> diz "alguém pretende pagar R$ X" e serve para você saber o que procurar. Quem
+> confirma é o extrato.
 
-**Como usar no dia a dia:** chegou o e-mail dizendo `VALEKX7WLW - R$ 70,33`?
-Procure **R$ 70,33** no extrato da conta. Achou? Abre o `/relatorio`, lança o
-código e marca como conferido.
+> **A URL funciona como senha.** Ela é longa e aleatória, e fica guardada no
+> aparelho de cada pessoa. Ela **não** está no código do site — se estivesse,
+> qualquer visitante teria acesso à lista de doadores. Só passe para a diretoria.
 
-> **O aviso não é confirmação de pagamento.** Muita gente copia e desiste — é
-> normal. O e-mail diz "alguém pretende pagar R$ X", e serve para você saber o
-> que procurar no extrato. Quem confirma é o extrato, sempre.
+> **Limite do Gmail:** conta gratuita envia ~100 e-mails por dia. Passando disso,
+> os avisos param mas a planilha continua gravando. Se acontecer, esvazie o
+> `AVISAR_EMAIL` e acompanhe pela planilha.
 
-> **Limite do Gmail:** conta gratuita envia até ~100 e-mails por dia. Se a
-> campanha viralizar e passar disso, os avisos param (a planilha continua
-> gravando normal). Se acontecer, é só esvaziar o `AVISAR_EMAIL` e passar a
-> acompanhar direto pela planilha.
-
-Enquanto `registroURL` estiver vazio, **o site não envia nada para lugar nenhum**.
+> **O que eu não consegui testar:** o script acima roda no Google, e eu não tenho
+> acesso a uma conta Google para executá-lo de ponta a ponta. O que testei foi o
+> lado do site, contra um servidor que responde exatamente igual ao que este
+> script devolve: carregar a lista, marcar como conferido e lançar à mão — os três
+> gravaram certo. Se algo falhar na sua configuração, me diga a mensagem de erro
+> que eu ajusto.
 
 ### A página de conferência (`relatorio.html`)
 
@@ -322,8 +386,17 @@ da igreja, o projeto inclui uma página só da diretoria:
 
 **`valedoivai.org.br/relatorio.html`**
 
-Ela não é linkada em lugar nenhum do site — só quem tem o endereço abre. O que dá
-para fazer nela:
+Ela não é linkada em lugar nenhum do site — só quem tem o endereço abre.
+
+**Ela funciona em dois modos:**
+
+- **Sem planilha conectada:** a lista fica salva só no navegador daquele aparelho.
+  Serve para uma pessoa só.
+- **Com a planilha conectada** (colando a URL no campo *Planilha compartilhada*):
+  todo mundo da diretoria vê e marca **a mesma lista**, em tempo real. É esse o
+  modo para usar em equipe.
+
+O que dá para fazer nela:
 
 1. **Trazer os códigos** — escolher o CSV baixado da planilha (*Arquivo › Fazer
    download › CSV*) ou colar as linhas direto. Ela entende acento, aspas e valor

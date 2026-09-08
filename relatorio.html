@@ -88,11 +88,23 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
 
 <main class="wrap">
 
-  <div class="aviso">
-    <strong>Esta página é só para a diretoria.</strong> Os dados ficam salvos
-    <strong>neste aparelho</strong>, no navegador — não sobem para lugar nenhum.
-    Se abrir em outro celular, a lista começa vazia. Use <em>Baixar CSV</em> para
-    guardar uma cópia ou passar para outra pessoa.
+  <div class="aviso" id="avisoModo"></div>
+
+  <div class="card" id="cardConexao">
+    <h2>Planilha compartilhada</h2>
+    <p class="hint">
+      Cole aqui o endereço da planilha da campanha (aquele que termina em <code>/exec</code>).
+      A partir daí, todo mundo da diretoria que colar esse mesmo endereço vê e marca
+      <strong>a mesma lista</strong>.
+    </p>
+    <label class="lbl" for="urlPlanilha">Endereço da planilha</label>
+    <input class="inp" id="urlPlanilha" placeholder="https://script.google.com/macros/s/.../exec">
+    <div class="acoes">
+      <button class="btn g" id="btnConectar">Conectar</button>
+      <button class="btn o sm" id="btnAtualizar" hidden>↻ Atualizar lista</button>
+      <button class="btn o sm" id="btnDesconectar" hidden>Desconectar</button>
+    </div>
+    <div class="msg" id="msgConexao" hidden></div>
   </div>
 
   <div class="tot" style="margin-top:16px">
@@ -186,8 +198,10 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--green)}
 "use strict";
 
 var CHAVE = "valeivai.conferencia.v1";
+var CHAVE_URL = "valeivai.planilha.v1";
 var dados = [];          // {codigo, valor, km, quando, nome, trecho, evento, feito}
 var filtro = "";
+var urlPlanilha = "";    // vazio = modo local (só neste aparelho)
 
 var $ = function(id){ return document.getElementById(id); };
 var money = function(n){ return (n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); };
@@ -196,6 +210,66 @@ function carregar(){
   try{ dados = JSON.parse(localStorage.getItem(CHAVE)) || []; }
   catch(e){ dados = []; }
   if(!Array.isArray(dados)) dados = [];
+  try{ urlPlanilha = localStorage.getItem(CHAVE_URL) || ""; }catch(e){ urlPlanilha = ""; }
+}
+
+/* ---------- planilha compartilhada ----------
+   A URL do Apps Script funciona como a senha: ela é longa e aleatória, e fica
+   guardada no aparelho de cada pessoa da diretoria. Não vai no código do site,
+   senão qualquer visitante teria acesso à lista de doadores. */
+function conectado(){ return !!urlPlanilha; }
+
+function pintarModo(){
+  var a = $("avisoModo");
+  if(conectado()){
+    a.innerHTML = "<strong>Lista compartilhada.</strong> Esta página está ligada à planilha "
+      + "da campanha — o que você marcar aqui, o resto da diretoria vê.";
+  }else{
+    a.innerHTML = "<strong>Somente neste aparelho.</strong> Sem a planilha conectada, "
+      + "a lista fica salva só neste navegador e ninguém mais enxerga. "
+      + "Conecte abaixo para compartilhar com a diretoria.";
+  }
+  $("btnAtualizar").hidden = !conectado();
+  $("btnDesconectar").hidden = !conectado();
+  $("urlPlanilha").value = urlPlanilha;
+}
+
+function baixarDaPlanilha(){
+  if(!conectado()) return Promise.resolve();
+  aviso("msgConexao", "Buscando a lista...");
+  return fetch(urlPlanilha + "?acao=listar", { cache: "no-store" })
+    .then(function(r){ return r.json(); })
+    .then(function(linhas){
+      if(!Array.isArray(linhas)) throw new Error("resposta inesperada");
+      dados = linhas.map(function(d){
+        return {
+          codigo: String(d.codigo || "").toUpperCase(),
+          valor:  paraNumero(d.valor),
+          km:     d.km || "",
+          quando: d.quando || "",
+          nome:   d.nome || "",
+          trecho: d.trecho || "",
+          evento: d.evento || "",
+          feito:  d.feito === true || String(d.feito).toLowerCase() === "sim"
+        };
+      });
+      salvar(); render();
+      aviso("msgConexao", dados.length + " códigos carregados da planilha.");
+    })
+    .catch(function(err){
+      aviso("msgConexao", "Não consegui ler a planilha. Confira o endereço e se a "
+            + "implantação está como 'Qualquer pessoa'.", true);
+    });
+}
+
+/* grava de volta na planilha; se falhar, a marcação continua valendo neste aparelho */
+function marcarNaPlanilha(d){
+  if(!conectado()) return;
+  fetch(urlPlanilha, {
+    method: "POST", mode: "no-cors", keepalive: true,
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ acao: "conferir", codigo: d.codigo, valor: d.valor, feito: d.feito })
+  }).catch(function(){});
 }
 function salvar(){
   try{ localStorage.setItem(CHAVE, JSON.stringify(dados)); }
@@ -391,9 +465,18 @@ $("btnAdd").addEventListener("click", function(){
   var val = paraNumero($("mVal").value);
   if(!cod){ aviso("msgAdd","Informe o código.",true); return; }
   if(val <= 0){ aviso("msgAdd","Informe o valor.",true); return; }
-  dados.push({ codigo:cod, valor:val, km:"", quando:new Date().toISOString(),
-               nome:$("mNome").value.trim(), trecho:"", evento:"manual", feito:true });
+  var novo = { codigo:cod, valor:val, km:"", quando:new Date().toISOString(),
+               nome:$("mNome").value.trim(), trecho:"", evento:"manual", feito:true };
+  dados.push(novo);
   salvar(); render();
+  if(conectado()){
+    fetch(urlPlanilha, {
+      method:"POST", mode:"no-cors", keepalive:true,
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body: JSON.stringify({ codigo:novo.codigo, evento:"manual", km:"",
+                             valor:novo.valor, trecho:"", nome:novo.nome, feito:true })
+    }).catch(function(){});
+  }
   $("mCod").value = ""; $("mVal").value = ""; $("mNome").value = "";
   aviso("msgAdd", cod + " adicionado e já marcado como conferido.");
 });
@@ -402,7 +485,11 @@ $("corpo").addEventListener("change", function(e){
   var c = e.target;
   if(c.type !== "checkbox") return;
   var i = Number(c.dataset.i);
-  if(dados[i]){ dados[i].feito = c.checked; salvar(); render(); }
+  if(dados[i]){
+    dados[i].feito = c.checked;
+    salvar(); render();
+    marcarNaPlanilha(dados[i]);
+  }
 });
 $("btnCSV").addEventListener("click", baixarCSV);
 $("btnLimpar").addEventListener("click", function(){
@@ -412,8 +499,33 @@ $("btnLimpar").addEventListener("click", function(){
   }
 });
 
+$("btnConectar").addEventListener("click", function(){
+  var u = $("urlPlanilha").value.trim();
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^\s]+\/exec$/.test(u)){
+    aviso("msgConexao", "O endereço precisa começar com https://script.google.com/macros/s/ "
+          + "e terminar em /exec.", true);
+    return;
+  }
+  urlPlanilha = u;
+  try{ localStorage.setItem(CHAVE_URL, u); }catch(e){}
+  pintarModo();
+  baixarDaPlanilha();
+});
+
+$("btnAtualizar").addEventListener("click", baixarDaPlanilha);
+
+$("btnDesconectar").addEventListener("click", function(){
+  if(!confirm("Desconectar da planilha? A lista volta a valer só neste aparelho.")) return;
+  urlPlanilha = "";
+  try{ localStorage.removeItem(CHAVE_URL); }catch(e){}
+  pintarModo();
+  aviso("msgConexao", "Desconectado.");
+});
+
 carregar();
+pintarModo();
 render();
+if(conectado()) baixarDaPlanilha();
 
 })();
 </script>
