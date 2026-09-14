@@ -175,8 +175,12 @@ section{padding:clamp(56px,9vw,104px) 0}
 }
 
 .progWrap{margin-top:4px}
-.progGente{margin-top:10px;font-size:.79rem;font-weight:700;color:#a9bed4}
-.progGente b{color:#fff}
+/* `.hStat b` define o tamanho dos números grandes e alcança qualquer <b> aqui
+   dentro. Sem reimpor, a prova social saía do tamanho de um título e competia
+   com o valor arrecadado. */
+.progGente{margin-top:11px;font-size:.8rem;font-weight:700;color:#a9bed4;line-height:1.4}
+.hStat .progGente b{display:inline;font-size:1.02rem;font-weight:900;color:#fff;
+  letter-spacing:-.02em;line-height:inherit}
 .progTop{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:9px;font-size:.78rem;color:#a9bed4;font-weight:700}
 .progTop b{color:var(--gold);font-size:1.25rem;font-weight:900;letter-spacing:-.03em}
 .progBar{height:13px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;position:relative}
