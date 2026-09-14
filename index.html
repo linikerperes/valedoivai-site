@@ -160,12 +160,19 @@ section{padding:clamp(56px,9vw,104px) 0}
    a urgência chega antes da causa e soa cobrança. */
 .conta{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .contaEsq{display:flex;align-items:baseline;gap:10px}
-/* `.hStat span` vale mais que `.contaNum` sozinho (classe+elemento vence
-   classe), e deixava o número pequeno e em caixa alta. Daí o `.hStat` na frente. */
-.hStat .contaNum{font-size:clamp(1.9rem,7vw,2.6rem);font-weight:900;letter-spacing:-.04em;
-  line-height:1;color:var(--gold);text-transform:none;margin-bottom:0;display:inline}
-.hStat .contaUn{font-size:.82rem;font-weight:800;color:#c6d6e6;letter-spacing:-.01em;
-  text-transform:none;margin-bottom:0;display:inline}
+/* A faixa vive fora dos cartões de número porque no celular eles ficam a duas
+   telas de distância — e contagem que exige rolagem não cria urgência nenhuma.
+   Estilo próprio, sem herdar nada de .hStat. */
+.boxConta{
+  margin-top:18px;max-width:620px;
+  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
+  border-radius:18px;padding:14px 18px;backdrop-filter:blur(6px);
+}
+.contaTit{display:block;font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;
+  color:#9db4cd;font-weight:800;margin-bottom:7px}
+.contaNum{font-size:clamp(1.8rem,6.5vw,2.4rem);font-weight:900;letter-spacing:-.04em;
+  line-height:1;color:var(--gold);display:inline}
+.contaUn{font-size:.82rem;font-weight:800;color:#c6d6e6;letter-spacing:-.01em;display:inline}
 .contaDir{text-align:right;font-size:.76rem;font-weight:700;color:#93aac4;line-height:1.35}
 .contaDir b{display:block;color:#e7eef7;font-size:.86rem}
 .contaFim .contaNum{color:#fff;font-size:clamp(1.4rem,5.5vw,1.9rem)}
@@ -665,6 +672,17 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
     <div class="ctaTopo">
       <a class="btn" href="#adotar">Doe seus quilômetros 🚌</a>
     </div>
+
+    <div class="boxConta" id="boxConta" hidden>
+      <span class="contaTit">Contagem para a saída</span>
+      <div class="conta" id="conta">
+        <div class="contaEsq">
+          <span class="contaNum" id="contaNum">—</span>
+          <span class="contaUn" id="contaUn"></span>
+        </div>
+        <div class="contaDir" id="contaDir"></div>
+      </div>
+    </div>
     </div>
 
     <aside class="heroRoute" aria-labelledby="hrTitulo">
@@ -709,16 +727,6 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
         <div class="progGente" id="progGente" hidden></div>
       </div>
 
-      <div class="hStat wide" id="boxConta" hidden>
-        <span>Contagem para a saída</span>
-        <div class="conta" id="conta">
-          <div class="contaEsq">
-            <span class="contaNum" id="contaNum">—</span>
-            <span class="contaUn" id="contaUn"></span>
-          </div>
-          <div class="contaDir" id="contaDir"></div>
-        </div>
-      </div>
     </div>
 
     <div class="heroCta">
