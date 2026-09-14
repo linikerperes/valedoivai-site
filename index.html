@@ -155,6 +155,25 @@ section{padding:clamp(56px,9vw,104px) 0}
 .hStat small{color:#93aac4;font-size:.76rem;font-weight:600}
 .hStat.wide{grid-column:1/-1}
 
+/* Contagem regressiva. Fica depois da barra de progresso de propósito: o
+   visitante vê primeiro quanto já andou, depois quanto tempo resta. Invertido,
+   a urgência chega antes da causa e soa cobrança. */
+.conta{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.contaEsq{display:flex;align-items:baseline;gap:10px}
+/* `.hStat span` vale mais que `.contaNum` sozinho (classe+elemento vence
+   classe), e deixava o número pequeno e em caixa alta. Daí o `.hStat` na frente. */
+.hStat .contaNum{font-size:clamp(1.9rem,7vw,2.6rem);font-weight:900;letter-spacing:-.04em;
+  line-height:1;color:var(--gold);text-transform:none;margin-bottom:0;display:inline}
+.hStat .contaUn{font-size:.82rem;font-weight:800;color:#c6d6e6;letter-spacing:-.01em;
+  text-transform:none;margin-bottom:0;display:inline}
+.contaDir{text-align:right;font-size:.76rem;font-weight:700;color:#93aac4;line-height:1.35}
+.contaDir b{display:block;color:#e7eef7;font-size:.86rem}
+.contaFim .contaNum{color:#fff;font-size:clamp(1.4rem,5.5vw,1.9rem)}
+@media(max-width:420px){
+  .conta{flex-direction:column;align-items:flex-start;gap:8px}
+  .contaDir{text-align:left}
+}
+
 .progWrap{margin-top:4px}
 .progTop{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:9px;font-size:.78rem;color:#a9bed4;font-weight:700}
 .progTop b{color:var(--gold);font-size:1.25rem;font-weight:900;letter-spacing:-.03em}
@@ -681,6 +700,17 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       <div class="hStat wide progWrap">
         <div class="progTop"><span>Progresso da jornada</span><b id="sPct">0%</b></div>
         <div class="progBar"><div class="progFill" id="sFill"></div></div>
+      </div>
+
+      <div class="hStat wide" id="boxConta" hidden>
+        <span>Contagem para a saída</span>
+        <div class="conta" id="conta">
+          <div class="contaEsq">
+            <span class="contaNum" id="contaNum">—</span>
+            <span class="contaUn" id="contaUn"></span>
+          </div>
+          <div class="contaDir" id="contaDir"></div>
+        </div>
       </div>
     </div>
 
@@ -1460,6 +1490,7 @@ function aplicarTotal(){
   renderHeroRoute();
   drawRoute();
   renderContas();
+  renderContagem();   // a faixa mostra quanto falta em reais: sem isto fica no valor velho
 }
 
 /* ---------------------- a estrada ---------------------- */
@@ -1972,6 +2003,81 @@ function esc(t){
   });
 }
 
+/* ---------------------- contagem regressiva ---------------------- */
+/* A data vem do dados.json. Sem ela a faixa some — nada de contagem chutada.
+   Conta em dias até a última semana; aí passa a mostrar horas, porque "faltam
+   2 dias" e "faltam 38 horas" pesam de formas diferentes na reta final. */
+var contaTimer = null;
+
+function renderContagem(){
+  var box = $("boxConta");
+  if(!box) return;
+  var quando = CONFIG.dataEvento;
+  if(!quando){ box.hidden = true; return; }
+
+  var alvo = new Date(quando);
+  if(isNaN(alvo.getTime())){ box.hidden = true; return; }
+  box.hidden = false;
+
+  var falta = alvo.getTime() - Date.now();
+  var caixa = $("conta");
+  var elNum = $("contaNum"), un = $("contaUn"), dir = $("contaDir");
+
+  if(falta <= 0){
+    caixa.classList.add("contaFim");
+    elNum.textContent = "A viagem começou!";
+    un.textContent = "";
+    dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>Obrigado a quem levou o ônibus até aqui.";
+    pararContagem();
+    return;
+  }
+  caixa.classList.remove("contaFim");
+
+  var horas = Math.floor(falta / 3600000);
+  var dias  = Math.floor(horas / 24);
+
+  if(dias >= 7){
+    elNum.textContent = num(dias);
+    un.textContent  = dias === 1 ? "dia" : "dias";
+  }else if(horas >= 24){
+    elNum.textContent = num(dias);
+    un.textContent  = (dias === 1 ? "dia e " : "dias e ") + (horas - dias * 24) + "h";
+  }else{
+    var min = Math.floor(falta / 60000) % 60;
+    elNum.textContent = horas + "h" + (min < 10 ? "0" : "") + min;
+    un.textContent  = "para a saída";
+  }
+
+  // o que ainda falta arrecadar, para o tempo não aparecer sozinho
+  var faltaBRL = Math.max(0, CONFIG.meta - CONFIG.arrecadado);
+  dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>"
+    + (faltaBRL > 0
+        ? "faltam " + moneyShort(faltaBRL) + " para garantir a viagem"
+        : "meta batida — o ônibus está pago");
+}
+
+function dataPorExtenso(d){
+  try{
+    return d.toLocaleDateString("pt-BR", { day:"numeric", month:"long", year:"numeric" });
+  }catch(e){ return d.toLocaleDateString("pt-BR"); }
+}
+
+/* De minuto em minuto basta enquanto falta mais de um dia; na reta final o
+   relógio precisa andar. Um timer só, trocado conforme a distância. */
+function ligarContagem(){
+  pararContagem();
+  renderContagem();
+  if(!CONFIG.dataEvento) return;
+  var alvo = new Date(CONFIG.dataEvento).getTime();
+  if(isNaN(alvo)) return;
+  var passo = (alvo - Date.now()) < 86400000 ? 1000 : 60000;
+  contaTimer = setInterval(renderContagem, passo);
+}
+
+function pararContagem(){
+  if(contaTimer){ clearInterval(contaTimer); contaTimer = null; }
+}
+
 /* ---------------------- mural ---------------------- */
 function renderMural(){
   var box = $("mural"), list = CONFIG.apoiadores || [];
@@ -2237,6 +2343,7 @@ function start(){
   renderHeroRoute();
   renderNumbers();
   renderPix();
+  ligarContagem();
   renderMural();
   renderContas();
   drawRoute();
