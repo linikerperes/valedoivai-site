@@ -175,6 +175,8 @@ section{padding:clamp(56px,9vw,104px) 0}
 }
 
 .progWrap{margin-top:4px}
+.progGente{margin-top:10px;font-size:.79rem;font-weight:700;color:#a9bed4}
+.progGente b{color:#fff}
 .progTop{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:9px;font-size:.78rem;color:#a9bed4;font-weight:700}
 .progTop b{color:var(--gold);font-size:1.25rem;font-weight:900;letter-spacing:-.03em}
 .progBar{height:13px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;position:relative}
@@ -700,6 +702,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       <div class="hStat wide progWrap">
         <div class="progTop"><span>Progresso da jornada</span><b id="sPct">0%</b></div>
         <div class="progBar"><div class="progFill" id="sFill"></div></div>
+        <div class="progGente" id="progGente" hidden></div>
       </div>
 
       <div class="hStat wide" id="boxConta" hidden>
@@ -1458,8 +1461,16 @@ function loadData(){
    o ultimo total no aparelho de quem ja visitou, so para a primeira pintura. */
 function totalGuardado(){
   try{
-    var v = parseFloat(localStorage.getItem("valeivai.total"));
-    return isNaN(v) ? null : v;
+    var bruto = localStorage.getItem("valeivai.total");
+    if(!bruto) return null;
+    // formato novo: {total, conferidos}. O antigo guardava só o número solto,
+    // então quem já visitou antes não perde o valor nesta troca.
+    if(bruto.charAt(0) === "{"){
+      var o = JSON.parse(bruto);
+      return (typeof o.total === "number") ? o : null;
+    }
+    var v = parseFloat(bruto);
+    return isNaN(v) ? null : { total: v, conferidos: 0 };
   }catch(e){ return null; }
 }
 
@@ -1474,7 +1485,17 @@ function loadTotal(){
   return Promise.race([busca, prazo]).then(function(t){
     if(!t || typeof t.total !== "number") return false;
     CONFIG.arrecadado = t.total;
-    try{ localStorage.setItem("valeivai.total", String(t.total)); }catch(e){}
+    // o mesmo endpoint ja conta quantas contribuicoes foram conferidas:
+    // e prova social real, conferida no extrato, sem expor nome de ninguem
+    if(typeof t.conferidos === "number" && t.conferidos > 0){
+      CONFIG.totalApoiadores = t.conferidos;
+    }
+    try{
+      localStorage.setItem("valeivai.total", JSON.stringify({
+        total: t.total,
+        conferidos: (typeof t.conferidos === "number") ? t.conferidos : 0
+      }));
+    }catch(e){}
     var h = new Date(), d2 = function(n){ return (n < 10 ? "0" : "") + n; };
     CONFIG.atualizadoEm = h.getFullYear() + "-" + d2(h.getMonth() + 1) + "-" + d2(h.getDate());
     return true;
@@ -1587,6 +1608,19 @@ function renderNumbers(){
   setText("tUpdate", CONFIG.atualizadoEm
     ? new Date(CONFIG.atualizadoEm + "T12:00:00-03:00").toLocaleDateString("pt-BR")
     : "a publicar");
+
+  // prova social: só aparece quando há número real conferido
+  var gente = $("progGente"), q = CONFIG.totalApoiadores;
+  if(gente){
+    if(q && q > 0){
+      gente.innerHTML = "<b>" + num(q) + (q === 1 ? " contribuição</b> já confirmada"
+                                                 : " contribuições</b> já confirmadas")
+                      + " no extrato.";
+      gente.hidden = false;
+    }else{
+      gente.hidden = true;
+    }
+  }
 
   setText("stkKm", km(kmFinanciados) + " garantidos");
   setText("stkLeft","faltam " + km(KM_TOTAL - kmFinanciados));
@@ -2359,8 +2393,16 @@ function start(){
 loadData().then(function(){
   // o guardado so levanta a primeira pintura, nunca abaixa: o valor real
   // chega logo em seguida e manda em qualquer caso
+  // O guardado só levanta a primeira pintura, nunca abaixa. Guarda também
+  // quantas contribuições — senão, quando a planilha demora e o valor vem do
+  // cache, o número some da tela e parece que ninguém doou.
   var guardado = totalGuardado();
-  if(guardado !== null && guardado > CONFIG.arrecadado) CONFIG.arrecadado = guardado;
+  if(guardado){
+    if(guardado.total > CONFIG.arrecadado) CONFIG.arrecadado = guardado.total;
+    if(guardado.conferidos > 0 && !CONFIG.totalApoiadores){
+      CONFIG.totalApoiadores = guardado.conferidos;
+    }
+  }
   start();
   loadTotal().then(function(mudou){ if(mudou) aplicarTotal(); });
 });
