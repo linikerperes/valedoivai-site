@@ -170,9 +170,15 @@ section{padding:clamp(56px,9vw,104px) 0}
 }
 .contaTit{display:block;font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;
   color:#9db4cd;font-weight:800;margin-bottom:7px}
-.contaNum{font-size:clamp(1.8rem,6.5vw,2.4rem);font-weight:900;letter-spacing:-.04em;
-  line-height:1;color:var(--gold);display:inline}
-.contaUn{font-size:.82rem;font-weight:800;color:#c6d6e6;letter-spacing:-.01em;display:inline}
+.contaRel{display:flex;align-items:baseline;gap:8px}
+.cUnid{display:flex;flex-direction:column;align-items:center;min-width:2.4ch}
+.cUnid b{font-size:clamp(1.7rem,6vw,2.3rem);font-weight:900;letter-spacing:-.04em;
+  line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+.cUnid span{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#93aac4;font-weight:800;margin-top:5px}
+.cSep{font-size:clamp(1.2rem,4vw,1.6rem);font-weight:900;line-height:1;
+  color:rgba(227,169,74,.45);position:relative;top:-2px}
+.contaFimTxt{font-size:1.15rem;font-weight:900;letter-spacing:-.03em;color:#fff}
 .contaDir{text-align:right;font-size:.76rem;font-weight:700;color:#93aac4;line-height:1.35}
 .contaDir b{display:block;color:#e7eef7;font-size:.86rem}
 .contaFim .contaNum{color:#fff;font-size:clamp(1.4rem,5.5vw,1.9rem)}
@@ -676,10 +682,14 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
     <div class="boxConta" id="boxConta" hidden>
       <span class="contaTit">Contagem para a saída</span>
       <div class="conta" id="conta">
-        <div class="contaEsq">
-          <span class="contaNum" id="contaNum">—</span>
-          <span class="contaUn" id="contaUn"></span>
+        <div class="contaRel" id="contaRel">
+          <div class="cUnid"><b id="cDias">--</b><span>dias</span></div>
+          <div class="cSep" aria-hidden="true">:</div>
+          <div class="cUnid"><b id="cHoras">--</b><span>horas</span></div>
+          <div class="cSep" aria-hidden="true">:</div>
+          <div class="cUnid"><b id="cMin">--</b><span>min</span></div>
         </div>
+        <div class="contaFimTxt" id="contaFimTxt" hidden></div>
         <div class="contaDir" id="contaDir"></div>
       </div>
     </div>
@@ -2066,41 +2076,40 @@ function renderContagem(){
   box.hidden = false;
 
   var falta = alvo.getTime() - Date.now();
-  var caixa = $("conta");
-  var elNum = $("contaNum"), un = $("contaUn"), dir = $("contaDir");
+  var rel = $("contaRel"), fimTxt = $("contaFimTxt"), dir = $("contaDir");
 
   if(falta <= 0){
-    caixa.classList.add("contaFim");
-    elNum.textContent = "A viagem começou!";
-    un.textContent = "";
-    dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>Obrigado a quem levou o ônibus até aqui.";
+    rel.hidden = true;
+    fimTxt.hidden = false;
+    fimTxt.textContent = "A viagem começou!";
+    dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>"
+                  + "Obrigado a quem levou o ônibus até aqui.";
     pararContagem();
     return;
   }
-  caixa.classList.remove("contaFim");
+  rel.hidden = false;
+  fimTxt.hidden = true;
 
-  var horas = Math.floor(falta / 3600000);
+  var min   = Math.floor(falta / 60000);
+  var horas = Math.floor(min / 60);
   var dias  = Math.floor(horas / 24);
 
-  if(dias >= 7){
-    elNum.textContent = num(dias);
-    un.textContent  = dias === 1 ? "dia" : "dias";
-  }else if(horas >= 24){
-    elNum.textContent = num(dias);
-    un.textContent  = (dias === 1 ? "dia e " : "dias e ") + (horas - dias * 24) + "h";
-  }else{
-    var min = Math.floor(falta / 60000) % 60;
-    elNum.textContent = horas + "h" + (min < 10 ? "0" : "") + min;
-    un.textContent  = "para a saída";
-  }
+  // só escreve quando o valor muda: o timer bate de segundo em segundo e
+  // 59 de cada 60 batidas não mudariam nada na tela
+  porTexto($("cDias"),  String(dias));
+  porTexto($("cHoras"), doisDig(horas % 24));
+  porTexto($("cMin"),   doisDig(min % 60));
 
-  // o que ainda falta arrecadar, para o tempo não aparecer sozinho
   var faltaBRL = Math.max(0, CONFIG.meta - CONFIG.arrecadado);
   dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>"
     + (faltaBRL > 0
         ? "faltam " + moneyShort(faltaBRL) + " para garantir a viagem"
         : "meta batida — o ônibus está pago");
 }
+
+function doisDig(n){ return (n < 10 ? "0" : "") + n; }
+
+function porTexto(el, txt){ if(el && el.textContent !== txt) el.textContent = txt; }
 
 function dataPorExtenso(d){
   try{
@@ -2116,13 +2125,19 @@ function ligarContagem(){
   if(!CONFIG.dataEvento) return;
   var alvo = new Date(CONFIG.dataEvento).getTime();
   if(isNaN(alvo)) return;
-  var passo = (alvo - Date.now()) < 86400000 ? 1000 : 60000;
-  contaTimer = setInterval(renderContagem, passo);
+  contaTimer = setInterval(renderContagem, 1000);
 }
 
 function pararContagem(){
   if(contaTimer){ clearInterval(contaTimer); contaTimer = null; }
 }
+
+/* Navegador estrangula timers em aba de fundo, e no celular as pessoas trocam
+   de app o tempo todo. Sem isto, quem volta para a aba vê o relógio parado no
+   minuto de quando saiu, até o próximo tique chegar. */
+document.addEventListener("visibilitychange", function(){
+  if(document.visibilityState === "visible") renderContagem();
+});
 
 /* ---------------------- mural ---------------------- */
 function renderMural(){
