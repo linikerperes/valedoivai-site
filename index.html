@@ -3112,10 +3112,13 @@ function initMusica(){
   btn.hidden = false;
   document.body.classList.add("temMusica");
   setText("musicaTit", m.titulo || "Música");
+  var escolha = null;
+  try{ escolha = localStorage.getItem(MUS_CHAVE); }catch(e){}
   var a = mus.audio = new Audio();
+  // quem já pausou antes não paga 2 MB de dados por uma música que não quer
+  a.preload = escolha === "pausada" ? "none" : "auto";
   a.src = m.arquivo;
   a.loop = true;
-  a.preload = "auto";
   a.volume = Math.max(0, Math.min(1, Number(m.volume) || 0.35));   // iOS ignora; o resto obedece
   a.addEventListener("play", pintarMusica);
   a.addEventListener("pause", pintarMusica);
@@ -3127,8 +3130,6 @@ function initMusica(){
     else{ guardarEscolha("pausada"); pausarMusica(true); }
   });
 
-  var escolha = null;
-  try{ escolha = localStorage.getItem(MUS_CHAVE); }catch(e){}
   pintarMusica();
   if(escolha === "pausada") return;
 

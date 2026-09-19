@@ -15,6 +15,12 @@
   "dataEvento": "2027-01-05T06:00:00-03:00",
   "registroURL": "https://script.google.com/macros/s/AKfycbyBzTbSRaicB-01LCBWaRBlhkuyAJaFXXpTtvJUuViaynpDm0y01TYsSXYIXC2_gKGg/exec",
   "audioMissao": "assets/audio/nossa-missao.mp3?v=2",
+  "musica": {
+    "arquivo": "assets/audio/sempre-desbravador.mp3?v=1",
+    "titulo": "Sempre Desbravador",
+    "artista": "Deise Kelly · tema do Campori",
+    "volume": 0.7
+  },
   "totalApoiadores": null,
   "apoiadores": [],
   "despesas": []
