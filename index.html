@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="semDados">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -20,6 +20,11 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+
+<!-- O total da campanha vem do Apps Script, que responde por um redirect para
+     googleusercontent. Abrir as duas conexões cedo corta a espera do primeiro número. -->
+<link rel="preconnect" href="https://script.google.com" crossorigin>
+<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
 
 <link rel="icon" href="assets/logo-sm.png">
 <link rel="apple-touch-icon" href="assets/logo-sm.png">
@@ -137,10 +142,94 @@ section{padding:clamp(56px,9vw,104px) 0}
 .heroTag i{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2.2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
 
-.hero h1{font-size:clamp(2.6rem,10.5vw,5.6rem);letter-spacing:-.045em}
-.hero h1 em{font-style:normal;color:var(--gold);display:block}
-.heroSub{font-size:clamp(1.02rem,3vw,1.3rem);color:#bcd0e6;max-width:600px;margin:22px 0 0}
+/* A manchete diz o pedido, não o nome da campanha: quem chega pelo WhatsApp
+   precisa entender em uma linha o que estão pedindo. Frase mais longa que o
+   antigo "Rumo ao Campori 2027", por isso o teto do tamanho desceu. */
+.hero h1{font-size:clamp(2.2rem,8.4vw,4.3rem);letter-spacing:-.04em;max-width:15ch}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.heroPreco{
+  display:inline-block;margin-top:20px;
+  padding:10px 16px;border-radius:14px;
+  background:rgba(227,169,74,.14);border:1px solid rgba(227,169,74,.42);
+  font-size:clamp(1.02rem,3.4vw,1.22rem);font-weight:800;letter-spacing:-.02em;color:#fff;
+}
+.heroPreco b{color:var(--gold);font-weight:900}
+.heroSub{font-size:clamp(1rem,2.8vw,1.18rem);color:#bcd0e6;max-width:560px;margin:16px 0 0}
 .heroSub b{color:#fff;font-weight:800}
+
+/* ---- botões do topo: principal + ouvir ---- */
+.heroBtns{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.heroBtns .btn{width:100%;font-size:1.06rem;padding:18px 26px}
+.heroBtns .btn.ouvir{padding:14px 22px;font-size:.96rem}
+.btn.ouvir[aria-pressed="true"]{background:rgba(227,169,74,.18);border-color:rgba(227,169,74,.6)}
+@media(min-width:700px){
+  .heroBtns{flex-direction:row;flex-wrap:wrap}
+  .heroBtns .btn{width:auto}
+}
+
+/* ---- player da narração ---- */
+.audioBox{
+  margin-top:12px;max-width:620px;padding:12px 14px;border-radius:16px;
+  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
+}
+.abRow{display:flex;align-items:center;gap:10px}
+.abBtn{
+  flex:none;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
+  display:grid;place-items:center;font-size:1.05rem;font-weight:900;
+  background:rgba(255,255,255,.14);color:#fff;transition:background .15s;
+}
+.abBtn:hover{background:rgba(255,255,255,.24)}
+.abBtn.main{background:var(--gold);color:#241804}
+.abProg{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden}
+.abFill{height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .25s linear}
+.abTempo{flex:none;font-size:.74rem;font-weight:800;color:#a9bed4;font-variant-numeric:tabular-nums;min-width:4.6ch;text-align:right}
+.abTexto{margin-top:10px}
+.abTexto summary{cursor:pointer;font-size:.76rem;font-weight:800;color:var(--gold-soft);padding:8px 0}
+.abTexto p{margin:4px 0 2px;font-size:.86rem;color:#c3d5e8;line-height:1.55}
+
+/* ---- o pulso da campanha, logo abaixo dos botões ---- */
+.pulso{
+  margin-top:18px;max-width:620px;padding:16px 16px 14px;border-radius:18px;
+  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
+}
+.miniRoad{position:relative;margin:4px 6px 26px}
+.mrTrack{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.16)}
+.mrFill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--red),var(--gold));transition:width 1.6s cubic-bezier(.22,.9,.28,1)}
+.mrMid{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
+  background:#0e2b4a;border:2.5px solid var(--gold)}
+.mrBus{position:absolute;top:50%;left:0;width:40px;height:26px;margin:-19px 0 0 -20px;
+  transition:left 1.6s cubic-bezier(.22,.9,.28,1);filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
+.mrLbl{position:absolute;top:16px;font-size:.66rem;font-weight:800;letter-spacing:.04em;color:#a9bed4;white-space:nowrap}
+.mrLbl.l{left:-6px}
+.mrLbl.m{left:50%;transform:translateX(-50%);color:var(--gold-soft)}
+.mrLbl.r{right:-6px}
+.pNums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pNums div{min-width:0}
+.pNums b{display:block;font-size:clamp(1.15rem,4.6vw,1.6rem);font-weight:900;letter-spacing:-.035em;line-height:1.1;color:#fff;white-space:nowrap}
+.pNums span{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#93aac4;font-weight:800;margin-top:3px}
+.pStatus{margin:12px 0 0;font-size:.78rem;font-weight:700;color:#a9bed4;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pStatus[data-tipo="erro"]{color:#ffd28a}
+.pStatus button{
+  border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:99px;padding:9px 14px;font-weight:800;font-size:.76rem;cursor:pointer;min-height:40px;
+}
+
+/* ---- carregando: o número ainda não chegou, então não existe número ----
+   Nada de "R$ 0" provisório. O bloco pulsa no lugar do valor, com a mesma
+   altura, para a tela não pular quando o dado real chega. */
+.semDados .dep{
+  color:transparent!important;display:inline-block;min-width:4.2ch;border-radius:8px;
+  background:linear-gradient(90deg,rgba(255,255,255,.08) 20%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.08) 80%);
+  background-size:220% 100%;animation:brilho 1.3s ease-in-out infinite;
+  -webkit-user-select:none;user-select:none;max-width:9ch;
+}
+.semDados .card .dep,.semDados .hud .dep,.semDados .sticky .dep{
+  background:linear-gradient(90deg,#e8edf3 20%,#f6f8fb 50%,#e8edf3 80%);background-size:220% 100%;
+}
+@keyframes brilho{from{background-position:120% 0}to{background-position:-100% 0}}
+.semDados .progFill,.semDados .mrFill{width:0!important}
+.semDados .mrBus,.semDados #vbus,.semDados #bus{opacity:.45}
 
 .heroStats{
   display:grid;grid-template-columns:1fr 1fr;gap:12px;
@@ -211,10 +300,6 @@ section{padding:clamp(56px,9vw,104px) 0}
 @keyframes slide{to{background-position:20px 0}}
 
 .heroCta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-/* CTA principal, no alto: cheio no celular para virar o maior alvo da tela */
-.ctaTopo{margin-top:26px}
-.ctaTopo .btn{width:100%;font-size:1.06rem;padding:18px 26px}
-@media(min-width:700px){.ctaTopo .btn{width:auto}}
 
 /* ---------------- ROTA ---------------- */
 .routeCard{padding:clamp(18px,3vw,28px);overflow:hidden}
@@ -248,16 +333,41 @@ section{padding:clamp(56px,9vw,104px) 0}
 
 /* ---------------- ADOTAR KM ---------------- */
 .adoptGrid{display:grid;gap:18px}
-.kmGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0}
+/* Seletor rápido: poucos valores pequenos e alvo grande. Quem decide pelo
+   celular, com o polegar, não deve precisar pensar em trecho de estrada. */
+#km{scroll-margin-top:16px}
+.kmTit{font-size:clamp(1.25rem,4.4vw,1.55rem);font-weight:900;letter-spacing:-.03em;margin:0 0 4px}
+.kmGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 0}
 .kmBtn{
-  border:2px solid var(--line);background:#fff;border-radius:15px;
-  padding:13px 6px;cursor:pointer;text-align:center;font-weight:900;
-  transition:all .16s ease;line-height:1.2;
+  border:2px solid var(--line);background:#fff;border-radius:16px;min-height:72px;
+  padding:12px 6px;cursor:pointer;text-align:center;font-weight:900;font-size:1.3rem;
+  letter-spacing:-.03em;line-height:1.1;
+  transition:border-color .16s ease,background .16s ease,color .16s ease,transform .16s ease;
 }
-.kmBtn small{display:block;font-weight:700;font-size:.71rem;color:var(--muted);margin-top:3px;letter-spacing:-.01em}
+.kmBtn span{font-size:.8rem;font-weight:800;letter-spacing:0}
+.kmBtn small{display:block;font-weight:700;font-size:.72rem;color:var(--muted);margin-top:5px;letter-spacing:-.01em}
 .kmBtn:hover{border-color:var(--gold);transform:translateY(-2px)}
-.kmBtn[aria-pressed="true"]{border-color:var(--red);background:#fff5f5;color:var(--red)}
-.kmBtn[aria-pressed="true"] small{color:var(--red);opacity:.8}
+.kmBtn[aria-pressed="true"]{border-color:var(--red);background:#fff5f5;color:var(--red);animation:pop .28s ease}
+.kmBtn[aria-pressed="true"] small{color:var(--red);opacity:.85}
+.kmBtn.outro{grid-column:1/-1;min-height:56px;font-size:1rem}
+@keyframes pop{50%{transform:scale(1.05)}}
+.outroBox{margin-top:12px}
+.outroRow{display:flex;gap:10px;align-items:stretch}
+.outroRow .input{font-size:1.2rem;font-weight:900}
+.outroRow span{align-self:center;font-weight:800;color:var(--muted)}
+.outroErro{margin-top:9px;font-size:.82rem;font-weight:700;color:#9a3b12;background:#fff3ea;border:1px solid #f4d2bb;border-radius:12px;padding:10px 12px}
+
+/* O trecho da estrada continua existindo, mas fechado: é para quem quer
+   "adotar" uma cidade, não o caminho de quem só quer ajudar. */
+.avancado{margin-top:20px;border-top:1px solid var(--line);padding-top:6px}
+.avancado>summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 2px;font-weight:800;font-size:.92rem;color:var(--ink);min-height:48px;
+}
+.avancado>summary::-webkit-details-marker{display:none}
+.avancado>summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--muted);transition:transform .2s}
+.avancado[open]>summary::after{transform:rotate(45deg)}
+.avancado .segBox{margin-top:4px;border-top:0;padding-top:4px}
 
 .fieldLbl{display:block;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:14px 0 7px}
 .input{
@@ -271,8 +381,9 @@ section{padding:clamp(56px,9vw,104px) 0}
   background:linear-gradient(150deg,var(--navy),#123457);
 }
 .impact span{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800}
-.impact .val{font-size:clamp(2.1rem,8vw,2.9rem);font-weight:900;letter-spacing:-.045em;margin:6px 0 4px;line-height:1}
-.impact p{color:#bcd0e6;margin:0 0 18px;font-size:.94rem}
+.impact .kmBig{display:block;font-size:clamp(1.5rem,6vw,1.9rem);font-weight:900;letter-spacing:-.04em;line-height:1;margin-top:8px}
+.impact .val{font-size:clamp(2.1rem,8vw,2.9rem);font-weight:900;letter-spacing:-.045em;margin:10px 0 16px;line-height:1;color:var(--gold)}
+.impact p{color:#bcd0e6;margin:8px 0 0;font-size:.94rem}
 .impact p b{color:#fff}
 
 /* ---------------- PIX ---------------- */
@@ -310,6 +421,35 @@ section{padding:clamp(56px,9vw,104px) 0}
   background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);color:#cfdcea;margin-bottom:11px;
 }
 .brBox.claro .brCode{background:#fff;border-color:#dce4ee;color:var(--ink)}
+/* Depois de copiar, o botão não volta sozinho ao estado anterior: a pessoa
+   sai do site para o banco e, ao voltar, precisa ver que já copiou e qual é
+   o próximo passo — o comprovante. */
+.depoisCopiar{
+  margin:11px 0 0;padding:11px 13px;border-radius:12px;font-size:.86rem;font-weight:700;line-height:1.45;
+  background:rgba(28,155,98,.16);border:1px solid rgba(28,155,98,.45);color:#d4f5e4;
+}
+.brBox.claro+.depoisCopiar,.modalCard .depoisCopiar{background:#effaf4;border-color:#bfe7d0;color:#14583a}
+.btn.destaque{position:relative;animation:chamar 1.8s ease-in-out 3}
+@keyframes chamar{0%,100%{box-shadow:0 10px 24px rgba(28,155,98,.3)}50%{box-shadow:0 0 0 7px rgba(28,155,98,.28),0 10px 24px rgba(28,155,98,.3)}}
+.passos{list-style:none;padding:0;margin:14px 0 4px;display:grid;gap:7px;counter-reset:p}
+.passos li{counter-increment:p;display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:var(--muted);font-weight:600}
+.passos li::before{content:counter(p);flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  background:#eef2f7;color:var(--ink);font-size:.72rem;font-weight:900}
+.passos li.feito{color:var(--ink)}
+.passos li.feito::before{content:"✓";background:var(--green);color:#fff}
+.selo{
+  margin-top:16px;padding:14px 15px;border-radius:15px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+}
+.selo strong{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.selo p{margin:0 0 8px;font-size:.84rem;color:#dfe8f2;font-weight:700;line-height:1.4}
+.selo ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.selo li{font-size:.8rem;color:#b9cce0;font-weight:600;padding-left:20px;position:relative}
+.selo li::before{content:"✓";position:absolute;left:0;color:#5fd39c;font-weight:900}
+.selo.claro{background:#fff;border-color:#f0e2c4}
+.selo.claro p{color:var(--ink)}
+.selo.claro li{color:#4a3c1e}
+.selo.claro li::before{color:var(--green)}
 .pendingBox{
   background:rgba(227,169,74,.13);border:1.5px solid rgba(227,169,74,.45);
   border-radius:14px;padding:16px;color:var(--gold-soft);font-size:.88rem;font-weight:700;text-align:center;
@@ -360,18 +500,28 @@ section{padding:clamp(56px,9vw,104px) 0}
 }
 
 /* ---------------- DEPOIMENTOS ---------------- */
-.quotes{display:grid;gap:15px}
+/* Na voz deles: é o motivo da campanha, então ganha fundo escuro, letra
+   grande e o nome de cada um em destaque — pesa mais que um card de rodapé. */
+.vozes{background:linear-gradient(170deg,#0a1e35 0%,#0e2b4a 100%);color:#fff}
+.vozes h2{color:#fff}
+.quotes{display:grid;gap:16px}
 .quote{
-  background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 24px;
-  position:relative;box-shadow:var(--shadow);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:22px;
+  padding:34px 24px 22px;position:relative;display:flex;flex-direction:column;justify-content:space-between;
 }
 .quote::before{
-  content:"“";position:absolute;top:-6px;left:18px;font-size:5rem;
-  color:var(--gold);opacity:.32;font-family:Georgia,serif;line-height:1;
+  content:"“";position:absolute;top:2px;left:20px;font-size:4.6rem;
+  color:var(--gold);opacity:.55;font-family:Georgia,serif;line-height:1;
 }
-.quote blockquote{margin:0 0 15px;font-size:1.04rem;font-weight:600;position:relative;letter-spacing:-.015em}
-.quote footer{font-size:.8rem;color:var(--muted);font-weight:700}
-.quote footer b{color:var(--ink)}
+.quote blockquote{margin:0 0 20px;font-size:clamp(1.08rem,3.4vw,1.18rem);font-weight:650;position:relative;letter-spacing:-.015em;line-height:1.5;color:#eef4fa}
+.quote footer{display:flex;align-items:center;gap:11px;font-size:.78rem;color:#93aac4;font-weight:700}
+.quote footer i{
+  flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-style:normal;
+  background:linear-gradient(145deg,var(--gold),#c98c2a);color:#241804;font-weight:900;font-size:.95rem;
+}
+.quote footer b{display:block;color:#fff;font-size:.98rem;letter-spacing:-.02em}
+.vozesFecho{margin:26px 0 0;font-size:clamp(1.05rem,3.2vw,1.25rem);font-weight:800;letter-spacing:-.02em;color:#fff;max-width:640px}
+.vozesFecho em{font-style:normal;color:var(--gold)}
 
 /* ---------------- PARANAVAI ---------------- */
 .local{
@@ -482,6 +632,8 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   transform:translateY(115%);transition:transform .35s cubic-bezier(.3,.9,.3,1);
 }
 .sticky.show{transform:translateY(0)}
+.sticky .info b{white-space:nowrap}
+
 .sticky .info{flex:1;min-width:0}
 .sticky .info b{display:block;font-size:.95rem;font-weight:900;letter-spacing:-.03em}
 .sticky .info small{color:var(--muted);font-size:.72rem;font-weight:700}
@@ -511,6 +663,8 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   transition:.3s;box-shadow:var(--shadow-lg);
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
+/* com o Pix aberto, o aviso sobe: embaixo ele cobriria o botão do comprovante */
+.modalAberto .toast{bottom:auto;top:calc(18px + env(safe-area-inset-top,0px))}
 
 /* O conteúdo só é escondido se o navegador realmente puder animá-lo (classe
    jsReveal, definida no <head>). Sem JS ou sem IntersectionObserver, tudo
@@ -626,6 +780,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 }
 @media(min-width:960px){
   .adoptGrid{grid-template-columns:1fr 1.15fr;align-items:start}
+  .kmGrid{grid-template-columns:repeat(3,1fr)}
   .tGrid{grid-template-columns:1fr 1fr}
   .certGrid{grid-template-columns:1fr 1fr;align-items:center}
   .sticky{display:none}
@@ -667,16 +822,66 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
     <div class="heroMain">
     <div class="heroTag"><i></i> Campanha de transporte · Campori 2027</div>
 
-    <h1>Rumo ao<br>Campori <em>2027.</em></h1>
+    <h1>Ajude nossos Desbravadores a chegar a <em>Barretos.</em></h1>
+
+    <p class="heroPreco">Cada <b class="precoKm">R$ 14,07</b> move o ônibus 1 km.</p>
 
     <p class="heroSub">
-      <b>1.102 quilômetros</b> separam Paranavaí do VI Campori Sul-Americano
-      de Desbravadores, em Barretos. Nós já começamos a viagem.
-      <b>Até onde você pode nos levar?</b>
+      São <b>1.102 km</b> de ida e volta. Escolha quantos quilômetros você quer
+      colocar nessa estrada.
     </p>
 
-    <div class="ctaTopo">
-      <a class="btn" href="#adotar">Doe seus quilômetros 🚌</a>
+    <div class="heroBtns">
+      <a class="btn" href="#km" data-rolar="km">🚌 Quero levar o ônibus</a>
+      <button type="button" class="btn ghost ouvir" id="ouvirBtn" aria-pressed="false"
+              aria-controls="audioBox">▶ Ouvir nossa missão</button>
+    </div>
+
+    <!-- Narração: nunca toca sozinha. O arquivo vem de dados.json (audioMissao);
+         sem ele, ou se ele falhar, o próprio navegador lê o texto. -->
+    <div class="audioBox" id="audioBox" hidden>
+      <div class="abRow">
+        <button type="button" class="abBtn main" id="abPlay" aria-label="Pausar narração">❚❚</button>
+        <button type="button" class="abBtn" id="abRestart" aria-label="Ouvir desde o começo">↻</button>
+        <div class="abProg" role="progressbar" aria-label="Progresso da narração"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="abProg">
+          <div class="abFill" id="abFill"></div>
+        </div>
+        <span class="abTempo" id="abTempo">0:00</span>
+      </div>
+      <details class="abTexto">
+        <summary>Ler o texto da narração</summary>
+        <p id="abTexto"></p>
+      </details>
+    </div>
+
+    <!-- O pulso da campanha. Só mostra número depois que a planilha responde:
+         antes disso é "atualizando", nunca um zero provisório. -->
+    <div class="pulso" id="pulso" aria-busy="true">
+      <div class="miniRoad" aria-hidden="true">
+        <div class="mrTrack">
+          <div class="mrFill" id="mrFill"></div>
+          <span class="mrMid"></span>
+          <svg class="mrBus" id="mrBus" viewBox="-28 -18 56 38">
+            <rect x="-25" y="-15" width="50" height="27" rx="7" fill="#d8232f"/>
+            <rect x="-19" y="-10" width="12" height="9" rx="2.5" fill="#bfe2ff"/>
+            <rect x="-4" y="-10" width="12" height="9" rx="2.5" fill="#bfe2ff"/>
+            <rect x="11" y="-10" width="10" height="9" rx="2.5" fill="#e8f4ff"/>
+            <circle cx="26" cy="-2" r="2.6" fill="#ffd76b"/>
+            <circle cx="-14" cy="13" r="5.4" fill="#12202e"/>
+            <circle cx="15" cy="13" r="5.4" fill="#12202e"/>
+          </svg>
+        </div>
+        <span class="mrLbl l">Paranavaí</span>
+        <span class="mrLbl m">Barretos</span>
+        <span class="mrLbl r">de volta</span>
+      </div>
+      <div class="pNums">
+        <div><b id="pKm" class="dep">km</b><span>garantidos</span></div>
+        <div><b id="pRaised" class="dep">R$</b><span>arrecadados</span></div>
+        <div><b id="pPct" class="dep">%</b><span>da viagem</span></div>
+      </div>
+      <p class="pStatus" id="pStatus" role="status">Atualizando campanha…</p>
     </div>
 
     <div class="boxConta" id="boxConta" hidden>
@@ -707,7 +912,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       </div>
 
       <div class="hrOut" id="hrOut" role="status" aria-live="polite">
-        <b id="hrTxt">Escolha uma cidade do trajeto.</b>
+        <b id="hrTxt">Atualizando a posição do ônibus…</b>
         <small id="hrSub">São 15 cidades entre Paranavaí e Barretos.</small>
         <button type="button" class="go" id="hrGo" hidden>Adotar este trecho →</button>
       </div>
@@ -717,22 +922,22 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
     <div class="heroStats">
       <div class="hStat">
         <span>Arrecadado</span>
-        <b id="sRaised">R$ 0</b>
+        <b id="sRaised" class="dep">R$</b>
         <small>de <span id="sGoal">R$ 15.500</span></small>
       </div>
       <div class="hStat">
         <span>Estrada garantida</span>
-        <b id="sKm">0 km</b>
+        <b id="sKm" class="dep">km</b>
         <small>de <span id="sKmTotal">1.102 km</span></small>
       </div>
       <div class="hStat">
         <span>Faltam</span>
-        <b id="sLeftKm">1.102 km</b>
-        <small id="sLeftBRL">R$ 15.500</small>
+        <b id="sLeftKm" class="dep">km</b>
+        <small id="sLeftBRL" class="dep">R$</small>
       </div>
 
       <div class="hStat wide progWrap">
-        <div class="progTop"><span>Progresso da jornada</span><b id="sPct">0%</b></div>
+        <div class="progTop"><span>Progresso da jornada</span><b id="sPct" class="dep">%</b></div>
         <div class="progBar"><div class="progFill" id="sFill"></div></div>
         <div class="progGente" id="progGente" hidden></div>
       </div>
@@ -740,7 +945,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
     </div>
 
     <div class="heroCta">
-      <a class="btn" href="#adotar">Levar a gente +10 km 🚌</a>
+      <a class="btn" href="#km" data-rolar="km">🚌 Quero levar o ônibus</a>
       <a class="btn ghost" href="#jornada">Ver a jornada</a>
     </div>
     </div>
@@ -759,16 +964,16 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       <p class="lead">
         São aproximadamente 551 km de Paranavaí até Barretos. Ida e volta: 1.102 km.
         Dividimos a meta de transporte por essa estrada inteira — então
-        <strong style="color:var(--ink)">cada R$ 14,07 equivale a 1 km da missão</strong>.
+        <strong style="color:var(--ink)">cada <span class="precoKm">R$ 14,07</span> equivale a 1 km da missão</strong>.
         O ônibus abaixo se move sozinho, conforme a campanha avança.
       </p>
     </div>
 
     <div class="card routeCard reveal">
       <div class="routeHud">
-        <div class="hud"><span>Posição</span><b id="hudKm">0 km</b></div>
-        <div class="hud"><span>Etapa</span><b id="hudLeg">Ida</b></div>
-        <div class="hud"><span>Concluído</span><b id="hudPct">0%</b></div>
+        <div class="hud"><span>Posição</span><b id="hudKm" class="dep">km</b></div>
+        <div class="hud"><span>Etapa</span><b id="hudLeg" class="dep">Ida</b></div>
+        <div class="hud"><span>Concluído</span><b id="hudPct" class="dep">%</b></div>
       </div>
 
       <div class="mapBox">
@@ -836,7 +1041,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
         </svg>
       </div>
 
-      <div class="routeStatus" id="routeStatus">📍 Saindo de Paranavaí</div>
+      <div class="routeStatus" id="routeStatus">Atualizando a posição do ônibus…</div>
 
       <p class="fine" style="margin:14px 0 0">
         A ida ocupa a faixa de cima e a volta a faixa de baixo — o ônibus sempre viaja para frente.
@@ -940,33 +1145,35 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 </section>
 
 <!-- ================= DEPOIMENTOS ================= -->
-<section style="background:#eaf0f6">
+<section class="vozes">
   <div class="wrap">
     <div class="head reveal">
-      <div class="eyebrow">Na voz deles</div>
-      <h2>Quem vai viver essa história.</h2>
-      <p class="lead">
-        Quatro dos nossos Desbravadores, e o motivo de cada um querer estar em Barretos.
+      <div class="eyebrow gold">Na voz deles</div>
+      <h2>Não é sobre pagar um ônibus.</h2>
+      <p class="lead on-dark">
+        É sobre o que eles vão viver lá. Quatro dos nossos Desbravadores, e o motivo
+        de cada um querer estar em Barretos.
       </p>
     </div>
     <div class="quotes reveal">
       <article class="quote">
         <blockquote>Eu gosto quando a gente ora junto no clube. Em Barretos vai ter um monte de desbravador orando na mesma hora, eu quero muito ver isso.</blockquote>
-        <footer><b>Lorenzo</b></footer>
+        <footer><i aria-hidden="true">L</i><span><b>Lorenzo</b>Desbravador · Vale do Ivaí</span></footer>
       </article>
       <article class="quote">
         <blockquote>Meu pai fala que Deus cuida da gente na viagem. Eu quero ir pra Barretos e voltar contando que deu tudo certo.</blockquote>
-        <footer><b>João Vitor</b></footer>
+        <footer><i aria-hidden="true">J</i><span><b>João Vitor</b>Desbravador · Vale do Ivaí</span></footer>
       </article>
       <article class="quote">
         <blockquote>No Campori a gente estuda a Bíblia junto com gente de tudo quanto é lugar. Acho que isso faz a minha fé ficar maior.</blockquote>
-        <footer><b>Miguel</b></footer>
+        <footer><i aria-hidden="true">M</i><span><b>Miguel</b>Desbravador · Vale do Ivaí</span></footer>
       </article>
       <article class="quote">
         <blockquote>Quero ir pra Barretos pra ficar mais perto de Deus e do meu clube ao mesmo tempo. Acho que é isso que faz o Campori ser diferente.</blockquote>
-        <footer><b>Nicolas</b></footer>
+        <footer><i aria-hidden="true">N</i><span><b>Nicolas</b>Desbravador · Vale do Ivaí</span></footer>
       </article>
     </div>
+    <p class="vozesFecho reveal">Cada quilômetro que você leva é <em>um pedaço dessa viagem</em> na vida deles.</p>
   </div>
 </section>
 
@@ -989,72 +1196,87 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   <div class="wrap">
     <div class="head reveal">
       <div class="eyebrow">Adote seus quilômetros</div>
-      <h2>Quantos quilômetros você quer levar?</h2>
-      <p class="lead">Escolha um trecho da estrada. O valor correspondente aparece na hora, sem letras miúdas.</p>
+      <h2>Coloque seus quilômetros na estrada.</h2>
+      <p class="lead">Escolha os km, copie o Pix com o valor já preenchido e mande o comprovante.
+        O valor aparece na hora, sem letras miúdas.</p>
     </div>
 
     <div class="adoptGrid">
-      <div class="card reveal">
-        <div class="eyebrow">Escolha seu trecho</div>
+      <div class="card reveal" id="km">
+        <div class="eyebrow">Passo 1</div>
+        <h3 class="kmTit">Quantos km você quer levar?</h3>
         <div class="kmGrid" id="kmGrid" role="group" aria-label="Quantidade de quilômetros"></div>
 
-        <div class="segBox">
-          <div class="eyebrow">Ou escolha um trecho da estrada</div>
-          <p class="fine" style="margin:0 0 12px">
-            De onde até onde você quer levar o ônibus. As cidades são as do trajeto real
-            Paranavaí → Barretos.
-          </p>
-
-          <div class="segTabs" role="tablist" aria-label="Como escolher o trecho">
-            <button type="button" class="segTab" id="tabCidade" role="tab" aria-selected="true"
-                    aria-controls="paneCidade">Por cidade</button>
-            <button type="button" class="segTab" id="tabKm" role="tab" aria-selected="false"
-                    aria-controls="paneKm">Por quilômetro</button>
+        <div class="outroBox" id="outroBox" hidden>
+          <label class="fieldLbl" for="outroKm">Quantos quilômetros?</label>
+          <div class="outroRow">
+            <input class="input" id="outroKm" type="text" inputmode="numeric" pattern="[0-9]*"
+                   autocomplete="off" placeholder="Ex.: 7" maxlength="4" aria-describedby="outroErro">
+            <span>km</span>
           </div>
-
-          <div id="paneCidade" role="tabpanel" aria-labelledby="tabCidade">
-            <div class="segRow">
-              <div>
-                <label class="fieldLbl" for="selDe">De</label>
-                <select class="input" id="selDe"></select>
-              </div>
-              <div>
-                <label class="fieldLbl" for="selAte">Até</label>
-                <select class="input" id="selAte"></select>
-              </div>
-            </div>
-          </div>
-
-          <div id="paneKm" role="tabpanel" aria-labelledby="tabKm" hidden>
-            <div class="segRow">
-              <div>
-                <label class="fieldLbl" for="kmDe">Do km</label>
-                <input class="input" id="kmDe" type="number" min="0" max="551" step="1" value="0" inputmode="numeric">
-              </div>
-              <div>
-                <label class="fieldLbl" for="kmAte">Até o km</label>
-                <input class="input" id="kmAte" type="number" min="1" max="551" step="1" value="50" inputmode="numeric">
-              </div>
-            </div>
-          </div>
-
-          <div class="segBar"><div class="segSel" id="segSel"></div></div>
-          <div class="segScale"><span>Paranavaí · km 0</span><span>Barretos · km 551</span></div>
-
-          <div class="segWarn" id="segWarn" hidden></div>
-
-          <button type="button" class="btn full segNote" id="doOnde"
-                  style="background:#eef2f7;color:var(--ink);box-shadow:none">
-            📍 Começar de onde o ônibus está
-          </button>
+          <div class="outroErro" id="outroErro" role="alert" hidden></div>
         </div>
 
-        <div class="impact">
+        <div class="impact" aria-live="polite">
           <span>Seu impacto</span>
-          <div class="val" id="impactVal">R$ 140,65</div>
+          <b class="kmBig" id="impactKm">10 km</b>
           <p id="impactTxt">Você leva o Vale do Ivaí <b>10 km</b> mais perto de Barretos.</p>
-          <button class="btn full" id="openPix">Quero levar esse trecho 🚌</button>
+          <div class="val" id="impactVal">R$ 140,65</div>
+          <button class="btn full" id="openPix">Quero levar esses 10 km 🚌</button>
         </div>
+
+        <details class="avancado" id="avancado">
+          <summary>Quero escolher um trecho específico da estrada</summary>
+          <div class="segBox">
+            <p class="fine" style="margin:0 0 12px">
+              De onde até onde você quer levar o ônibus. As cidades são as do trajeto real
+              Paranavaí → Barretos.
+            </p>
+
+            <div class="segTabs" role="tablist" aria-label="Como escolher o trecho">
+              <button type="button" class="segTab" id="tabCidade" role="tab" aria-selected="true"
+                      aria-controls="paneCidade">Por cidade</button>
+              <button type="button" class="segTab" id="tabKm" role="tab" aria-selected="false"
+                      aria-controls="paneKm">Por quilômetro</button>
+            </div>
+
+            <div id="paneCidade" role="tabpanel" aria-labelledby="tabCidade">
+              <div class="segRow">
+                <div>
+                  <label class="fieldLbl" for="selDe">De</label>
+                  <select class="input" id="selDe"></select>
+                </div>
+                <div>
+                  <label class="fieldLbl" for="selAte">Até</label>
+                  <select class="input" id="selAte"></select>
+                </div>
+              </div>
+            </div>
+
+            <div id="paneKm" role="tabpanel" aria-labelledby="tabKm" hidden>
+              <div class="segRow">
+                <div>
+                  <label class="fieldLbl" for="kmDe">Do km</label>
+                  <input class="input" id="kmDe" type="number" min="0" max="551" step="1" value="0" inputmode="numeric">
+                </div>
+                <div>
+                  <label class="fieldLbl" for="kmAte">Até o km</label>
+                  <input class="input" id="kmAte" type="number" min="1" max="551" step="1" value="50" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+
+            <div class="segBar"><div class="segSel" id="segSel"></div></div>
+            <div class="segScale"><span>Paranavaí · km 0</span><span>Barretos · km 551</span></div>
+
+            <div class="segWarn" id="segWarn" hidden></div>
+
+            <button type="button" class="btn full segNote" id="doOnde"
+                    style="background:#eef2f7;color:var(--ink);box-shadow:none">
+              📍 Começar de onde o ônibus está
+            </button>
+          </div>
+        </details>
 
         <p class="fine" style="margin-top:14px">
           A equivalência em quilômetros é apenas uma forma transparente de visualizar a meta.
@@ -1064,13 +1286,14 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 
       <div class="card pixPanel reveal" id="pix">
         <div class="eyebrow gold">Como contribuir</div>
-        <h3 style="font-size:1.7rem;margin-bottom:6px">PIX em quatro passos</h3>
+        <h3 style="font-size:1.7rem;margin-bottom:6px">Pix em cinco passos</h3>
 
         <div class="pixSteps">
-          <div class="pixStep"><i>1</i><p>Escolha quantos quilômetros quer adotar.</p></div>
-          <div class="pixStep"><i>2</i><p>Copie o código Pix já com o valor e cole no app do seu banco.</p></div>
-          <div class="pixStep"><i>3</i><p>Envie o comprovante pelo WhatsApp do clube — o código da sua doação já vai junto.</p></div>
-          <div class="pixStep"><i>4</i><p>Confirmado o recebimento, o ônibus avança na estrada e seu certificado fica disponível.</p></div>
+          <div class="pixStep"><i>1</i><p>Escolha seus quilômetros.</p></div>
+          <div class="pixStep"><i>2</i><p>Copie o Pix com o valor já preenchido.</p></div>
+          <div class="pixStep"><i>3</i><p>Cole no aplicativo do seu banco, em <strong style="color:#fff">Pix Copia e Cola</strong>.</p></div>
+          <div class="pixStep"><i>4</i><p>Envie o comprovante pelo WhatsApp — o código da sua doação já vai junto.</p></div>
+          <div class="pixStep"><i>5</i><p>Após a confirmação no extrato, o ônibus avança.</p></div>
         </div>
 
         <div id="pixReady" hidden>
@@ -1079,8 +1302,10 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
             <div class="codDoa"><span>Código desta doação</span><b id="codDoacao">—</b></div>
             <div class="brCode" id="brcodeTxt" hidden></div>
             <button class="btn green full" id="copyBrcode">
-              <span>📋 Copiar código de <b id="brValor">R$ 140,65</b></span>
+              <span>📋 Copiar Pix de <b id="brValor">R$ 140,65</b></span>
             </button>
+            <p class="depoisCopiar" id="depois1" hidden>✓ Pix copiado. Agora abra seu banco e escolha
+              <strong>Pix Copia e Cola</strong>. Depois, envie o comprovante aqui embaixo.</p>
             <p class="fine on-dark" style="margin:11px 0 0">
               Cole no app do banco em <strong>Pix › Pix Copia e Cola</strong>.
               O valor já vai junto, não precisa digitar nada.
@@ -1095,6 +1320,17 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
           <p class="fine on-dark" id="pixReceiver" style="text-align:center;margin:16px 0 0"></p>
         </div>
 
+        <div class="selo" aria-label="Doação transparente">
+          <strong>Doação transparente</strong>
+          <p>Pix institucional · Igreja Adventista do Sétimo Dia / União Sul Brasileira</p>
+          <ul>
+            <li>Nenhum valor passa por conta pessoal</li>
+            <li>Cada doação recebe um código individual</li>
+            <li>Contribuições são conferidas no extrato</li>
+            <li>Prestação de contas pública</li>
+          </ul>
+        </div>
+
         <div id="pixPending">
           <div class="pendingBox">
             ⚠️ Chave PIX ainda não configurada.<br>
@@ -1102,7 +1338,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
           </div>
         </div>
 
-        <button class="btn green full" id="sendProof" style="margin-top:10px">📲 Enviar comprovante no WhatsApp</button>
+        <button class="btn green full" id="sendProof" style="margin-top:14px">📲 Enviar comprovante pelo WhatsApp</button>
         <p class="fine on-dark" style="margin-top:12px">
           O WhatsApp abre com a mensagem já escrita. Por segurança do próprio aplicativo,
           o anexo do comprovante é feito por você na conversa.
@@ -1139,11 +1375,11 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
     <div class="tGrid reveal">
       <div class="card">
         <div class="tLine"><span>Meta de transporte</span><b id="tGoal">R$ 15.500</b></div>
-        <div class="tLine"><span>Total recebido</span><b id="tRaised">R$ 0</b></div>
-        <div class="tLine"><span>Falta arrecadar</span><b id="tLeft">R$ 15.500</b></div>
-        <div class="tLine"><span>Estrada financiada</span><b id="tKm">0 / 1.102 km</b></div>
-        <div class="tLine"><span>Contribuições</span><b id="tCount">—</b></div>
-        <div class="tLine"><span>Última atualização</span><b id="tUpdate">—</b></div>
+        <div class="tLine"><span>Total recebido</span><b id="tRaised" class="dep">R$</b></div>
+        <div class="tLine"><span>Falta arrecadar</span><b id="tLeft" class="dep">R$</b></div>
+        <div class="tLine"><span>Estrada financiada</span><b id="tKm" class="dep">km</b></div>
+        <div class="tLine"><span>Contribuições</span><b id="tCount" class="dep">—</b></div>
+        <div class="tLine"><span>Última atualização</span><b id="tUpdate" class="dep">—</b></div>
       </div>
       <div class="card contas" style="grid-column:1/-1">
         <div class="eyebrow" style="color:#9a6a13">Prestação de contas</div>
@@ -1155,6 +1391,16 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       </div>
 
       <div class="card trust">
+        <div class="selo claro" style="margin:0 0 20px">
+          <strong style="color:#9a6a13">Doação transparente</strong>
+          <p>Pix institucional · Igreja Adventista do Sétimo Dia / União Sul Brasileira</p>
+          <ul>
+            <li>Nenhum valor passa por conta pessoal</li>
+            <li>Cada doação recebe um código individual</li>
+            <li>Contribuições são conferidas no extrato</li>
+            <li>Prestação de contas pública</li>
+          </ul>
+        </div>
         <div class="eyebrow" style="color:#9a6a13">Prestação de contas</div>
         <h3 style="font-size:1.4rem;margin-bottom:12px">Para onde vai o dinheiro</h3>
         <p style="color:#4a3c1e;font-size:.95rem;margin-bottom:14px">
@@ -1319,12 +1565,14 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 </footer>
 
 <!-- sticky mobile -->
-<div class="sticky" id="sticky">
+<!-- Só no celular, só depois do topo, e some quando o seletor, o Pix ou o
+     teclado estão na tela: nunca cobre o que a pessoa está usando. -->
+<div class="sticky" id="sticky" aria-hidden="true">
   <div class="info">
-    <b id="stkKm">0 km garantidos</b>
-    <small id="stkLeft">faltam 1.102 km</small>
+    <b>🚌 <span id="stkKm" class="dep">km</span> <span style="color:var(--muted);font-weight:800">/ 1.102 km</span></b>
+    <small id="stkLeft">garantidos até agora</small>
   </div>
-  <a class="btn" href="#adotar">Adotar km</a>
+  <a class="btn" href="#km" data-rolar="km" tabindex="-1">Ajudar</a>
 </div>
 
 <!-- modal PIX -->
@@ -1332,7 +1580,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   <div class="modalCard">
     <div class="modalTop">
       <div>
-        <div class="eyebrow">Adotar trecho</div>
+        <div class="eyebrow">Passo 2 · Pix</div>
         <h3 id="mTitle">Você escolheu <span id="mKm">10 km</span></h3>
       </div>
       <button class="xBtn" id="closeModal" aria-label="Fechar">×</button>
@@ -1344,19 +1592,25 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
         <div class="codDoa"><span>Código desta doação</span><b id="mCodDoacao">—</b></div>
         <div class="brCode" id="mBrcode" hidden></div>
         <button class="btn green full" id="mCopyBrcode">
-          <span>📋 Copiar código de <b id="mBrValor">R$ 140,65</b></span>
+          <span>📋 Copiar Pix de <b id="mBrValor">R$ 140,65</b></span>
         </button>
       </div>
-      <p class="fine" style="margin:12px 0">
-        Cole no app do banco em <strong>Pix › Pix Copia e Cola</strong>. O valor já vai preenchido.
-      </p>
+      <p class="depoisCopiar" id="depois2" hidden>✓ Pix copiado. Agora abra seu banco e escolha
+        <strong>Pix Copia e Cola</strong>. O valor já vai preenchido.</p>
+      <ol class="passos" id="mPassos">
+        <li class="feito">Escolher os quilômetros</li>
+        <li>Copiar o Pix com o valor</li>
+        <li>Colar no banco, em Pix Copia e Cola</li>
+        <li>Enviar o comprovante pelo WhatsApp</li>
+        <li>Após a confirmação, o ônibus avança</li>
+      </ol>
     </div>
     <div id="mPixPending">
       <div class="pendingBox" style="background:#fff6e5;border-color:#f0dcb6;color:#8a5f10">
         ⚠️ A chave PIX oficial ainda não foi configurada nesta campanha.
       </div>
     </div>
-    <button class="btn green full" id="mProof" style="margin-top:10px">📲 Falar no WhatsApp e enviar comprovante</button>
+    <button class="btn green full" id="mProof" style="margin-top:12px">📲 Enviar comprovante pelo WhatsApp</button>
     <p class="fine" style="margin-top:14px">Este site não processa pagamentos. A transferência acontece no seu próprio banco.</p>
   </div>
 </div>
@@ -1383,6 +1637,7 @@ var CONFIG = {
   edicao: "",           // "Alpha" ou "Omega" — deixe vazio se ainda não definido
   dataEvento: "",       // ex.: "2027-01-05T08:00:00-03:00"
   registroURL: "",      // opcional: URL da planilha que recebe os códigos gerados
+  audioMissao: "",      // opcional: MP3 da narração; vazio = o navegador lê o texto
   despesas: [],         // [{descricao:"Sinal do ônibus", valor:5000, data:"2026-10-15"}]
   totalApoiadores: null,// número real de contribuições, ou null
   apoiadores: []        // [{nome:"Família Silva", km:10, anonimo:false}]
@@ -1451,6 +1706,11 @@ function toast(msg){
 
 function setText(id, txt){ var e = $(id); if(e) e.textContent = txt; }
 
+/* Todo número que depende da planilha passa por aqui: enquanto ela não
+   responde, "…" (que o CSS transforma no bloco pulsante); se falhou sem
+   reserva, um traço. Nunca um zero que parece dado. */
+function ouAguarde(txt){ return temNumero() ? txt : (estado === "carregando" ? "…" : "—"); }
+
 /* ---------------------- carga de dados ---------------------- */
 function loadData(){
   return fetch("dados.json", {cache:"no-store"})
@@ -1458,8 +1718,12 @@ function loadData(){
     .then(function(d){
       if(!d) return;
       // só sobrescreve o que veio preenchido — nunca inventa valor
-      if(typeof d.arrecadado === "number") CONFIG.arrecadado = d.arrecadado;
+      // O número do dados.json é o último total conferido, escrito à mão. Ele
+      // NÃO vai direto para a tela: a planilha manda. Fica guardado como
+      // reserva para o caso de a planilha não responder.
+      if(typeof d.arrecadado === "number") RESERVA.dados = { total: d.arrecadado, em: d.atualizadoEm || "" };
       if(d.atualizadoEm) CONFIG.atualizadoEm = d.atualizadoEm;
+      if(d.audioMissao) CONFIG.audioMissao = d.audioMissao;
       if(d.pix && d.pix.chave) CONFIG.pix = d.pix;
       if(d.whatsapp) CONFIG.whatsapp = d.whatsapp;
       if(d.edicao) CONFIG.edicao = d.edicao;
@@ -1475,65 +1739,144 @@ function loadData(){
 /* O que move o ônibus é o total JÁ CONFERIDO no extrato, que a diretoria marca
    na página /relatorio. Este endpoint devolve só a soma — nunca nomes, códigos
    ou valores individuais —, por isso pode ser chamado sem a chave, de um site
-   público. Se a planilha estiver fora do ar, continua valendo o `arrecadado`
-   do dados.json, que é o número escrito à mão. */
-/* O Apps Script leva alguns segundos para acordar. Sem isto, o visitante ve
-   "R$ 0 - 0 km" no primeiro instante e so depois o valor real aparece — numa
-   pagina de arrecadacao, essa e a pior primeira impressao possivel. Guardamos
-   o ultimo total no aparelho de quem ja visitou, so para a primeira pintura. */
-function totalGuardado(){
+   público.
+
+   A tela tem estados explícitos, e nenhum deles é "zero provisório":
+     carregando → os números pulsam no lugar, sem valor nenhum;
+     ok         → o total que a planilha acabou de devolver;
+     reserva    → a planilha falhou ou demorou demais: mostra o último total
+                  confirmado (dados.json ou a última visita neste aparelho),
+                  dizendo de quando ele é, e oferece tentar de novo;
+     erro       → falhou e não há reserva: traço no lugar do número.
+   Se a resposta chegar atrasada, depois da reserva, ela ainda vale e troca. */
+var RESERVA = { dados: null, aparelho: null };
+var estado = "carregando";
+var tentativa = 0;
+var ESPERA_RESERVA = 8000;   // Apps Script frio leva uns 3–6 s; depois disso, reserva
+var ESPERA_MAXIMA  = 30000;
+
+function temNumero(){ return estado === "ok" || estado === "reserva"; }
+
+function lerAparelho(){
   try{
     var bruto = localStorage.getItem("valeivai.total");
     if(!bruto) return null;
-    // formato novo: {total, conferidos}. O antigo guardava só o número solto,
-    // então quem já visitou antes não perde o valor nesta troca.
-    if(bruto.charAt(0) === "{"){
-      var o = JSON.parse(bruto);
-      return (typeof o.total === "number") ? o : null;
+    // formato antigo guardava só o número solto
+    if(bruto.charAt(0) !== "{"){
+      var v = parseFloat(bruto);
+      return isNaN(v) ? null : { total: v, conferidos: 0, em: "" };
     }
-    var v = parseFloat(bruto);
-    return isNaN(v) ? null : { total: v, conferidos: 0 };
+    var o = JSON.parse(bruto);
+    return (typeof o.total === "number") ? o : null;
   }catch(e){ return null; }
 }
 
-function loadTotal(){
-  if(!CONFIG.registroURL) return Promise.resolve(false);
-  // A pagina ja esta na tela, entao da para esperar: o Apps Script demora
-  // alguns segundos quando esta "frio". O teto existe so para nao ficar preso.
-  var prazo = new Promise(function(ok){ setTimeout(function(){ ok(null); }, 15000); });
-  var busca = fetch(CONFIG.registroURL + "?acao=total", {cache:"no-store"})
+function hojeISO(){
+  var h = new Date(), d2 = function(n){ return (n < 10 ? "0" : "") + n; };
+  return h.getFullYear() + "-" + d2(h.getMonth() + 1) + "-" + d2(h.getDate());
+}
+
+function dataCurta(iso){
+  if(!iso) return "";
+  var d = new Date(iso + "T12:00:00-03:00");
+  return isNaN(d.getTime()) ? "" : d.toLocaleDateString("pt-BR", { day:"2-digit", month:"2-digit" });
+}
+
+function pedirTotal(){
+  var ctl = ("AbortController" in window) ? new AbortController() : null;
+  if(ctl) setTimeout(function(){ ctl.abort(); }, ESPERA_MAXIMA);
+  return fetch(CONFIG.registroURL + "?acao=total", ctl ? {cache:"no-store", signal:ctl.signal} : {cache:"no-store"})
     .then(function(r){ return r.ok ? r.json() : null; })
     .catch(function(){ return null; });
-  return Promise.race([busca, prazo]).then(function(t){
-    if(!t || typeof t.total !== "number") return false;
+}
+
+function buscarTotal(){
+  // Sem planilha configurada, o dados.json é a fonte oficial — não é reserva.
+  if(!CONFIG.registroURL){
+    if(RESERVA.dados){ CONFIG.arrecadado = RESERVA.dados.total; mudarEstado("ok"); }
+    else mudarEstado("erro");
+    return;
+  }
+  var minha = ++tentativa;
+  mudarEstado("carregando");
+  var lento = setTimeout(function(){
+    if(minha === tentativa && estado === "carregando") usarReserva("lento");
+  }, ESPERA_RESERVA);
+
+  pedirTotal().then(function(t){
+    if(minha !== tentativa) return;          // o visitante já pediu outra
+    clearTimeout(lento);
+    if(!t || typeof t.total !== "number"){ usarReserva("falhou"); return; }
     CONFIG.arrecadado = t.total;
-    // o mesmo endpoint ja conta quantas contribuicoes foram conferidas:
-    // e prova social real, conferida no extrato, sem expor nome de ninguem
-    if(typeof t.conferidos === "number" && t.conferidos > 0){
-      CONFIG.totalApoiadores = t.conferidos;
-    }
+    if(typeof t.conferidos === "number" && t.conferidos > 0) CONFIG.totalApoiadores = t.conferidos;
+    CONFIG.atualizadoEm = hojeISO();
     try{
       localStorage.setItem("valeivai.total", JSON.stringify({
         total: t.total,
-        conferidos: (typeof t.conferidos === "number") ? t.conferidos : 0
+        conferidos: (typeof t.conferidos === "number") ? t.conferidos : 0,
+        em: CONFIG.atualizadoEm
       }));
     }catch(e){}
-    var h = new Date(), d2 = function(n){ return (n < 10 ? "0" : "") + n; };
-    CONFIG.atualizadoEm = h.getFullYear() + "-" + d2(h.getMonth() + 1) + "-" + d2(h.getDate());
-    return true;
+    mudarEstado("ok");
   });
 }
 
-/* Recalcula a viagem depois que o total real chega. Só os números e a estrada:
-   nada de refazer botões ou reatar eventos, que já estão de pé. */
+/* A reserva é o MAIOR dos dois totais conhecidos: os dois já foram reais e o
+   total conferido só cresce. Vem sempre com a data, para ninguém achar que é
+   o número de agora. */
+function usarReserva(motivo){
+  var r = RESERVA.dados, a = RESERVA.aparelho, melhor = null;
+  if(r && r.total > 0) melhor = r;
+  if(a && a.total > 0 && (!melhor || a.total > melhor.total)) melhor = a;
+  if(!melhor){ mudarEstado("erro", motivo); return; }
+  CONFIG.arrecadado = melhor.total;
+  if(melhor.conferidos > 0 && !CONFIG.totalApoiadores) CONFIG.totalApoiadores = melhor.conferidos;
+  if(melhor.em) CONFIG.atualizadoEm = melhor.em;
+  mudarEstado("reserva", motivo, melhor.em);
+}
+
+function mudarEstado(novo, motivo, desde){
+  estado = novo;
+  document.documentElement.classList.toggle("semDados", novo === "carregando");
+  var pulso = $("pulso"), st = $("pStatus");
+  if(pulso) pulso.setAttribute("aria-busy", novo === "carregando" ? "true" : "false");
+
+  if(st){
+    st.removeAttribute("data-tipo");
+    var quando = dataCurta(desde);
+    if(novo === "carregando"){
+      st.textContent = "Atualizando campanha…";
+    }else if(novo === "ok"){
+      st.textContent = "";
+      st.hidden = true;
+    }else{
+      st.hidden = false;
+      st.setAttribute("data-tipo", "erro");
+      var txt = (motivo === "lento")
+        ? "A atualização está demorando."
+        : "Não foi possível atualizar a campanha agora.";
+      if(novo === "reserva") txt += " Mostrando o último total confirmado" + (quando ? " (" + quando + ")" : "") + ".";
+      st.innerHTML = "<span>" + esc(txt) + "</span>"
+                   + '<button type="button" id="pTentar">Tentar novamente</button>';
+      $("pTentar").addEventListener("click", buscarTotal);
+    }
+    if(novo === "carregando") st.hidden = false;
+  }
+  aplicarTotal();
+}
+
+/* Recalcula a viagem com o total da vez. Só os números e a estrada: nada de
+   refazer botões ou reatar eventos, que já estão de pé. */
 function aplicarTotal(){
-  kmFinanciados = Math.min(KM_TOTAL, CONFIG.arrecadado / PRECO_KM);
-  pct = Math.min(100, Math.max(0, CONFIG.arrecadado / CONFIG.meta * 100));
+  var total = temNumero() ? CONFIG.arrecadado : 0;
+  kmFinanciados = Math.min(KM_TOTAL, total / PRECO_KM);
+  pct = Math.min(100, Math.max(0, total / CONFIG.meta * 100));
   renderNumbers();
   renderHeroRoute();
   drawRoute();
   renderContas();
-  renderContagem();   // a faixa mostra quanto falta em reais: sem isto fica no valor velho
+  renderContagem();
+  if(!trechoTocado) prepararTrecho();
 }
 
 /* ---------------------- a estrada ---------------------- */
@@ -1582,7 +1925,10 @@ function drawRoute(){
 
   // situação atual, em texto
   var st = $("routeStatus"), ida = KM_TOTAL / 2, msg, win = false;
-  if(kmFinanciados < 1){
+  if(!temNumero()){
+    msg = estado === "carregando" ? "Atualizando a posição do ônibus…"
+                                  : "Não deu para atualizar a posição do ônibus agora.";
+  }else if(kmFinanciados < 1){
     msg = "📍 Ainda em Paranavaí — o ônibus espera o primeiro quilômetro.";
   }else if(kmFinanciados < ida - 10){
     msg = "🚌 Ida · km " + num(kmFinanciados) + " de " + num(ida);
@@ -1599,42 +1945,45 @@ function drawRoute(){
   st.textContent = msg;
   st.classList.toggle("win", win);
 
-  setText("hudKm", num(kmFinanciados) + " km");
-  setText("hudLeg", kmFinanciados >= ida ? "Volta" : "Ida");
-  setText("hudPct", pct.toFixed(0) + "%");
+  setText("hudKm", ouAguarde(num(kmFinanciados) + " km"));
+  setText("hudLeg", ouAguarde(kmFinanciados >= ida ? "Volta" : "Ida"));
+  setText("hudPct", ouAguarde(pct.toFixed(0) + "%"));
 }
 
 /* ---------------------- números da campanha ---------------------- */
 function renderNumbers(){
   var falta = Math.max(0, CONFIG.meta - CONFIG.arrecadado);
+  var restaKm = KM_TOTAL - kmFinanciados;
 
-  setText("sRaised", moneyShort(CONFIG.arrecadado));
+  document.querySelectorAll(".precoKm").forEach(function(e){ e.textContent = money(PRECO_KM); });
+
   setText("sGoal",   moneyShort(CONFIG.meta));
-  setText("sKm",     km(kmFinanciados));
   setText("sKmTotal",km(KM_TOTAL));
-  setText("sLeftKm", km(KM_TOTAL - kmFinanciados));
-  setText("sLeftBRL",moneyShort(falta));
-  setText("sPct",    pct.toFixed(0) + "%");
+  setText("sRaised", ouAguarde(moneyShort(CONFIG.arrecadado)));
+  setText("sKm",     ouAguarde(km(kmFinanciados)));
+  setText("sLeftKm", ouAguarde(km(restaKm)));
+  setText("sLeftBRL",ouAguarde(moneyShort(falta)));
+  setText("sPct",    ouAguarde(pct.toFixed(0) + "%"));
 
   setText("tGoal",   moneyShort(CONFIG.meta));
-  setText("tRaised", moneyShort(CONFIG.arrecadado));
-  setText("tLeft",   moneyShort(falta));
-  setText("tKm",     num(kmFinanciados) + " / " + num(KM_TOTAL) + " km");
+  setText("tRaised", ouAguarde(moneyShort(CONFIG.arrecadado)));
+  setText("tLeft",   ouAguarde(moneyShort(falta)));
+  setText("tKm",     ouAguarde(num(kmFinanciados) + " / " + num(KM_TOTAL) + " km"));
   setText("fGoal",   moneyShort(CONFIG.meta));
 
   // nunca inventa número de doadores
   var n = CONFIG.totalApoiadores;
   if(n === null || n === undefined) n = CONFIG.apoiadores.length || null;
-  setText("tCount", n ? (n + (n === 1 ? " contribuição" : " contribuições")) : "a publicar");
+  setText("tCount", ouAguarde(n ? (n + (n === 1 ? " contribuição" : " contribuições")) : "a publicar"));
 
-  setText("tUpdate", CONFIG.atualizadoEm
+  setText("tUpdate", ouAguarde(CONFIG.atualizadoEm
     ? new Date(CONFIG.atualizadoEm + "T12:00:00-03:00").toLocaleDateString("pt-BR")
-    : "a publicar");
+    : "a publicar"));
 
   // prova social: só aparece quando há número real conferido
   var gente = $("progGente"), q = CONFIG.totalApoiadores;
   if(gente){
-    if(q && q > 0){
+    if(temNumero() && q && q > 0){
       gente.innerHTML = "<b>" + num(q) + (q === 1 ? " contribuição</b> já confirmada"
                                                  : " contribuições</b> já confirmadas")
                       + " no extrato.";
@@ -1644,8 +1993,10 @@ function renderNumbers(){
     }
   }
 
-  setText("stkKm", km(kmFinanciados) + " garantidos");
-  setText("stkLeft","faltam " + km(KM_TOTAL - kmFinanciados));
+  setText("stkKm", ouAguarde(num(kmFinanciados)));
+  renderPulso();
+
+  if(!temNumero()) return;   // barras e marcos só andam com número de verdade
 
   setTimeout(function(){ $("sFill").style.width = pct + "%"; }, reduced ? 0 : 340);
 
@@ -1657,41 +2008,158 @@ function renderNumbers(){
   });
 }
 
+/* O pulso do topo: os três números que respondem "a campanha está andando?".
+   Na primeira vez que o número chega, ele conta a partir de zero — é a única
+   animação que carrega informação (mostra o tamanho do avanço). */
+var pulsoContou = false;
+
+function renderPulso(){
+  var pk = $("pKm"), pr = $("pRaised"), pp = $("pPct");
+  if(!pk) return;
+  if(!temNumero()){
+    pk.textContent = pr.textContent = pp.textContent = ouAguarde("");
+    $("mrFill").style.width = "0";
+    $("mrBus").style.left = "0";
+    return;
+  }
+  var alvoKm = kmFinanciados, alvoR = CONFIG.arrecadado, alvoP = pct;
+  var pintar = function(f){
+    pk.textContent = num(alvoKm * f) + " km";
+    pr.textContent = moneyShort(Math.round(alvoR * f));
+    pp.textContent = (alvoP * f).toFixed(alvoP < 10 ? 1 : 0).replace(".", ",") + "%";
+  };
+  var p = Math.max(0, Math.min(100, alvoP));
+  setTimeout(function(){
+    $("mrFill").style.width = p + "%";
+    $("mrBus").style.left = p + "%";
+  }, reduced ? 0 : 120);
+
+  if(pulsoContou || reduced || document.visibilityState !== "visible"){ pintar(1); pulsoContou = true; return; }
+  pulsoContou = true;
+  var t0 = null, DUR = 1100;
+  var passo = function(t){
+    if(t0 === null) t0 = t;
+    var f = Math.min(1, (t - t0) / DUR);
+    pintar(1 - Math.pow(1 - f, 3));
+    if(f < 1) requestAnimationFrame(passo);
+  };
+  requestAnimationFrame(passo);
+  // rAF não roda em aba escondida: garante o valor final de qualquer jeito
+  setTimeout(function(){ pintar(1); }, DUR + 150);
+}
+
 /* ---------------------- adotar km ---------------------- */
+/* Valores pequenos de propósito: quem chega pelo WhatsApp decide em segundos,
+   e 1 km (R$ 14,07) precisa parecer tão legítimo quanto 10. Para mais que
+   isso existe o "Outro km" — e para quem quer adotar uma cidade, o trecho. */
+var OPCOES_KM = [1, 2, 3, 4, 5, 10];
 var escolhido = 10;
+var kmValido = true;       // falso enquanto o "Outro km" está vazio ou errado
+var trechoRotulo = "";     // "Cidade A → Cidade B", ou "" quando é só quantidade
 
 function buildKmButtons(){
-  var opts = [1,5,10,25,50,100], html = "";
-  opts.forEach(function(k){
-    html += '<button type="button" class="kmBtn" data-km="' + k + '" aria-pressed="' + (k===10) + '">'
-          + k + ' km<small>' + money(k * PRECO_KM) + '</small></button>';
-  });
+  var html = OPCOES_KM.map(function(k){
+    return '<button type="button" class="kmBtn" data-km="' + k + '" aria-pressed="' + (k === escolhido) + '">'
+         + k + ' <span>km</span><small>' + money(k * PRECO_KM) + '</small></button>';
+  }).join("");
+  html += '<button type="button" class="kmBtn outro" data-km="outro" aria-pressed="false"'
+        + ' aria-expanded="false" aria-controls="outroBox">✏️ Outro km</button>';
   $("kmGrid").innerHTML = html;
   $("kmGrid").addEventListener("click", function(e){
     var b = e.target.closest(".kmBtn");
-    if(b) setKm(Number(b.dataset.km));
+    if(!b) return;
+    if(b.dataset.km === "outro"){ abrirOutro(); return; }
+    fecharOutro();
+    setKm(Number(b.dataset.km));
   });
 }
 
-var trechoRotulo = "";   // "Cidade A → Cidade B", ou "" quando é só quantidade
+function marcarBotoes(k, outro){
+  document.querySelectorAll(".kmBtn").forEach(function(b){
+    var eOutro = b.dataset.km === "outro";
+    b.setAttribute("aria-pressed", eOutro ? !!outro : (!outro && Number(b.dataset.km) === k));
+  });
+}
 
-function setKm(k, fromInput){
+function setKm(k, doOutro){
   trechoRotulo = "";       // escolher quantidade desfaz o trecho
   escolhido = Math.max(1, Math.min(KM_TOTAL, Math.round(Number(k) || 1)));
-
-  document.querySelectorAll(".kmBtn").forEach(function(b){
-    b.setAttribute("aria-pressed", Number(b.dataset.km) === escolhido);
-  });
+  kmValido = true;
+  marcarBotoes(escolhido, doOutro);
+  pintarBarra(0, 0);
   atualizarImpacto();
 }
 
+function abrirOutro(){
+  var box = $("outroBox"), inp = $("outroKm");
+  box.hidden = false;
+  document.querySelector('.kmBtn.outro').setAttribute("aria-expanded", "true");
+  marcarBotoes(0, true);
+  lerOutro();
+  // teclado numérico já aberto: é o próximo passo óbvio
+  try{ inp.focus({ preventScroll: true }); }catch(e){ inp.focus(); }
+}
+
+function fecharOutro(){
+  $("outroBox").hidden = true;
+  $("outroErro").hidden = true;
+  var b = document.querySelector('.kmBtn.outro');
+  if(b) b.setAttribute("aria-expanded", "false");
+}
+
+/* Aceita só inteiro de 1 até a viagem inteira. Campo vazio não é erro — é só
+   a pessoa ainda pensando —, mas trava o Pix para ninguém copiar um valor
+   que não está na tela. */
+function lerOutro(){
+  var bruto = ($("outroKm").value || "").trim(), erro = "", n = NaN;
+  if(bruto){
+    if(!/^\d+$/.test(bruto.replace(/\./g, ""))) erro = "Use só números inteiros, como 7 ou 15.";
+    else{
+      n = parseInt(bruto.replace(/\./g, ""), 10);
+      if(n < 1) erro = "O mínimo é 1 km.";
+      else if(n > KM_TOTAL) erro = "O máximo é " + num(KM_TOTAL) + " km — a viagem inteira.";
+    }
+  }
+  var caixa = $("outroErro");
+  caixa.hidden = !erro;
+  caixa.textContent = erro;
+  $("outroKm").setAttribute("aria-invalid", erro ? "true" : "false");
+
+  if(!bruto || erro){
+    kmValido = false;
+    trechoRotulo = "";
+    pintarBarra(0, 0);
+    atualizarImpacto();
+    return;
+  }
+  setKm(n, true);
+}
+
 function atualizarImpacto(){
-  var v = money(escolhido * PRECO_KM);
-  setText("impactVal", v);
+  var botoesPix = ["openPix", "copyBrcode", "mCopyBrcode", "sendProof", "mProof"];
+  esconderCopiado();
+  if(!kmValido){
+    setText("impactKm", "— km");
+    $("impactTxt").textContent = "Digite quantos quilômetros você quer levar.";
+    setText("impactVal", "—");
+    setText("openPix", "Quero levar esses km 🚌");
+    botoesPix.forEach(function(id){ if($(id)) $(id).disabled = true; });
+    return;
+  }
+  botoesPix.forEach(function(id){
+    if(!$(id)) return;
+    // WhatsApp só volta se estiver configurado
+    $(id).disabled = (id === "sendProof" || id === "mProof") ? !CONFIG.whatsapp : false;
+  });
+
+  var v = money(escolhido * PRECO_KM), k = num(escolhido);
+  setText("impactKm", k + " km");
   $("impactTxt").innerHTML = trechoRotulo
-    ? "Você leva o ônibus de <b>" + trechoRotulo + "</b> — " + num(escolhido) + " km da estrada."
-    : "Você leva o Vale do Ivaí <b>" + num(escolhido) + " km</b> mais perto de Barretos.";
-  setText("mKm", num(escolhido) + " km");
+    ? "Você leva o ônibus de <b>" + esc(trechoRotulo) + "</b> — " + k + " km da estrada."
+    : "Você leva o Vale do Ivaí <b>" + k + " km</b> mais perto de Barretos.";
+  setText("impactVal", v);
+  setText("openPix", escolhido === 1 ? "Quero levar esse 1 km 🚌" : "Quero levar esses " + k + " km 🚌");
+  setText("mKm", k + " km");
   setText("mVal", v);
   $("certKm").value = escolhido;
   updateCert();
@@ -1724,6 +2192,7 @@ function cidadeEm(k){
 }
 
 var tDe = 0, tAte = 58;
+var trechoTocado = false;   // depois que a pessoa mexe no trecho, não mudamos mais sozinhos
 
 function pintarBarra(de, ate){
   var IDA = metadeIda();
@@ -1732,12 +2201,13 @@ function pintarBarra(de, ate){
 }
 
 function aplicarTrecho(de, ate, rotulo){
+  trechoTocado = true;
   trechoRotulo = rotulo;
   escolhido = Math.max(1, Math.round(ate - de));
+  kmValido = true;
+  fecharOutro();
   // se o trecho der exatamente um dos atalhos, o botão acende junto
-  document.querySelectorAll(".kmBtn").forEach(function(b){
-    b.setAttribute("aria-pressed", Number(b.dataset.km) === escolhido);
-  });
+  marcarBotoes(escolhido, false);
   pintarBarra(de, ate);
   atualizarImpacto();
 }
@@ -1782,19 +2252,21 @@ function buildTrecho(){
   $("selAte").innerHTML = opts;
   $("kmDe").max = metadeIda();
   $("kmAte").max = metadeIda();
+  mostrarPane("km");
+  prepararTrecho();
+}
 
-  /* Abre já valendo: 5 km a partir de onde o ônibus está.
-     É a continuação natural da viagem — a pessoa não precisa escolher nada
-     para ver um valor coerente com o momento da campanha. */
+/* Deixa os campos do trecho sugerindo 5 km a partir de onde o ônibus está,
+   SEM aplicar: o trecho fica fechado e quem manda é o seletor rápido. Só vale
+   quando a pessoa mexer. Roda de novo quando a posição real do ônibus chega. */
+function prepararTrecho(){
   var IDA = metadeIda();
-  tDe  = Math.min(Math.round(posEstrada()), IDA - 5);
-  tDe  = Math.max(0, tDe);
+  tDe  = Math.max(0, Math.min(Math.round(posEstrada()), IDA - 5));
   tAte = Math.min(IDA, tDe + 5);
-
+  $("kmDe").value = tDe;
+  $("kmAte").value = tAte;
   $("selDe").value  = String(cidadeEm(tDe).km);
   $("selAte").value = String(cidadeEm(tAte).km);
-  mostrarPane("km");
-  validarTrecho(false);
 }
 
 /* leva o trecho escolhido no topo da página para o formulário de doação */
@@ -1802,8 +2274,9 @@ function irParaTrecho(de, ate){
   tDe = Math.round(Math.min(de, ate));
   tAte = Math.round(Math.max(de, ate));
   mostrarPane("km");
+  $("avancado").open = true;
   validarTrecho(false);
-  var alvo = document.getElementById("adotar");
+  var alvo = $("avancado");
   if(alvo) alvo.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
 }
 
@@ -1811,6 +2284,10 @@ function irParaTrecho(de, ate){
 var cidadeAlvo = null;
 
 function selecionarParada(c, btn){
+  if(!temNumero()){
+    $("hrTxt").textContent = "Um instante — atualizando a posição do ônibus.";
+    return;
+  }
   // arredonda a posição aqui para o valor exibido bater com o do formulário
   var pos = Math.round(posEstrada()), volta = naVolta();
   document.querySelectorAll(".vstop").forEach(function(e){ e.setAttribute("aria-pressed","false"); });
@@ -1861,6 +2338,13 @@ function renderHeroRoute(){
   if(reduced){ $("vfill").style.height = p + "%"; }
   else { setTimeout(function(){ $("vfill").style.height = p + "%"; }, 300); }
 
+  if(!temNumero()){
+    $("hrTxt").textContent = estado === "carregando" ? "Atualizando a posição do ônibus…"
+                                                     : "Posição do ônibus indisponível agora.";
+    $("hrSub").textContent = "Toque em uma cidade para ver quanto falta para chegar lá.";
+    $("hrGo").hidden = true;
+    return;
+  }
   $("hrTxt").textContent = volta
     ? "O ônibus está voltando para casa."
     : (kmFinanciados < 1 ? "O ônibus ainda está em Paranavaí."
@@ -1967,8 +2451,36 @@ function atualizarPixCodigo(){
   var codigo = pixCopiaCola(valor);
   var rotulo = money(valor);
   ["brcodeTxt", "mBrcode"].forEach(function(id){ if($(id)) $(id).textContent = codigo; });
-  ["brValor", "mBrValor"].forEach(function(id){ if($(id)) $(id).textContent = rotulo; });
+  ["copyBrcode", "mCopyBrcode"].forEach(function(id){
+    if($(id)) $(id).innerHTML = "<span>📋 Copiar Pix de <b>" + esc(rotulo) + "</b></span>";
+  });
   ["codDoacao", "mCodDoacao"].forEach(function(id){ if($(id)) $(id).textContent = CODIGO_DOACAO; });
+}
+
+/* Depois de copiar, o próximo passo tem que saltar aos olhos: a pessoa vai
+   ao banco e volta — e ao voltar precisa ver "já copiei, falta o comprovante".
+   Por isso o estado fica na tela até o valor mudar. */
+function marcarCopiado(){
+  ["copyBrcode", "mCopyBrcode"].forEach(function(id){
+    if($(id)) $(id).innerHTML = "<span>✓ Pix copiado · copiar de novo</span>";
+  });
+  ["depois1", "depois2"].forEach(function(id){ if($(id)) $(id).hidden = false; });
+  ["sendProof", "mProof"].forEach(function(id){
+    var b = $(id);
+    if(!b || b.disabled) return;
+    b.classList.remove("destaque");
+    void b.offsetWidth;            // reinicia a animação se copiar de novo
+    b.classList.add("destaque");
+  });
+  var itens = document.querySelectorAll("#mPassos li");
+  if(itens[1]) itens[1].classList.add("feito");
+}
+
+function esconderCopiado(){
+  ["depois1", "depois2"].forEach(function(id){ if($(id)) $(id).hidden = true; });
+  ["sendProof", "mProof"].forEach(function(id){ if($(id)) $(id).classList.remove("destaque"); });
+  var itens = document.querySelectorAll("#mPassos li");
+  if(itens[1]) itens[1].classList.remove("feito");
 }
 
 /* ---------------------- PIX ---------------------- */
@@ -1992,23 +2504,28 @@ function renderPix(){
   }
 }
 
-function copiar(texto, btn, rotuloOk, aviso){
+/* `depois`, quando vem, assume o botão (caso do Pix, que fica marcado);
+   sem ele, o botão mostra o ok e volta sozinho. */
+function copiar(texto, btn, rotuloOk, aviso, depois){
   if(!texto) return;
   var original = btn.innerHTML;
   var ok = function(){
-    btn.innerHTML = "✓ " + rotuloOk;
     toast(aviso);
+    if(depois){ depois(); return; }
+    btn.innerHTML = "✓ " + rotuloOk;
     setTimeout(function(){ btn.innerHTML = original; }, 2200);
   };
+  // sem área de transferência, a pessoa copia da caixa — e segue igual
+  var manual = function(){ prompt("Copie o código abaixo:", texto); if(depois) depois(); };
   if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(texto).then(ok).catch(function(){ prompt("Copie:", texto); });
+    navigator.clipboard.writeText(texto).then(ok).catch(manual);
   }else{
-    prompt("Copie:", texto);
+    manual();
   }
 }
 
 function openWhats(){
-  if(!CONFIG.whatsapp) return;
+  if(!CONFIG.whatsapp || !kmValido) return;
   registrar("whatsapp");
   var nome = ($("certName").value || "").trim();
   var k = escolhido;
@@ -2046,9 +2563,9 @@ function renderContas(){
   }
 
   html += '<div class="despTotais">'
-        + '<div class="tLine"><span>Total recebido</span><b>' + moneyShort(CONFIG.arrecadado) + "</b></div>"
+        + '<div class="tLine"><span>Total recebido</span><b class="dep">' + ouAguarde(moneyShort(CONFIG.arrecadado)) + "</b></div>"
         + '<div class="tLine"><span>Total gasto</span><b>' + moneyShort(gasto) + "</b></div>"
-        + '<div class="tLine saldo"><span>Saldo em caixa</span><b>' + moneyShort(saldo) + "</b></div>"
+        + '<div class="tLine saldo"><span>Saldo em caixa</span><b class="dep">' + ouAguarde(moneyShort(saldo)) + "</b></div>"
         + "</div>";
   box.innerHTML = html;
 }
@@ -2102,7 +2619,7 @@ function renderContagem(){
 
   var faltaBRL = Math.max(0, CONFIG.meta - CONFIG.arrecadado);
   dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>"
-    + (faltaBRL > 0
+    + (!temNumero() ? "" : faltaBRL > 0
         ? "faltam " + moneyShort(faltaBRL) + " para garantir a viagem"
         : "meta batida — o ônibus está pago");
 }
@@ -2327,12 +2844,211 @@ function initVideos(){
   });
 }
 
+/* A barra fixa aparece só quando ajuda: depois do topo (lá o botão grande já
+   está na tela), e some sobre o seletor e o Pix (a pessoa já chegou), com o
+   Pix aberto e com o teclado na tela — onde ela cobriria o campo. */
 function initSticky(){
-  var s = $("sticky"), hero = document.querySelector(".hero");
+  var s = $("sticky"), hero = document.querySelector(".hero"), adotar = $("adotar");
   if(!("IntersectionObserver" in window)) return;
-  new IntersectionObserver(function(e){
-    s.classList.toggle("show", !e[0].isIntersecting);
-  }, {threshold:0}).observe(hero);
+  var veHero = true, veAdotar = false, digitando = false;
+  var atualizar = function(){
+    var mostra = !veHero && !veAdotar && !digitando && !document.body.classList.contains("modalAberto");
+    s.classList.toggle("show", mostra);
+    s.setAttribute("aria-hidden", mostra ? "false" : "true");
+    s.querySelector("a").tabIndex = mostra ? 0 : -1;
+  };
+  new IntersectionObserver(function(e){ veHero = e[0].isIntersecting; atualizar(); }, {threshold:0}).observe(hero);
+  if(adotar) new IntersectionObserver(function(e){ veAdotar = e[0].isIntersecting; atualizar(); },
+                                      {threshold:0, rootMargin:"0px 0px -35% 0px"}).observe(adotar);
+  document.addEventListener("focusin", function(e){
+    if(/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)){ digitando = true; atualizar(); }
+  });
+  document.addEventListener("focusout", function(){ digitando = false; setTimeout(atualizar, 60); });
+  initSticky.atualizar = atualizar;
+}
+
+/* ---------------------- narração: "Ouvir nossa missão" ----------------------
+   Nunca toca sozinha. Se o dados.json apontar um arquivo (audioMissao), ele
+   manda; sem arquivo, ou se ele falhar, o próprio navegador lê o texto em
+   pt-BR. Trocar a voz sintética por uma gravação de verdade é só pôr o MP3 e
+   preencher o campo — a interface não muda.
+
+   A leitura do navegador vai frase por frase: pausar em Android não funciona
+   (speechSynthesis.pause é ignorado lá) e fala longa é cortada no Chrome.
+   Frase a frase, "pausar" é parar e lembrar onde estava. */
+function textoMissao(falado){
+  var preco = falado ? precoFalado() : money(PRECO_KM);
+  return "Em janeiro de 2027, os Desbravadores do Clube Vale do Ivaí vão sair de Paranavaí rumo ao "
+       + "Campori Sul-Americano, em Barretos. São " + (falado ? "mil cento e dois" : "1.102")
+       + " quilômetros de ida e volta. Para transformar essa viagem em algo que todo mundo possa "
+       + "ajudar a construir, dividimos a meta do transporte pela estrada. Cada " + preco
+       + " representa um quilômetro. Você escolhe quantos quilômetros quer levar, copia o Pix com "
+       + "o valor e o código da sua doação, envia o comprovante e, depois da confirmação, vê o "
+       + "ônibus avançar. Um quilômetro já coloca essa história em movimento.";
+}
+
+// "R$ 14,07" lido pela voz sai "erre cifrão"; por extenso sai natural
+function precoFalado(){
+  var c = Math.round(PRECO_KM * 100), r = Math.floor(c / 100), ct = c % 100;
+  return r + (r === 1 ? " real" : " reais") + (ct ? " e " + ct + (ct === 1 ? " centavo" : " centavos") : "");
+}
+
+var narr = { modo: "", audio: null, frases: [], i: 0, tocando: false, iniciou: false, vez: 0 };
+
+function initNarracao(){
+  $("abTexto").textContent = textoMissao(false);
+  var podeFalar = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  if(!CONFIG.audioMissao && !podeFalar){
+    // sem arquivo e sem voz no aparelho: o botão vira "ler o texto"
+    $("ouvirBtn").textContent = "📖 Ler nossa missão";
+  }
+  if(podeFalar) try{ speechSynthesis.getVoices(); }catch(e){}   // Chrome carrega as vozes tarde
+  $("ouvirBtn").addEventListener("click", alternarNarracao);
+  $("abPlay").addEventListener("click", alternarNarracao);
+  $("abRestart").addEventListener("click", function(){ reiniciarNarracao(); });
+  window.addEventListener("pagehide", pararNarracao);
+}
+
+function alternarNarracao(){
+  var box = $("audioBox");
+  if(!narr.iniciou){
+    narr.iniciou = true;
+    box.hidden = false;
+    if(CONFIG.audioMissao) usarArquivo();
+    else if("speechSynthesis" in window) usarVoz();
+    else { box.querySelector(".abRow").hidden = true; box.querySelector("details").open = true; return; }
+    return;
+  }
+  if(narr.tocando) pausarNarracao(); else continuarNarracao();
+}
+
+function usarArquivo(){
+  narr.modo = "arquivo";
+  var a = narr.audio = new Audio();
+  a.preload = "none";
+  // Se o arquivo falhar, a voz do navegador assume — e eventos atrasados do
+  // arquivo (a promessa do play() rejeita DEPOIS do "error") não podem mais
+  // mexer no estado. Todo ouvinte confere de quem é a vez.
+  var meu = function(fn){ return function(){ if(narr.modo === "arquivo") fn(); }; };
+  a.addEventListener("play",  meu(function(){ narr.tocando = true;  pintarNarracao(); }));
+  a.addEventListener("pause", meu(function(){ narr.tocando = false; pintarNarracao(); }));
+  a.addEventListener("ended", meu(function(){ narr.tocando = false; narr.fim = true; pintarNarracao(); }));
+  a.addEventListener("timeupdate", meu(pintarNarracao));
+  a.addEventListener("loadedmetadata", meu(pintarNarracao));
+  // arquivo ausente ou bloqueado: cai para a voz do navegador, sem erro na tela
+  a.addEventListener("error", function(){
+    if(narr.modo !== "arquivo") return;
+    if("speechSynthesis" in window) usarVoz();
+    else { narr.tocando = false; $("audioBox").querySelector("details").open = true; pintarNarracao(); }
+  });
+  a.src = CONFIG.audioMissao;
+  var p = a.play();
+  if(p && p.catch) p.catch(meu(function(){ narr.tocando = false; pintarNarracao(); }));
+}
+
+function usarVoz(){
+  narr.modo = "voz";
+  narr.frases = textoMissao(true).match(/[^.!?]+[.!?]+/g) || [textoMissao(true)];
+  narr.i = 0;
+  falarFrase();
+}
+
+function vozPtBr(){
+  var vs = [];
+  try{ vs = speechSynthesis.getVoices(); }catch(e){}
+  var pt = vs.filter(function(v){ return /^pt[-_]BR/i.test(v.lang); });
+  if(!pt.length) pt = vs.filter(function(v){ return /^pt/i.test(v.lang); });
+  // as vozes "naturais"/do Google soam bem melhor que as antigas do sistema
+  var boa = pt.filter(function(v){ return /natural|google|premium|enhanced|luciana|francisca|thalita/i.test(v.name); });
+  return boa[0] || pt[0] || null;
+}
+
+function falarFrase(){
+  var minha = ++narr.vez;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  if(narr.i >= narr.frases.length){ narr.tocando = false; narr.fim = true; pintarNarracao(); return; }
+  var u = new SpeechSynthesisUtterance(narr.frases[narr.i].trim());
+  u.lang = "pt-BR";
+  u.rate = 0.98;
+  var v = vozPtBr(); if(v) u.voice = v;
+  u.onend = function(){
+    if(minha !== narr.vez || !narr.tocando) return;   // foi pausa ou recomeço
+    narr.i++;
+    falarFrase();
+  };
+  u.onerror = u.onend;
+  narr.tocando = true;
+  narr.fim = false;
+  pintarNarracao();
+  speechSynthesis.speak(u);
+}
+
+function pausarNarracao(){
+  if(narr.modo === "arquivo" && narr.audio){ narr.audio.pause(); return; }
+  narr.tocando = false;
+  narr.vez++;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  pintarNarracao();
+}
+
+function continuarNarracao(){
+  if(narr.modo === "arquivo" && narr.audio){
+    if(narr.fim){ narr.audio.currentTime = 0; narr.fim = false; }
+    narr.audio.play();
+    return;
+  }
+  if(narr.fim) narr.i = 0;
+  falarFrase();
+}
+
+function reiniciarNarracao(){
+  if(narr.modo === "arquivo" && narr.audio){
+    narr.fim = false;
+    narr.audio.currentTime = 0;
+    narr.audio.play();
+    return;
+  }
+  narr.i = 0;
+  falarFrase();
+}
+
+function pararNarracao(){
+  if(narr.audio) narr.audio.pause();
+  if(narr.modo === "voz"){ narr.tocando = false; narr.vez++; try{ speechSynthesis.cancel(); }catch(e){} }
+}
+
+function tempo(seg){
+  seg = Math.max(0, Math.floor(seg || 0));
+  return Math.floor(seg / 60) + ":" + doisDig(seg % 60);
+}
+
+function pintarNarracao(){
+  var frac = 0, rotTempo = "";
+  if(narr.modo === "arquivo" && narr.audio){
+    var d = narr.audio.duration;
+    frac = (d && isFinite(d)) ? narr.audio.currentTime / d : 0;
+    rotTempo = tempo(narr.audio.currentTime) + (d && isFinite(d) ? " / " + tempo(d) : "");
+  }else if(narr.modo === "voz"){
+    frac = narr.frases.length ? Math.min(narr.i, narr.frases.length) / narr.frases.length : 0;
+    if(narr.fim) frac = 1;
+  }
+  $("abFill").style.width = (frac * 100).toFixed(1) + "%";
+  $("abProg").setAttribute("aria-valuenow", Math.round(frac * 100));
+  $("abTempo").textContent = rotTempo;
+  $("abTempo").hidden = !rotTempo;
+
+  var b = $("ouvirBtn"), p = $("abPlay");
+  b.setAttribute("aria-pressed", narr.tocando ? "true" : "false");
+  if(narr.tocando){
+    b.textContent = "❚❚ Pausar narração";
+    p.textContent = "❚❚"; p.setAttribute("aria-label", "Pausar narração");
+  }else if(narr.fim){
+    b.textContent = "▶ Ouvir de novo";
+    p.textContent = "▶"; p.setAttribute("aria-label", "Ouvir de novo");
+  }else{
+    b.textContent = "▶ Continuar narração";
+    p.textContent = "▶"; p.setAttribute("aria-label", "Continuar narração");
+  }
 }
 
 /* ---------------------- ligações ---------------------- */
@@ -2355,6 +3071,7 @@ function bind(){
   });
 
   $("doOnde").addEventListener("click", function(){
+    if(!temNumero()){ toast("Um instante — atualizando a posição do ônibus"); return; }
     var pos = Math.round(posEstrada());
     var destino = null;
     CIDADES.forEach(function(c){ if(destino === null && c.km > pos + 4) destino = c.km; });
@@ -2375,20 +3092,41 @@ function bind(){
   $("sendProof").addEventListener("click", openWhats);
   $("mProof").addEventListener("click", openWhats);
   $("copyBrcode").addEventListener("click", function(){
-    copiar($("brcodeTxt").textContent, this, "Código copiado", "Código Pix copiado com o valor");
+    if(!kmValido) return;
+    copiar($("brcodeTxt").textContent, this, "Pix copiado", "Pix copiado com o valor", marcarCopiado);
     registrar("copiou");
   });
   $("mCopyBrcode").addEventListener("click", function(){
-    copiar($("mBrcode").textContent, this, "Código copiado", "Código Pix copiado com o valor");
+    if(!kmValido) return;
+    copiar($("mBrcode").textContent, this, "Pix copiado", "Pix copiado com o valor", marcarCopiado);
     registrar("copiou");
   });
+  $("outroKm").addEventListener("input", lerOutro);
+  $("outroKm").addEventListener("keydown", function(e){
+    if(e.key === "Enter" && kmValido){ e.preventDefault(); $("openPix").click(); }
+  });
 
-  var m = $("modal");
-  $("openPix").addEventListener("click", function(){ m.classList.add("open"); });
-  $("closeModal").addEventListener("click", function(){ m.classList.remove("open"); });
-  m.addEventListener("click", function(e){ if(e.target === m) m.classList.remove("open"); });
+  var m = $("modal"), voltarFoco = null;
+  var abrir = function(){
+    if(!kmValido) return;
+    voltarFoco = document.activeElement;
+    m.classList.add("open");
+    document.body.classList.add("modalAberto");
+    if(initSticky.atualizar) initSticky.atualizar();
+    setTimeout(function(){ var b = $("mCopyBrcode"); if(b && !b.disabled) b.focus(); }, 60);
+  };
+  var fechar = function(){
+    if(!m.classList.contains("open")) return;
+    m.classList.remove("open");
+    document.body.classList.remove("modalAberto");
+    if(initSticky.atualizar) initSticky.atualizar();
+    if(voltarFoco && voltarFoco.focus) voltarFoco.focus();
+  };
+  $("openPix").addEventListener("click", abrir);
+  $("closeModal").addEventListener("click", fechar);
+  m.addEventListener("click", function(e){ if(e.target === m) fechar(); });
   document.addEventListener("keydown", function(e){
-    if(e.key === "Escape") m.classList.remove("open");
+    if(e.key === "Escape") fechar();
   });
 }
 
@@ -2396,14 +3134,15 @@ function bind(){
 function start(){
   KM_TOTAL = CONFIG.kmIda * 2;
   PRECO_KM = CONFIG.meta / KM_TOTAL;
-  kmFinanciados = Math.min(KM_TOTAL, CONFIG.arrecadado / PRECO_KM);
-  pct = Math.min(100, Math.max(0, CONFIG.arrecadado / CONFIG.meta * 100));
+  kmFinanciados = 0;   // até a planilha responder, a tela não tem número
+  pct = 0;
 
   buildKmButtons();
-  buildTrecho();   // já define o trecho inicial de 5 km
+  buildTrecho();       // só prepara os campos; o trecho fica fechado
+  renderPix();
+  setKm(escolhido);    // 10 km selecionado, Pix já montado com o valor
   renderHeroRoute();
   renderNumbers();
-  renderPix();
   ligarContagem();
   renderMural();
   renderContas();
@@ -2412,26 +3151,16 @@ function start(){
   initReveal();
   initSticky();
   initVideos();
+  initNarracao();
 }
 
 /* A página desenha primeiro com o dados.json e só depois busca o total real na
    planilha. Assim o site nunca fica em branco esperando o Google responder —
    se a planilha estiver lenta ou bloqueada, o visitante já viu a campanha. */
 loadData().then(function(){
-  // o guardado so levanta a primeira pintura, nunca abaixa: o valor real
-  // chega logo em seguida e manda em qualquer caso
-  // O guardado só levanta a primeira pintura, nunca abaixa. Guarda também
-  // quantas contribuições — senão, quando a planilha demora e o valor vem do
-  // cache, o número some da tela e parece que ninguém doou.
-  var guardado = totalGuardado();
-  if(guardado){
-    if(guardado.total > CONFIG.arrecadado) CONFIG.arrecadado = guardado.total;
-    if(guardado.conferidos > 0 && !CONFIG.totalApoiadores){
-      CONFIG.totalApoiadores = guardado.conferidos;
-    }
-  }
+  RESERVA.aparelho = lerAparelho();
   start();
-  loadTotal().then(function(mudou){ if(mudou) aplicarTotal(); });
+  buscarTotal();
 });
 
 })();
