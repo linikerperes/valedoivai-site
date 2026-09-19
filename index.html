@@ -2879,7 +2879,8 @@ function initSticky(){
 function textoMissao(falado){
   var preco = falado ? precoFalado() : money(PRECO_KM);
   return "Em janeiro de 2027, os Desbravadores do Clube Vale do Ivaí vão sair de Paranavaí rumo ao "
-       + "Campori Sul-Americano, em Barretos. São " + (falado ? "mil cento e dois" : "1.102")
+       + (falado ? "Camporí" : "Campori")   // falado sem acento sai "CamPOri"; o certo é "camporí"
+       + " Sul-Americano, em Barretos. São " + (falado ? "mil cento e dois" : "1.102")
        + " quilômetros de ida e volta. Para transformar essa viagem em algo que todo mundo possa "
        + "ajudar a construir, dividimos a meta do transporte pela estrada. Cada " + preco
        + " representa um quilômetro. Você escolhe quantos quilômetros quer levar, copia o Pix com "
