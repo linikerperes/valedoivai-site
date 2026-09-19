@@ -678,6 +678,30 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 @keyframes eq{0%,100%{height:3px}50%{height:12px}}
 .musica.tocando .eq{display:flex}
 .modalAberto .musica{display:none}
+
+/* Tela de boas-vindas: o celular só libera som depois de um toque, então o
+   toque de "entrar" é o que dá a partida na música. Só aparece quando o
+   navegador bloqueou o som — onde tocou sozinha, ela nem existe. */
+.portao{
+  position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:24px;
+  background:radial-gradient(90% 60% at 78% 12%,rgba(227,169,74,.25),transparent 62%),
+             linear-gradient(160deg,rgba(5,15,28,.96) 0%,rgba(10,36,64,.96) 100%);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  color:#fff;text-align:center;animation:portaoEntra .35s ease;
+}
+.portao.saindo{opacity:0;transition:opacity .35s ease}
+@keyframes portaoEntra{from{opacity:0}to{opacity:1}}
+.portaoCard{width:min(380px,100%)}
+.portaoCard img{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;background:#fff;
+  box-shadow:0 0 0 3px rgba(227,169,74,.8),0 14px 34px rgba(0,0,0,.45)}
+.portaoCard .eyebrow{margin-bottom:10px}
+.portaoCard h2{font-size:clamp(1.8rem,7vw,2.3rem);color:#fff;margin-bottom:10px}
+.portaoCard p{color:#bcd0e6;margin:0 0 26px;font-size:.98rem}
+.portaoCard .btn{width:100%;font-size:1.08rem;padding:19px 26px}
+.portaoSem{margin-top:14px;background:none;border:0;color:#a9bed4;font-weight:700;font-size:.86rem;
+  text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:12px}
+.portaoMus{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;font-size:.78rem;font-weight:800;
+  color:var(--gold-soft);letter-spacing:.02em}
 /* no celular vira só o botão redondo + barrinhas, e o cabeçalho abre espaço
    para ele não cobrir o nome do clube */
 @media(max-width:600px){
@@ -1651,6 +1675,18 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   <span><b id="musicaTit">Música</b><small id="musicaSub">toque para ouvir</small></span>
   <span class="eq" aria-hidden="true"><u></u><u></u><u></u></span>
 </button>
+
+<div class="portao" id="portao" hidden role="dialog" aria-modal="true" aria-labelledby="portaoTit">
+  <div class="portaoCard">
+    <img src="assets/logo-vale-do-ivai.jpg" alt="">
+    <div class="eyebrow gold">Clube de Desbravadores Vale do Ivaí</div>
+    <h2 id="portaoTit">Rumo ao Campori 2027</h2>
+    <p>Ajude nossos Desbravadores a chegar a Barretos.</p>
+    <div class="portaoMus">♪ <span id="portaoMusica">Sempre Desbravador</span></div>
+    <button type="button" class="btn" id="portaoEntrar">▶ Entrar no site</button>
+    <br><button type="button" class="portaoSem" id="portaoSem">Entrar sem som</button>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -3134,15 +3170,42 @@ function initMusica(){
   if(escolha === "pausada") return;
 
   mus.querTocar = true;
-  tocarMusica();
+  var p0 = a.play();
+  if(p0 && p0.catch) p0.catch(function(err){
+    pintarMusica();
+    // NotAllowedError = o navegador exige um toque antes do som
+    if(err && err.name === "NotAllowedError" && mus.querTocar && a.paused) abrirPortao();
+  });
   // barrado? espera o primeiro gesto de verdade em qualquer lugar
   var gestos = ["pointerup", "touchend", "keydown"];
   var primeiro = function(e){
-    if(e.target && e.target.closest && e.target.closest("#musicaBtn")) return;  // o botão decide sozinho
+    if(e.target && e.target.closest && e.target.closest("#musicaBtn, #portaoSem")) return;  // esses decidem sozinhos
     gestos.forEach(function(g){ document.removeEventListener(g, primeiro, true); });
     if(mus.querTocar && a.paused) tocarMusica();
   };
   gestos.forEach(function(g){ document.addEventListener(g, primeiro, true); });
+}
+
+function abrirPortao(){
+  var pt = $("portao");
+  if(!pt) return;
+  setText("portaoMusica", (CONFIG.musica.titulo || "Música") + (CONFIG.musica.artista ? " · " + CONFIG.musica.artista.split(" · ")[0] : ""));
+  pt.hidden = false;
+  document.body.style.overflow = "hidden";
+  var fechar = function(comSom){
+    if(pt.hidden) return;
+    if(comSom){ mus.querTocar = true; tocarMusica(); }       // dentro do toque: o celular libera
+    else{ guardarEscolha("pausada"); pausarMusica(true); }
+    pt.classList.add("saindo");
+    document.body.style.overflow = "";
+    setTimeout(function(){ pt.hidden = true; pt.classList.remove("saindo"); }, 350);
+    document.removeEventListener("keydown", tecla);
+  };
+  var tecla = function(e){ if(e.key === "Escape") fechar(false); };
+  $("portaoEntrar").addEventListener("click", function(){ fechar(true); });
+  $("portaoSem").addEventListener("click", function(){ fechar(false); });
+  document.addEventListener("keydown", tecla);
+  try{ $("portaoEntrar").focus({ preventScroll: true }); }catch(e){}
 }
 
 function tocarMusica(){
