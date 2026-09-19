@@ -656,6 +656,36 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 .modalTop h3{font-size:1.5rem}
 .xBtn{border:0;background:#f0f4f8;width:38px;height:38px;border-radius:50%;font-size:1.4rem;cursor:pointer;flex:none;line-height:1;color:var(--muted)}
 
+/* ---- música de fundo: botão flutuante, sempre à mão para pausar ---- */
+.musica{
+  position:fixed;z-index:70;right:12px;top:calc(12px + env(safe-area-inset-top,0px));
+  display:flex;align-items:center;gap:8px;max-width:calc(100% - 24px);
+  padding:6px 12px 6px 6px;border-radius:99px;border:1px solid rgba(255,255,255,.22);
+  background:rgba(8,22,39,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  color:#fff;cursor:pointer;font:inherit;box-shadow:0 8px 22px rgba(0,0,0,.28);
+}
+.musica i{
+  flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:var(--gold);color:#241804;font-style:normal;font-weight:900;font-size:.8rem;
+}
+.musica>span{display:flex;flex-direction:column;line-height:1.15;min-width:0;text-align:left}
+.musica b{font-size:.74rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.musica small{font-size:.62rem;color:#a9bed4;font-weight:700;white-space:nowrap}
+/* barrinhas de equalizador: só quando está tocando de verdade */
+.musica .eq{display:none;flex-direction:row;align-items:flex-end;gap:2px;height:12px;margin-left:2px}
+.eq u{display:block;width:3px;background:var(--gold);border-radius:2px;animation:eq 1s ease-in-out infinite}
+.eq u:nth-child(2){animation-delay:-.4s}.eq u:nth-child(3){animation-delay:-.7s}
+@keyframes eq{0%,100%{height:3px}50%{height:12px}}
+.musica.tocando .eq{display:flex}
+.modalAberto .musica{display:none}
+/* no celular vira só o botão redondo + barrinhas, e o cabeçalho abre espaço
+   para ele não cobrir o nome do clube */
+@media(max-width:600px){
+  .musica{padding:5px 10px 5px 5px;gap:6px}
+  .musica>span:not(.eq){display:none}
+  .temMusica .brandRow{padding-right:74px}
+}
+
 .toast{
   position:fixed;left:50%;bottom:110px;transform:translate(-50%,20px);
   background:var(--navy);color:#fff;padding:13px 22px;border-radius:99px;
@@ -1615,6 +1645,13 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   </div>
 </div>
 
+<!-- Música de fundo. Só aparece se dados.json tiver musica.arquivo. -->
+<button type="button" class="musica" id="musicaBtn" hidden aria-pressed="false">
+  <i aria-hidden="true" id="musicaIc">▶</i>
+  <span><b id="musicaTit">Música</b><small id="musicaSub">toque para ouvir</small></span>
+  <span class="eq" aria-hidden="true"><u></u><u></u><u></u></span>
+</button>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1638,6 +1675,7 @@ var CONFIG = {
   dataEvento: "",       // ex.: "2027-01-05T08:00:00-03:00"
   registroURL: "",      // opcional: URL da planilha que recebe os códigos gerados
   audioMissao: "",      // opcional: MP3 da narração; vazio = o navegador lê o texto
+  musica: null,         // opcional: {arquivo, titulo, artista, volume} — música de fundo
   despesas: [],         // [{descricao:"Sinal do ônibus", valor:5000, data:"2026-10-15"}]
   totalApoiadores: null,// número real de contribuições, ou null
   apoiadores: []        // [{nome:"Família Silva", km:10, anonimo:false}]
@@ -1724,6 +1762,7 @@ function loadData(){
       if(typeof d.arrecadado === "number") RESERVA.dados = { total: d.arrecadado, em: d.atualizadoEm || "" };
       if(d.atualizadoEm) CONFIG.atualizadoEm = d.atualizadoEm;
       if(d.audioMissao) CONFIG.audioMissao = d.audioMissao;
+      if(d.musica && d.musica.arquivo) CONFIG.musica = d.musica;
       if(d.pix && d.pix.chave) CONFIG.pix = d.pix;
       if(d.whatsapp) CONFIG.whatsapp = d.whatsapp;
       if(d.edicao) CONFIG.edicao = d.edicao;
@@ -2833,6 +2872,7 @@ function initReveal(){
 function initVideos(){
   document.querySelectorAll(".ytCapa").forEach(function(capa){
     capa.addEventListener("click", function(){
+      pausarMusica(false);   // o vídeo tem som próprio; não é preferência da pessoa
       var f = document.createElement("iframe");
       f.src = "https://www.youtube-nocookie.com/embed/" + capa.dataset.yt + "?autoplay=1&rel=0";
       f.title = capa.dataset.titulo || "Vídeo";
@@ -3038,6 +3078,8 @@ function pintarNarracao(){
   $("abTempo").textContent = rotTempo;
   $("abTempo").hidden = !rotTempo;
 
+  silenciarMusica(narr.tocando);   // narração e música juntas viram ruído
+
   var b = $("ouvirBtn"), p = $("abPlay");
   b.setAttribute("aria-pressed", narr.tocando ? "true" : "false");
   if(narr.tocando){
@@ -3050,6 +3092,96 @@ function pintarNarracao(){
     b.textContent = "▶ Continuar narração";
     p.textContent = "▶"; p.setAttribute("aria-label", "Continuar narração");
   }
+}
+
+/* ---------------------- música de fundo ----------------------
+   Toca sozinha até onde o navegador deixa. Chrome, Safari e todo celular
+   bloqueiam som antes de a pessoa interagir com a página — não há código
+   que contorne isso. Então: tenta tocar ao abrir (funciona em parte dos
+   computadores) e, se for barrado, começa no primeiro toque em qualquer
+   lugar da página. Rolar a tela não conta como toque para o navegador.
+
+   Quem pausa não é incomodado de novo: a escolha fica guardada no aparelho.
+   A narração e os vídeos silenciam a música enquanto tocam. */
+var mus = { audio: null, querTocar: false, silenciada: false, porSistema: false };
+var MUS_CHAVE = "valeivai.musica";
+
+function initMusica(){
+  var m = CONFIG.musica, btn = $("musicaBtn");
+  if(!m || !m.arquivo || !btn) return;
+  btn.hidden = false;
+  document.body.classList.add("temMusica");
+  setText("musicaTit", m.titulo || "Música");
+  var a = mus.audio = new Audio();
+  a.src = m.arquivo;
+  a.loop = true;
+  a.preload = "auto";
+  a.volume = Math.max(0, Math.min(1, Number(m.volume) || 0.35));   // iOS ignora; o resto obedece
+  a.addEventListener("play", pintarMusica);
+  a.addEventListener("pause", pintarMusica);
+  a.addEventListener("error", function(){ btn.hidden = true; document.body.classList.remove("temMusica"); });
+
+  btn.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(a.paused){ guardarEscolha("tocar"); mus.querTocar = true; tocarMusica(); }
+    else{ guardarEscolha("pausada"); pausarMusica(true); }
+  });
+
+  var escolha = null;
+  try{ escolha = localStorage.getItem(MUS_CHAVE); }catch(e){}
+  pintarMusica();
+  if(escolha === "pausada") return;
+
+  mus.querTocar = true;
+  tocarMusica();
+  // barrado? espera o primeiro gesto de verdade em qualquer lugar
+  var gestos = ["pointerup", "touchend", "keydown"];
+  var primeiro = function(e){
+    if(e.target && e.target.closest && e.target.closest("#musicaBtn")) return;  // o botão decide sozinho
+    gestos.forEach(function(g){ document.removeEventListener(g, primeiro, true); });
+    if(mus.querTocar && a.paused) tocarMusica();
+  };
+  gestos.forEach(function(g){ document.addEventListener(g, primeiro, true); });
+}
+
+function tocarMusica(){
+  var a = mus.audio;
+  if(!a || mus.silenciada) return;
+  var p = a.play();
+  if(p && p.catch) p.catch(function(){ pintarMusica(); });   // bloqueado: fica esperando o toque
+}
+
+function pausarMusica(daPessoa){
+  if(!mus.audio) return;
+  if(daPessoa) mus.querTocar = false;
+  mus.audio.pause();
+}
+
+/* Pausa enquanto a narração fala e volta sozinha quando ela termina —
+   mas só se a música estava tocando antes. */
+function silenciarMusica(sim){
+  if(!mus.audio || mus.silenciada === sim) return;
+  mus.silenciada = sim;
+  if(sim){
+    mus.porSistema = !mus.audio.paused;
+    mus.audio.pause();
+  }else if(mus.porSistema && mus.querTocar){
+    mus.porSistema = false;
+    tocarMusica();
+  }
+}
+
+function guardarEscolha(v){ try{ localStorage.setItem(MUS_CHAVE, v); }catch(e){} }
+
+function pintarMusica(){
+  var a = mus.audio, btn = $("musicaBtn");
+  if(!a || !btn) return;
+  var tocando = !a.paused;
+  btn.classList.toggle("tocando", tocando);
+  btn.setAttribute("aria-pressed", tocando ? "true" : "false");
+  btn.setAttribute("aria-label", (tocando ? "Pausar" : "Tocar") + " música: " + (CONFIG.musica.titulo || ""));
+  $("musicaIc").textContent = tocando ? "❚❚" : "▶";
+  setText("musicaSub", tocando ? (CONFIG.musica.artista || "tocando") : "toque para ouvir");
 }
 
 /* ---------------------- ligações ---------------------- */
@@ -3153,6 +3285,7 @@ function start(){
   initSticky();
   initVideos();
   initNarracao();
+  initMusica();
 }
 
 /* A página desenha primeiro com o dados.json e só depois busca o total real na
