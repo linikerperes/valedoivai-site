@@ -35,816 +35,575 @@
   --navy2:#0e2b4a;
   --gold:#e3a94a;
   --gold-soft:#f5d18a;
-  --red:#d8232f;
-  --green:#1c9b62;
-  --cream:#fdf7ec;
-  --ink:#0d1520;
-  --muted:#5d6b7d;
-  --line:#e2e8f0;
-  --bg:#f4f7fa;
+  --red:#d0212d;
+  --red-esc:#a8151f;
+  --green:#15794c;      /* 5,4:1 com texto branco */
+  --ink:#101a26;
+  --muted:#4f5d6e;          /* 7:1 sobre branco — legível de verdade */
+  --muted-dark:#b9cce0;     /* 8:1 sobre o azul escuro */
+  --line:#dde5ee;
+  --bg:#f5f7fa;
+  --bg-alt:#eaeff5;
   --card:#ffffff;
-  --shadow:0 18px 44px rgba(6,20,40,.13);
-  --shadow-lg:0 30px 70px rgba(6,20,40,.22);
-  --r:22px;
+  /* uma sombra só, em duas intensidades: nada de brilho colorido */
+  --shadow:0 4px 14px rgba(10,25,45,.07);
+  --shadow-lg:0 14px 36px rgba(10,25,45,.14);
+  --r:18px;
+  --r-sm:12px;
   --safe-b:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  line-height:1.5;
-  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  font-synthesis-weight:none;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  margin:0;background:var(--bg);color:var(--ink);
+  font:400 clamp(1rem,.98rem + .2vw,1.06rem)/1.62 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-synthesis-weight:none;-webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button,input,select{font:inherit;color:inherit}
-h1,h2,h3{line-height:1.06;letter-spacing:-.03em;margin:0;font-weight:860}
-p{margin:0 0 1em}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
 
-.wrap{width:min(1120px,calc(100% - 34px));margin-inline:auto}
-section{padding:clamp(56px,9vw,104px) 0}
+/* ---- escala tipográfica: quatro tamanhos, sem competição ---- */
+h1,h2,h3{margin:0;font-weight:850;letter-spacing:-.025em;line-height:1.12}
+h1{font-size:clamp(2rem,6.4vw,3.5rem);letter-spacing:-.035em;max-width:16ch}
+h2{font-size:clamp(1.55rem,4.4vw,2.3rem)}
+h3{font-size:clamp(1.1rem,2.6vw,1.3rem)}
+p{margin:0 0 1em}
+p:last-child{margin-bottom:0}
+.lead{font-size:clamp(1.02rem,2.2vw,1.12rem);color:var(--muted);margin-top:14px;max-width:62ch}
+.lead.on-dark{color:var(--muted-dark)}
+.fine{font-size:.9rem;line-height:1.6;color:var(--muted);max-width:66ch}
+.fine.on-dark{color:var(--muted-dark)}
+.fine a,.lead a{text-decoration:underline;text-underline-offset:3px}
+.fine.on-dark a{color:var(--gold-soft)}
+.centro{margin-inline:auto;text-align:center}
 .eyebrow{
-  text-transform:uppercase;letter-spacing:.2em;font-weight:800;
-  font-size:.7rem;color:var(--red);margin-bottom:12px;
+  text-transform:uppercase;letter-spacing:.16em;font-weight:800;
+  font-size:.76rem;color:var(--red);margin:0 0 10px;
 }
 .eyebrow.gold{color:var(--gold)}
-.head{max-width:760px;margin-bottom:clamp(28px,4vw,46px)}
-.head h2{font-size:clamp(2rem,5.6vw,3.3rem)}
-.lead{font-size:clamp(1rem,2.4vw,1.16rem);color:var(--muted);margin-top:16px}
-.lead.on-dark{color:#a9bed4}
-.fine{font-size:.78rem;color:var(--muted);line-height:1.55}
-.fine.on-dark{color:#8ba3bc}
+.realce{color:var(--red)}
+.dark .realce{color:var(--gold)}
 
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:clamp(20px,3.4vw,30px);box-shadow:var(--shadow)}
+.wrap{width:min(1120px,calc(100% - 32px));margin-inline:auto}
+.wrap.estreito{width:min(720px,calc(100% - 32px))}
+section{padding:clamp(48px,7vw,84px) 0}
+.claro{background:var(--bg-alt)}
+.dark{background:var(--navy);color:#fff}
+.dark h2,.dark h3{color:#fff}
+.head{margin-bottom:clamp(24px,3.5vw,38px)}
 
+/* ---- botões: uma ação principal por etapa ---- */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  padding:16px 26px;border-radius:99px;border:0;cursor:pointer;
-  font-weight:800;font-size:1rem;letter-spacing:-.01em;
-  background:var(--red);color:#fff;
-  transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
-  box-shadow:0 10px 24px rgba(216,35,47,.3);
-  text-align:center;
+  min-height:52px;padding:15px 24px;border-radius:99px;border:0;cursor:pointer;
+  font-weight:800;font-size:1rem;letter-spacing:-.01em;text-align:center;
+  background:var(--red);color:#fff;transition:background .15s ease,transform .15s ease;
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(216,35,47,.36)}
-.btn:active{transform:translateY(0)}
-.btn.ghost{background:rgba(255,255,255,.1);color:#fff;box-shadow:none;border:1.5px solid rgba(255,255,255,.34)}
-.btn.ghost:hover{background:rgba(255,255,255,.18)}
-.btn.dark{background:var(--navy);box-shadow:0 10px 24px rgba(8,22,39,.3)}
-.btn.green{background:var(--green);box-shadow:0 10px 24px rgba(28,155,98,.3)}
+.btn:hover{background:var(--red-esc)}
+.btn:active{transform:translateY(1px)}
 .btn.full{width:100%}
-.btn.suave{background:rgba(255,255,255,.13);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,.24)}
-.btn.suave:hover{background:rgba(255,255,255,.2);box-shadow:none}
-.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.zap{background:var(--green)}
+.btn.zap:hover{background:#0f6b42}
+.btn.escuro{background:var(--navy)}
+.btn.escuro:hover{background:var(--navy2)}
+.btn.neutro{background:#e4eaf2;color:var(--ink)}
+.btn.neutro:hover{background:#d7e0ea}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.destaque{animation:chamar 1.8s ease-in-out 3}
+@keyframes chamar{0%,100%{box-shadow:0 0 0 0 rgba(23,138,87,0)}50%{box-shadow:0 0 0 6px rgba(23,138,87,.25)}}
+/* ação secundária: texto, não mais um botão do mesmo peso */
+.linkBtn{
+  display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:10px 2px;
+  background:none;border:0;cursor:pointer;font-weight:700;font-size:.94rem;
+  color:var(--muted);text-decoration:underline;text-underline-offset:4px;
+}
+.linkBtn:hover{color:var(--ink)}
+.hero .linkBtn,.dark .linkBtn,.rotaCard .linkBtn{color:var(--gold-soft)}
+.hero .linkBtn:hover,.dark .linkBtn:hover{color:#fff}
 
-/* ---------------- HERO ---------------- */
+/* ================= ABERTURA ================= */
 .hero{
-  position:relative;color:#fff;padding:0;
+  position:relative;color:#fff;
   background:
-    radial-gradient(90% 60% at 78% 12%, rgba(227,169,74,.22), transparent 62%),
-    radial-gradient(70% 50% at 12% 4%, rgba(216,35,47,.2), transparent 60%),
-    linear-gradient(160deg,#050f1c 0%,#0a2440 58%,#0f3157 100%);
+    radial-gradient(85% 60% at 80% 10%, rgba(227,169,74,.18), transparent 60%),
+    linear-gradient(165deg,#061225 0%,#0b2743 60%,#103158 100%);
   overflow:hidden;
 }
-/* A curva que emenda o hero com a secao clara. O quanto ela sobe no centro
-   precisa acompanhar a largura da tela: uma subida fixa de 110px e 8% da
-   largura no desktop (curva suave) mas 25% no celular, virando uma cupula
-   que invade os botoes. Amarrando em vw, a curva fica igual em toda tela. */
-.hero::after{
-  content:"";position:absolute;left:-8%;right:-8%;height:250px;
-  bottom:calc(-250px + clamp(28px, 8vw, 110px));
-  background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0;
-}
-.heroInner{position:relative;z-index:3;padding:clamp(26px,5vw,44px) 0 clamp(74px,10vw,120px)}
-.brandRow{display:flex;align-items:center;gap:14px;margin-bottom:clamp(30px,6vw,54px)}
+.heroInner{position:relative;z-index:2;padding:clamp(22px,4vw,34px) 0 clamp(44px,6vw,72px)}
+.brandRow{display:flex;align-items:center;gap:13px;margin-bottom:clamp(26px,5vw,42px)}
 .brandLogo{
-  width:clamp(56px,12vw,74px);aspect-ratio:1;border-radius:50%;
-  object-fit:cover;background:#fff;
-  box-shadow:0 0 0 2px rgba(227,169,74,.75), 0 10px 26px rgba(0,0,0,.4);
-  flex:none;
+  width:clamp(50px,11vw,64px);aspect-ratio:1;border-radius:50%;object-fit:cover;background:#fff;
+  box-shadow:0 0 0 2px rgba(227,169,74,.7);flex:none;
 }
-.brandTxt strong{display:block;font-size:clamp(.9rem,2.6vw,1.02rem);letter-spacing:-.02em}
-.brandTxt span{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);font-weight:700}
+.brandTxt strong{display:block;font-size:clamp(.92rem,2.5vw,1.02rem);letter-spacing:-.02em}
+.brandTxt span{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);font-weight:700}
 
 .heroTag{
-  display:inline-flex;align-items:center;gap:9px;
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
-  padding:8px 16px;border-radius:99px;font-size:.74rem;font-weight:800;
-  letter-spacing:.13em;text-transform:uppercase;margin-bottom:22px;
+  display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);
+  padding:7px 14px;border-radius:99px;font-size:.76rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#e7eef7;
 }
-.heroTag i{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2.2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
-
-/* A manchete diz o pedido, não o nome da campanha: quem chega pelo WhatsApp
-   precisa entender em uma linha o que estão pedindo. Frase mais longa que o
-   antigo "Rumo ao Campori 2027", por isso o teto do tamanho desceu. */
-.hero h1{font-size:clamp(2.2rem,8.4vw,4.3rem);letter-spacing:-.04em;max-width:15ch}
+.heroTag i{width:7px;height:7px;border-radius:50%;background:var(--gold);flex:none}
 .hero h1 em{font-style:normal;color:var(--gold)}
-.heroPreco{
-  display:inline-block;margin-top:20px;
-  padding:10px 16px;border-radius:14px;
-  background:rgba(227,169,74,.14);border:1px solid rgba(227,169,74,.42);
-  font-size:clamp(1.02rem,3.4vw,1.22rem);font-weight:800;letter-spacing:-.02em;color:#fff;
-}
-.heroPreco b{color:var(--gold);font-weight:900}
-.heroSub{font-size:clamp(1rem,2.8vw,1.18rem);color:#bcd0e6;max-width:560px;margin:16px 0 0}
+.heroSub{font-size:clamp(1.04rem,2.6vw,1.18rem);color:#cfdded;max-width:52ch;margin:18px 0 0}
 .heroSub b{color:#fff;font-weight:800}
+.precoKm{white-space:nowrap}
 
-/* ---- botões do topo: principal + ouvir ---- */
-.heroBtns{display:flex;flex-direction:column;gap:10px;margin-top:24px}
-.heroBtns .btn{width:100%;font-size:1.06rem;padding:18px 26px}
-.heroBtns .btn.ouvir{padding:14px 22px;font-size:.96rem}
-.btn.ouvir[aria-pressed="true"]{background:rgba(227,169,74,.18);border-color:rgba(227,169,74,.6)}
-@media(min-width:700px){
-  .heroBtns{flex-direction:row;flex-wrap:wrap}
-  .heroBtns .btn{width:auto}
-}
+.heroBtns{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-top:26px}
+.heroBtns .btn{flex:1 1 260px;font-size:1.05rem;min-height:56px}
+@media(min-width:640px){.heroBtns .btn{flex:0 0 auto}}
 
-/* ---- player da narração ---- */
+/* ---- narração: some do caminho até ser pedida ---- */
 .audioBox{
-  margin-top:12px;max-width:620px;padding:12px 14px;border-radius:16px;
-  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
+  margin-top:16px;max-width:560px;padding:12px 14px;border-radius:var(--r-sm);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
 }
 .abRow{display:flex;align-items:center;gap:10px}
 .abBtn{
   flex:none;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
-  display:grid;place-items:center;font-size:1.05rem;font-weight:900;
-  background:rgba(255,255,255,.14);color:#fff;transition:background .15s;
+  display:grid;place-items:center;font-size:1rem;font-weight:900;
+  background:rgba(255,255,255,.14);color:#fff;
 }
 .abBtn:hover{background:rgba(255,255,255,.24)}
 .abBtn.main{background:var(--gold);color:#241804}
-.abProg{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden}
+.abProg{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden}
 .abFill{height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .25s linear}
-.abTempo{flex:none;font-size:.74rem;font-weight:800;color:#a9bed4;font-variant-numeric:tabular-nums;min-width:4.6ch;text-align:right}
-.abTexto{margin-top:10px}
-.abTexto summary{cursor:pointer;font-size:.76rem;font-weight:800;color:var(--gold-soft);padding:8px 0}
-.abTexto p{margin:4px 0 2px;font-size:.86rem;color:#c3d5e8;line-height:1.55}
+.abTempo{flex:none;font-size:.82rem;font-weight:700;color:var(--muted-dark);font-variant-numeric:tabular-nums;min-width:5ch;text-align:right}
+.abTexto summary{cursor:pointer;font-size:.85rem;font-weight:700;color:var(--gold-soft);padding:10px 0 4px}
+.abTexto p{margin:6px 0 2px;font-size:.92rem;color:#d7e3ef;line-height:1.6}
 
-/* ---- o pulso da campanha, logo abaixo dos botões ---- */
+/* ---- progresso: um bloco só, com tudo que importa ---- */
 .pulso{
-  margin-top:18px;max-width:620px;padding:16px 16px 14px;border-radius:18px;
-  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
+  margin-top:26px;max-width:620px;padding:20px;border-radius:var(--r);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
 }
-.miniRoad{position:relative;margin:4px 6px 26px}
-.mrTrack{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.16)}
+.miniRoad{position:relative;margin:2px 4px 30px}
+.mrTrack{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.18)}
 .mrFill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:99px;
   background:linear-gradient(90deg,var(--red),var(--gold));transition:width 1.6s cubic-bezier(.22,.9,.28,1)}
 .mrMid{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
-  background:#0e2b4a;border:2.5px solid var(--gold)}
-.mrBus{position:absolute;top:50%;left:0;width:40px;height:26px;margin:-19px 0 0 -20px;
-  transition:left 1.6s cubic-bezier(.22,.9,.28,1);filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
-.mrLbl{position:absolute;top:16px;font-size:.66rem;font-weight:800;letter-spacing:.04em;color:#a9bed4;white-space:nowrap}
-.mrLbl.l{left:-6px}
+  background:#0b2743;border:2.5px solid var(--gold)}
+.mrBus{position:absolute;top:50%;left:0;width:38px;height:25px;margin:-18px 0 0 -19px;
+  transition:left 1.6s cubic-bezier(.22,.9,.28,1)}
+.mrLbl{position:absolute;top:18px;font-size:.76rem;font-weight:700;color:var(--muted-dark);white-space:nowrap}
+.mrLbl.l{left:-4px}
 .mrLbl.m{left:50%;transform:translateX(-50%);color:var(--gold-soft)}
-.mrLbl.r{right:-6px}
-.pNums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mrLbl.r{right:-4px}
+
+.pNums{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
 .pNums div{min-width:0}
-.pNums b{display:block;font-size:clamp(1.15rem,4.6vw,1.6rem);font-weight:900;letter-spacing:-.035em;line-height:1.1;color:#fff;white-space:nowrap}
-.pNums span{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#93aac4;font-weight:800;margin-top:3px}
-.pStatus{margin:12px 0 0;font-size:.78rem;font-weight:700;color:#a9bed4;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pNums b{display:block;font-size:clamp(1.3rem,4.6vw,1.75rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;color:#fff;white-space:nowrap}
+.pNums span{display:block;font-size:.8rem;color:var(--muted-dark);font-weight:600;margin-top:4px;line-height:1.35}
+.progBar{height:10px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden}
+.progFill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--gold));
+  transition:width 1.5s cubic-bezier(.22,.9,.28,1)}
+.pMeta{display:flex;flex-wrap:wrap;gap:4px 14px;margin:12px 0 0;font-size:.9rem;font-weight:700;color:#e7eef7}
+.pMetaFixa{color:var(--muted-dark);font-weight:600}
+.pGente{margin:8px 0 0;font-size:.9rem;color:var(--muted-dark);font-weight:600}
+.pGente b{color:#fff}
+.pConta{margin:10px 0 0;font-size:.9rem;color:var(--muted-dark);font-weight:600}
+.pConta b{color:var(--gold);font-weight:900;font-size:1.05rem}
+.pStatus{margin:14px 0 0;font-size:.88rem;font-weight:600;color:var(--muted-dark);display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .pStatus[data-tipo="erro"]{color:#ffd28a}
 .pStatus button{
   border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;
-  border-radius:99px;padding:9px 14px;font-weight:800;font-size:.76rem;cursor:pointer;min-height:40px;
+  border-radius:99px;padding:10px 16px;font-weight:700;font-size:.85rem;cursor:pointer;min-height:44px;
 }
 
-/* ---- carregando: o número ainda não chegou, então não existe número ----
-   Nada de "R$ 0" provisório. O bloco pulsa no lugar do valor, com a mesma
-   altura, para a tela não pular quando o dado real chega. */
+/* ---- carregando: o número ainda não existe, então não há número ---- */
 .semDados .dep{
-  color:transparent!important;display:inline-block;min-width:4.2ch;border-radius:8px;
-  background:linear-gradient(90deg,rgba(255,255,255,.08) 20%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.08) 80%);
+  color:transparent!important;display:inline-block;min-width:4.5ch;max-width:10ch;border-radius:8px;
+  background:linear-gradient(90deg,rgba(255,255,255,.09) 20%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.09) 80%);
   background-size:220% 100%;animation:brilho 1.3s ease-in-out infinite;
-  -webkit-user-select:none;user-select:none;max-width:9ch;
+  -webkit-user-select:none;user-select:none;
 }
-.semDados .card .dep,.semDados .hud .dep,.semDados .sticky .dep{
-  background:linear-gradient(90deg,#e8edf3 20%,#f6f8fb 50%,#e8edf3 80%);background-size:220% 100%;
+.semDados .claro .dep,.semDados .sticky .dep{
+  background:linear-gradient(90deg,#dde5ee 20%,#eef2f7 50%,#dde5ee 80%);background-size:220% 100%;
 }
 @keyframes brilho{from{background-position:120% 0}to{background-position:-100% 0}}
 .semDados .progFill,.semDados .mrFill{width:0!important}
-.semDados .mrBus,.semDados #vbus,.semDados #bus{opacity:.45}
+.semDados .mrBus,.semDados #vbus{opacity:.45}
 
-.heroStats{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
-  margin:clamp(28px,5vw,40px) 0 26px;max-width:620px;
+/* ================= CONTRIBUIR ================= */
+.fluxo{list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:passo}
+.passo{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:clamp(18px,3.4vw,26px);box-shadow:var(--shadow);scroll-margin-top:14px;
 }
-.hStat{
-  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
-  border-radius:18px;padding:16px 18px;backdrop-filter:blur(6px);
+.passoTit{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+.passoTit i{
+  flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  background:var(--navy);color:#fff;font-style:normal;font-weight:900;font-size:.92rem;
 }
-.hStat span{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:#9db4cd;font-weight:800;margin-bottom:6px}
-.hStat b{font-size:clamp(1.35rem,5vw,1.95rem);font-weight:900;letter-spacing:-.035em;display:block;line-height:1.05}
-.hStat small{color:#93aac4;font-size:.76rem;font-weight:600}
-.hStat.wide{grid-column:1/-1}
-
-/* Contagem regressiva. Fica depois da barra de progresso de propósito: o
-   visitante vê primeiro quanto já andou, depois quanto tempo resta. Invertido,
-   a urgência chega antes da causa e soa cobrança. */
-.conta{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.contaEsq{display:flex;align-items:baseline;gap:10px}
-/* A faixa vive fora dos cartões de número porque no celular eles ficam a duas
-   telas de distância — e contagem que exige rolagem não cria urgência nenhuma.
-   Estilo próprio, sem herdar nada de .hStat. */
-.boxConta{
-  margin-top:18px;max-width:620px;
-  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);
-  border-radius:18px;padding:14px 18px;backdrop-filter:blur(6px);
-}
-.contaTit{display:block;font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;
-  color:#9db4cd;font-weight:800;margin-bottom:7px}
-.contaRel{display:flex;align-items:baseline;gap:8px}
-.cUnid{display:flex;flex-direction:column;align-items:center;min-width:2.4ch}
-.cUnid b{font-size:clamp(1.7rem,6vw,2.3rem);font-weight:900;letter-spacing:-.04em;
-  line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
-.cUnid span{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
-  color:#93aac4;font-weight:800;margin-top:5px}
-.cSep{font-size:clamp(1.2rem,4vw,1.6rem);font-weight:900;line-height:1;
-  color:rgba(227,169,74,.45);position:relative;top:-2px}
-.contaFimTxt{font-size:1.15rem;font-weight:900;letter-spacing:-.03em;color:#fff}
-.contaDir{text-align:right;font-size:.76rem;font-weight:700;color:#93aac4;line-height:1.35}
-.contaDir b{display:block;color:#e7eef7;font-size:.86rem}
-.contaFim .contaNum{color:#fff;font-size:clamp(1.4rem,5.5vw,1.9rem)}
-@media(max-width:420px){
-  .conta{flex-direction:column;align-items:flex-start;gap:8px}
-  .contaDir{text-align:left}
-}
-
-.progWrap{margin-top:4px}
-/* `.hStat b` define o tamanho dos números grandes e alcança qualquer <b> aqui
-   dentro. Sem reimpor, a prova social saía do tamanho de um título e competia
-   com o valor arrecadado. */
-.progGente{margin-top:11px;font-size:.8rem;font-weight:700;color:#a9bed4;line-height:1.4}
-.hStat .progGente b{display:inline;font-size:1.02rem;font-weight:900;color:#fff;
-  letter-spacing:-.02em;line-height:inherit}
-.progTop{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:9px;font-size:.78rem;color:#a9bed4;font-weight:700}
-.progTop b{color:var(--gold);font-size:1.25rem;font-weight:900;letter-spacing:-.03em}
-.progBar{height:13px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;position:relative}
-.progFill{
-  height:100%;width:0;border-radius:99px;
-  background:linear-gradient(90deg,var(--red),var(--gold));
-  transition:width 1.5s cubic-bezier(.22,.9,.28,1);
-  position:relative;
-}
-.progFill::after{
-  content:"";position:absolute;inset:0;
-  background:repeating-linear-gradient(115deg,rgba(255,255,255,.24) 0 9px,transparent 9px 20px);
-  animation:slide 1.1s linear infinite;
-}
-@keyframes slide{to{background-position:20px 0}}
-
-.heroCta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-
-/* ---------------- ROTA ---------------- */
-.routeCard{padding:clamp(18px,3vw,28px);overflow:hidden}
-.routeHud{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;
-}
-.hud{background:#f6f9fc;border:1px solid var(--line);border-radius:16px;padding:13px 14px;text-align:center}
-.hud span{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:5px}
-.hud b{font-size:clamp(.98rem,3.7vw,1.5rem);font-weight:900;letter-spacing:-.04em;display:block;line-height:1.1;white-space:nowrap}
-
-.mapBox{
-  border-radius:20px;overflow:hidden;border:1px solid var(--line);
-  background:linear-gradient(180deg,#eaf5ff 0%,#f2f8ee 55%,#eef6e6 100%);
-}
-.mapBox svg{width:100%;height:auto;display:block}
-.routeStatus{
-  display:flex;align-items:center;justify-content:center;gap:9px;
-  margin-top:14px;padding:13px 18px;border-radius:99px;
-  background:var(--navy);color:#fff;font-weight:800;font-size:.9rem;text-align:center;
-}
-.routeStatus.win{background:var(--green)}
-
-.laneLabel{font:800 23px ui-sans-serif,system-ui,sans-serif;letter-spacing:.2em;fill:#8b9dae}
-.cityName{font:900 27px ui-sans-serif,system-ui,sans-serif;letter-spacing:-.025em;fill:#0d1520}
-.cityKm{font:700 22px ui-sans-serif,system-ui,sans-serif;fill:#75879a}
-.totalKm{font:900 34px ui-sans-serif,system-ui,sans-serif;letter-spacing:-.03em;fill:#b3c1d0}
-.totalSub{font:800 17px ui-sans-serif,system-ui,sans-serif;letter-spacing:.24em;fill:#c2cedb}
-
-#bus{transition:transform 1.6s cubic-bezier(.3,.85,.3,1)}
-#roadDone{transition:stroke-dashoffset 1.6s cubic-bezier(.3,.85,.3,1)}
-
-/* ---------------- ADOTAR KM ---------------- */
-.adoptGrid{display:grid;gap:18px}
-/* Seletor rápido: poucos valores pequenos e alvo grande. Quem decide pelo
-   celular, com o polegar, não deve precisar pensar em trecho de estrada. */
-#km{scroll-margin-top:16px}
-.kmTit{font-size:clamp(1.25rem,4.4vw,1.55rem);font-weight:900;letter-spacing:-.03em;margin:0 0 4px}
-.kmGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 0}
+.kmGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 0}
 .kmBtn{
-  border:2px solid var(--line);background:#fff;border-radius:16px;min-height:72px;
+  border:2px solid var(--line);background:#fff;border-radius:var(--r-sm);min-height:72px;
   padding:12px 6px;cursor:pointer;text-align:center;font-weight:900;font-size:1.3rem;
-  letter-spacing:-.03em;line-height:1.1;
-  transition:border-color .16s ease,background .16s ease,color .16s ease,transform .16s ease;
+  letter-spacing:-.03em;line-height:1.1;color:var(--ink);
+  transition:border-color .15s,background .15s,color .15s;
 }
-.kmBtn span{font-size:.8rem;font-weight:800;letter-spacing:0}
-.kmBtn small{display:block;font-weight:700;font-size:.72rem;color:var(--muted);margin-top:5px;letter-spacing:-.01em}
-.kmBtn:hover{border-color:var(--gold);transform:translateY(-2px)}
-.kmBtn[aria-pressed="true"]{border-color:var(--red);background:#fff5f5;color:var(--red);animation:pop .28s ease}
-.kmBtn[aria-pressed="true"] small{color:var(--red);opacity:.85}
+.kmBtn span{font-size:.82rem;font-weight:800;letter-spacing:0}
+.kmBtn small{display:block;font-weight:700;font-size:.8rem;color:var(--muted);margin-top:5px;letter-spacing:-.01em}
+.kmBtn:hover{border-color:var(--gold)}
+.kmBtn[aria-pressed="true"]{border-color:var(--red);background:#fff4f4;color:var(--red)}
+.kmBtn[aria-pressed="true"] small{color:var(--red)}
 .kmBtn.outro{grid-column:1/-1;min-height:56px;font-size:1rem}
-@keyframes pop{50%{transform:scale(1.05)}}
-.outroBox{margin-top:12px}
-.outroRow{display:flex;gap:10px;align-items:stretch}
+.outroBox{margin-top:14px}
+.outroRow{display:flex;gap:10px;align-items:center}
 .outroRow .input{font-size:1.2rem;font-weight:900}
-.outroRow span{align-self:center;font-weight:800;color:var(--muted)}
-.outroErro{margin-top:9px;font-size:.82rem;font-weight:700;color:#9a3b12;background:#fff3ea;border:1px solid #f4d2bb;border-radius:12px;padding:10px 12px}
-
-/* O trecho da estrada continua existindo, mas fechado: é para quem quer
-   "adotar" uma cidade, não o caminho de quem só quer ajudar. */
-.avancado{margin-top:20px;border-top:1px solid var(--line);padding-top:6px}
-.avancado>summary{
-  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:14px 2px;font-weight:800;font-size:.92rem;color:var(--ink);min-height:48px;
-}
-.avancado>summary::-webkit-details-marker{display:none}
-.avancado>summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--muted);transition:transform .2s}
-.avancado[open]>summary::after{transform:rotate(45deg)}
-.avancado .segBox{margin-top:4px;border-top:0;padding-top:4px}
-
-.fieldLbl{display:block;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:14px 0 7px}
+.outroRow span{font-weight:700;color:var(--muted)}
+.outroErro{margin-top:10px;font-size:.9rem;font-weight:700;color:#8a3310;background:#fff4ec;
+  border:1px solid #f0d3bd;border-radius:var(--r-sm);padding:11px 13px}
+.fieldLbl{display:block;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);font-weight:800;margin:14px 0 7px}
 .input{
-  width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:14px;
-  background:#fff;outline:0;font-weight:700;transition:border-color .16s;
+  width:100%;min-height:52px;padding:13px 15px;border:2px solid var(--line);border-radius:var(--r-sm);
+  background:#fff;outline:0;font-weight:600;transition:border-color .15s;
 }
 .input:focus{border-color:var(--gold)}
+.escolhido{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:18px 0 0;
+  padding-top:16px;border-top:1px solid var(--line);
+}
+.escolhido b{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;color:var(--red)}
+.escolhido span{font-size:.95rem;color:var(--muted);flex:1 1 220px}
+.escolhido span b{font-size:inherit;color:var(--ink)}
 
-.impact{
-  margin-top:18px;padding:22px;border-radius:18px;color:#fff;
-  background:linear-gradient(150deg,var(--navy),#123457);
+/* trecho da estrada: existe, mas fora do caminho de quem só quer ajudar */
+.avancado{margin-top:18px;border-top:1px solid var(--line)}
+.avancado>summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:16px 2px 6px;font-weight:700;font-size:.95rem;color:var(--muted);min-height:48px;
 }
-.impact span{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800}
-.impact .kmBig{display:block;font-size:clamp(1.5rem,6vw,1.9rem);font-weight:900;letter-spacing:-.04em;line-height:1;margin-top:8px}
-.impact .val{font-size:clamp(2.1rem,8vw,2.9rem);font-weight:900;letter-spacing:-.045em;margin:10px 0 16px;line-height:1;color:var(--gold)}
-.impact p{color:#bcd0e6;margin:8px 0 0;font-size:.94rem}
-.impact p b{color:#fff}
+.avancado>summary::-webkit-details-marker{display:none}
+.avancado>summary::after{content:"+";font-size:1.4rem;line-height:1;transition:transform .2s}
+.avancado[open]>summary{color:var(--ink)}
+.avancado[open]>summary::after{transform:rotate(45deg)}
+.segBox{padding-bottom:6px}
+.segTabs{display:flex;gap:6px;background:#eef2f7;padding:5px;border-radius:var(--r-sm);margin:12px 0 14px}
+.segTab{flex:1;min-height:48px;padding:12px 8px;border:0;background:none;border-radius:9px;
+  font-weight:700;font-size:.92rem;cursor:pointer;color:var(--muted)}
+.segTab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.segRow{display:grid;grid-template-columns:1fr;gap:10px}
+.segBar{position:relative;height:10px;border-radius:99px;background:#e2e9f1;margin:20px 0 8px;overflow:hidden}
+.segSel{position:absolute;top:0;bottom:0;border-radius:99px;left:0;width:0;
+  background:linear-gradient(90deg,var(--red),var(--gold));transition:left .3s,width .3s}
+.segScale{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);font-weight:600}
+.segWarn{margin-top:12px;font-size:.9rem;font-weight:700;color:#7c5410;background:#fff6e5;
+  border:1px solid #efdcb6;border-radius:var(--r-sm);padding:11px 13px}
+.segBox .btn{margin-top:14px}
 
-/* ---------------- PIX ---------------- */
-.pixPanel{background:linear-gradient(150deg,#0a1e35,#123457);color:#fff;border:0}
-.pixSteps{display:grid;gap:11px;margin:20px 0}
-.pixStep{display:flex;gap:13px;align-items:flex-start}
-.pixStep i{
-  flex:none;width:27px;height:27px;border-radius:50%;background:var(--gold);color:var(--navy);
-  display:grid;place-items:center;font-weight:900;font-size:.82rem;font-style:normal;
-}
-.pixStep p{margin:0;color:#c3d5e8;font-size:.92rem;padding-top:2px}
-.pixKeyBox{
-  background:rgba(255,255,255,.09);border:1.5px dashed rgba(255,255,255,.35);
-  border-radius:14px;padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:.92rem;word-break:break-all;margin-bottom:12px;text-align:center;font-weight:700;
-}
-.brBox{margin-top:16px;padding:15px;border-radius:16px;background:rgba(0,0,0,.26);border:1px solid rgba(255,255,255,.14)}
-.brBox.claro{background:#f5f8fb;border-color:#cfdae6}
-.brLabel{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:var(--gold);margin-bottom:9px}
-.brBox.claro .brLabel{color:#9a6a13}
-.codDoa{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-  margin-bottom:10px;padding:9px 12px;border-radius:11px;
-  background:rgba(227,169,74,.15);border:1px solid rgba(227,169,74,.4);
-}
-.codDoa span{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--gold-soft)}
-.codDoa b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1rem;font-weight:800;letter-spacing:.06em;color:#fff}
-.brBox.claro .codDoa{background:#fff6e5;border-color:#f0dcb6}
-.brBox.claro .codDoa span{color:#9a6a13}
-.brBox.claro .codDoa b{color:var(--ink)}
+/* ---- Pix: um lugar só, com o valor e o recebedor à vista ---- */
+.pixDados{margin:16px 0;display:grid;gap:10px}
+.pixDados>div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;
+  padding-bottom:10px;border-bottom:1px solid var(--line)}
+.pixDados dt{font-size:.88rem;color:var(--muted);font-weight:600}
+.pixDados dd{margin:0;font-size:.95rem;font-weight:700;text-align:right}
+.pixDados dd b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em}
 .brCode{
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  font-size:.66rem;line-height:1.5;word-break:break-all;
-  max-height:96px;overflow-y:auto;padding:11px;border-radius:11px;
-  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);color:#cfdcea;margin-bottom:11px;
+  font-size:.8rem;line-height:1.5;word-break:break-all;max-height:110px;overflow-y:auto;
+  padding:12px;border-radius:var(--r-sm);background:#f4f7fa;border:1px solid var(--line);margin-bottom:12px;
 }
-.brBox.claro .brCode{background:#fff;border-color:#dce4ee;color:var(--ink)}
-/* Depois de copiar, o botão não volta sozinho ao estado anterior: a pessoa
-   sai do site para o banco e, ao voltar, precisa ver que já copiou e qual é
-   o próximo passo — o comprovante. */
 .depoisCopiar{
-  margin:11px 0 0;padding:11px 13px;border-radius:12px;font-size:.86rem;font-weight:700;line-height:1.45;
-  background:rgba(28,155,98,.16);border:1px solid rgba(28,155,98,.45);color:#d4f5e4;
+  margin:12px 0 0;padding:12px 14px;border-radius:var(--r-sm);font-size:.92rem;font-weight:600;line-height:1.5;
+  background:#effaf4;border:1px solid #bfe7d0;color:#0f5738;
 }
-.brBox.claro+.depoisCopiar,.modalCard .depoisCopiar{background:#effaf4;border-color:#bfe7d0;color:#14583a}
-.btn.destaque{position:relative;animation:chamar 1.8s ease-in-out 3}
-@keyframes chamar{0%,100%{box-shadow:0 10px 24px rgba(28,155,98,.3)}50%{box-shadow:0 0 0 7px rgba(28,155,98,.28),0 10px 24px rgba(28,155,98,.3)}}
-.passos{list-style:none;padding:0;margin:14px 0 4px;display:grid;gap:7px;counter-reset:p}
-.passos li{counter-increment:p;display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:var(--muted);font-weight:600}
-.passos li::before{content:counter(p);flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
-  background:#eef2f7;color:var(--ink);font-size:.72rem;font-weight:900}
-.passos li.feito{color:var(--ink)}
-.passos li.feito::before{content:"✓";background:var(--green);color:#fff}
+.aviso{margin:8px 0 0;padding:14px;border-radius:var(--r-sm);background:#fff6e5;border:1px solid #efdcb6;
+  color:#6b4a0d;font-size:.92rem;font-weight:700}
+.aviso span{display:block;font-weight:500;margin-top:4px}
+#copyBrcode{margin-top:4px}
+.passo .fine{margin-top:12px}
+
 .selo{
-  margin-top:16px;padding:14px 15px;border-radius:15px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+  margin-top:20px;padding:18px 20px;border-radius:var(--r);
+  background:#fffaf0;border:1px solid #efe1c6;
 }
-.selo strong{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.selo p{margin:0 0 8px;font-size:.84rem;color:#dfe8f2;font-weight:700;line-height:1.4}
-.selo ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
-.selo li{font-size:.8rem;color:#b9cce0;font-weight:600;padding-left:20px;position:relative}
-.selo li::before{content:"✓";position:absolute;left:0;color:#5fd39c;font-weight:900}
-.selo.claro{background:#fff;border-color:#f0e2c4}
-.selo.claro p{color:var(--ink)}
-.selo.claro li{color:#4a3c1e}
-.selo.claro li::before{color:var(--green)}
-.pendingBox{
-  background:rgba(227,169,74,.13);border:1.5px solid rgba(227,169,74,.45);
-  border-radius:14px;padding:16px;color:var(--gold-soft);font-size:.88rem;font-weight:700;text-align:center;
-}
+.selo strong{display:block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:#8a5f10;margin-bottom:8px}
+.selo p{margin:0 0 10px;font-size:.95rem;font-weight:700;color:var(--ink)}
+.selo ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.selo li{font-size:.92rem;color:#4a3c1e;padding-left:24px;position:relative}
+.selo li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:900}
+.centro{margin-top:18px}
 
-/* ---------------- FOTOS ---------------- */
-.dark{background:var(--navy);color:#fff}
-.dark h2{color:#fff}
-.rail{
-  display:grid;grid-auto-flow:column;grid-auto-columns:min(84%,420px);gap:14px;
-  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;
-  scrollbar-width:thin;
-}
-.rail figure{
-  margin:0;position:relative;border-radius:20px;overflow:hidden;
-  aspect-ratio:4/3;scroll-snap-align:start;background:#12314f;
-}
-.rail img{width:100%;height:100%;object-fit:cover}
-.rail figcaption{
-  position:absolute;inset:auto 0 0 0;padding:44px 15px 13px;
-  background:linear-gradient(transparent,rgba(0,0,0,.86));
-  font-size:.74rem;color:#e8eef5;font-weight:600;
-}
-
-.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:26px}
-.fact{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:17px;padding:17px}
-.fact span{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:5px}
-.fact b{display:block;font-size:clamp(1.4rem,5.5vw,2rem);font-weight:900;letter-spacing:-.04em;line-height:1}
-.fact small{color:#93aac4;font-size:.74rem;font-weight:600}
-
-/* ---------------- VIDEOS ---------------- */
-.vidGrid{display:grid;gap:18px}
-.vidFrame{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:var(--shadow)}
-.vidFrame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-/* capa leve: o player do YouTube (cerca de 1 MB) só é baixado no clique */
-.ytCapa{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;cursor:pointer;background:#0a1622;display:block}
-.ytCapa img{width:100%;height:100%;object-fit:cover;opacity:.86;transition:opacity .2s,transform .3s}
-.ytCapa:hover img{opacity:1;transform:scale(1.03)}
-.ytPlay{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:68px;height:48px;border-radius:13px;background:rgba(216,35,47,.95);
-  display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.45);
-}
-.ytPlay::after{content:"";border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #fff;margin-left:3px}
-.vidSoon{
-  aspect-ratio:16/9;border-radius:18px;border:2px dashed var(--line);
-  display:grid;place-items:center;text-align:center;padding:22px;color:var(--muted);background:#fff;
-}
-
-/* ---------------- DEPOIMENTOS ---------------- */
-/* Na voz deles: é o motivo da campanha, então ganha fundo escuro, letra
-   grande e o nome de cada um em destaque — pesa mais que um card de rodapé. */
+/* ================= VOZES ================= */
 .vozes{background:linear-gradient(170deg,#0a1e35 0%,#0e2b4a 100%);color:#fff}
 .vozes h2{color:#fff}
-.quotes{display:grid;gap:16px}
-.quote{
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:22px;
-  padding:34px 24px 22px;position:relative;display:flex;flex-direction:column;justify-content:space-between;
+.vozDestaque{
+  margin:0 0 16px;padding:28px clamp(20px,4vw,32px);border-radius:var(--r);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-left:4px solid var(--gold);
 }
-.quote::before{
-  content:"“";position:absolute;top:2px;left:20px;font-size:4.6rem;
-  color:var(--gold);opacity:.55;font-family:Georgia,serif;line-height:1;
+.vozDestaque p{font-size:clamp(1.18rem,3.4vw,1.5rem);font-weight:600;line-height:1.45;letter-spacing:-.02em;color:#fff;margin:0 0 18px}
+.vozDestaque footer,.quote footer{display:flex;align-items:center;gap:11px;font-size:.85rem;color:var(--muted-dark);font-weight:600}
+.vozDestaque footer i,.quote footer i{
+  flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-style:normal;
+  background:linear-gradient(145deg,var(--gold),#c98c2a);color:#241804;font-weight:900;font-size:1rem;
 }
-.quote blockquote{margin:0 0 20px;font-size:clamp(1.08rem,3.4vw,1.18rem);font-weight:650;position:relative;letter-spacing:-.015em;line-height:1.5;color:#eef4fa}
-.quote footer{display:flex;align-items:center;gap:11px;font-size:.78rem;color:#93aac4;font-weight:700}
-.quote footer i{
-  flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-style:normal;
-  background:linear-gradient(145deg,var(--gold),#c98c2a);color:#241804;font-weight:900;font-size:.95rem;
-}
-.quote footer b{display:block;color:#fff;font-size:.98rem;letter-spacing:-.02em}
-.vozesFecho{margin:26px 0 0;font-size:clamp(1.05rem,3.2vw,1.25rem);font-weight:800;letter-spacing:-.02em;color:#fff;max-width:640px}
-.vozesFecho em{font-style:normal;color:var(--gold)}
+.vozDestaque footer b,.quote footer b{display:block;color:#fff;font-size:1rem;letter-spacing:-.02em}
+.quotes{display:grid;gap:12px}
+.quote{padding:20px;border-radius:var(--r-sm);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12)}
+.quote blockquote{margin:0 0 16px;font-size:1rem;line-height:1.55;color:#e4edf6}
 
-/* ---------------- PARANAVAI ---------------- */
-.local{
-  background:linear-gradient(140deg,var(--red),#8f1620);color:#fff;
-  border-radius:26px;padding:clamp(28px,5vw,52px);
-}
-.local h3{font-size:clamp(1.6rem,5vw,2.5rem);margin-bottom:14px}
-.local p{color:#ffdbdf;margin:0;font-size:1.04rem}
+/* ================= PERCURSO ================= */
+.rotaCard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:clamp(18px,3.4vw,26px);box-shadow:var(--shadow)}
+.hrTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.hrTop .t{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.legBadge{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;
+  padding:5px 11px;border-radius:99px;background:var(--gold);color:#241804;white-space:nowrap}
+.legBadge.volta{background:var(--green);color:#fff}
+.vroute{position:relative;height:460px;margin:18px 0 20px}
+.vtrack{position:absolute;left:13px;top:0;bottom:0;width:6px;border-radius:99px;background:#e2e9f1}
+.vfill{position:absolute;left:13px;top:0;width:6px;border-radius:99px;height:0;
+  background:linear-gradient(180deg,var(--red),var(--gold));transition:height 1.5s cubic-bezier(.22,.9,.28,1)}
+/* alvo de toque: 40px de altura é o máximo possível sem as paradas vizinhas
+   se sobreporem (José Bonifácio e Rio Preto ficam a 46 km uma da outra) */
+.vstop{position:absolute;left:0;width:100%;transform:translateY(-50%);display:block;
+  padding:11px 0 11px 46px;background:none;border:0;cursor:pointer;text-align:left;color:inherit;font:inherit;border-radius:9px}
+.vdot{position:absolute;left:7px;top:50%;margin-top:-8px;width:12px;height:12px;border-radius:50%;
+  background:#fff;border:2.5px solid #b7c5d4;transition:transform .2s,background .2s,border-color .2s}
+.vstop.passou .vdot{background:var(--gold);border-color:var(--gold)}
+.vstop[aria-pressed="true"] .vdot{transform:scale(1.5);background:var(--red);border-color:var(--red)}
+.vname{display:block;font-size:.92rem;font-weight:700;letter-spacing:-.01em;color:var(--muted);
+  line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vstop.passou .vname{color:var(--ink)}
+.vstop:hover .vname,.vstop[aria-pressed="true"] .vname{color:var(--ink)}
+.vkm{font-size:.84rem;color:var(--muted);font-weight:600}
+.vbus{position:absolute;left:-3px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+  font-size:1rem;z-index:3;background:var(--red);border:2.5px solid #fff;box-shadow:var(--shadow);
+  transform:translateY(-50%);transition:top 1.6s cubic-bezier(.22,.9,.28,1)}
+.routeStatus{margin:0 0 12px;padding:13px 16px;border-radius:var(--r-sm);background:var(--navy);
+  color:#fff;font-weight:700;font-size:.95rem;text-align:center}
+.routeStatus.win{background:var(--green)}
+.hrOut{padding:14px 16px;border-radius:var(--r-sm);background:#f4f7fa;border:1px solid var(--line)}
+.hrOut>b{display:block;font-size:.98rem;letter-spacing:-.01em;line-height:1.35}
+.hrOut small{display:block;color:var(--muted);font-size:.88rem;margin-top:4px;line-height:1.5}
+.hrOut .linkBtn{color:var(--red)}
 
-/* ---------------- MARCOS ---------------- */
-.miles{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
-.mile{
-  background:#fff;border:1.5px solid var(--line);border-radius:19px;padding:19px 16px;
-  text-align:center;transition:.2s;
-}
-.mile .ic{font-size:1.9rem;line-height:1;margin-bottom:8px;filter:grayscale(1);opacity:.42}
-.mile h3{font-size:1.18rem;margin-bottom:5px}
-.mile p{font-size:.79rem;color:var(--muted);margin:0 0 10px}
-.mile .tag{font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:var(--muted)}
-.mile.done{border-color:var(--green);background:#f2fbf6;box-shadow:0 10px 26px rgba(28,155,98,.15)}
-.mile.done .ic{filter:none;opacity:1}
-.mile.done .tag{color:var(--green)}
+/* ================= DESTINO ================= */
+.railWrap{position:relative}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:min(86%,440px);gap:14px;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:thin}
+.rail figure{margin:0;position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;
+  scroll-snap-align:start;background:#12314f}
+.rail img{width:100%;height:100%;object-fit:cover}
+.rail figcaption{position:absolute;inset:auto 0 0 0;padding:44px 15px 13px;
+  background:linear-gradient(transparent,rgba(0,0,0,.88));font-size:.86rem;color:#f0f5fa;font-weight:600}
+.railNav{display:flex;align-items:center;gap:12px;margin-top:12px}
+.railBtn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.08);color:#fff;font-size:1.3rem;font-weight:800;cursor:pointer;line-height:1}
+.railBtn:hover{background:rgba(255,255,255,.18)}
+.railBtn[disabled]{opacity:.35;cursor:not-allowed}
+.railDica{font-size:.86rem;font-weight:700;color:var(--muted-dark)}
 
-/* ---------------- TRANSPARENCIA ---------------- */
-.tGrid{display:grid;gap:16px}
-.tLine{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:34px}
+.fact{padding:16px 0;border-top:1px solid rgba(255,255,255,.16)}
+.fact b{display:block;font-size:clamp(1.35rem,5vw,1.9rem);font-weight:900;letter-spacing:-.03em;line-height:1.1}
+.fact span{display:block;color:var(--muted-dark);font-size:.86rem;font-weight:600;margin-top:5px;line-height:1.35}
+.dark .fine{margin-top:14px}
+
+.vidGrid{display:grid;gap:18px;margin-top:38px}
+.vidFrame{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:#000}
+.vidFrame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ytCapa{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;cursor:pointer;background:#0a1622;display:block}
+.ytCapa img{width:100%;height:100%;object-fit:cover;opacity:.88;transition:opacity .2s}
+.ytCapa:hover img{opacity:1}
+.ytPlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:66px;height:46px;
+  border-radius:13px;background:rgba(208,33,45,.95);display:grid;place-items:center}
+.ytPlay::after{content:"";border-style:solid;border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent #fff;margin-left:3px}
+.vidGrid .fine{margin-top:10px}
+
+/* ================= TRANSPARENCIA ================= */
+.tLista{margin:0 0 24px;padding:0}
+.tLine{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:14px 0;border-bottom:1px solid var(--line)}
 .tLine:last-child{border-bottom:0}
-.tLine span{color:var(--muted);font-weight:600;font-size:.92rem}
-.tLine b{font-size:1.14rem;font-weight:900;letter-spacing:-.03em;text-align:right}
-.trust{background:#fffaf0;border-color:#f0e2c4}
-.trust li{margin-bottom:9px;color:#4a3c1e;font-size:.92rem}
-
-/* ---------------- DIRETORIA ---------------- */
-.dirGrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.dirCard{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px 15px;box-shadow:var(--shadow)}
-.dirCargo{display:block;font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:800;margin-bottom:5px}
-.dirCard b{display:block;font-size:1rem;letter-spacing:-.025em;line-height:1.2}
-.dirZap{
-  display:inline-flex;align-items:center;min-height:44px;margin-top:3px;
-  font-size:.77rem;font-weight:800;color:var(--green);
-  text-decoration:underline;text-underline-offset:3px;
-}
-.dirNota{display:block;margin-top:7px;font-size:.7rem;color:var(--muted);line-height:1.4}
-
-/* ---------------- PRESTAÇÃO DE CONTAS ---------------- */
-.despLinha{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.tLine dt,.tLine span{color:var(--muted);font-size:.95rem}
+.tLine dd,.tLine b{margin:0;font-size:1.08rem;font-weight:800;letter-spacing:-.02em;text-align:right}
+.bloco{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+.bloco h3{margin-bottom:12px}
+.bloco p{font-size:.98rem;color:var(--muted);max-width:66ch}
+.bloco p strong{color:var(--ink)}
+.bloco code{background:#e6ecf4;padding:2px 6px;border-radius:6px;font-size:.88em}
+.despLinha{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+  padding:12px 0;border-bottom:1px solid var(--line)}
 .despLinha:last-child{border-bottom:0}
-.despLinha .d{min-width:0}
-.despLinha b{display:block;font-size:.94rem;letter-spacing:-.02em}
-.despLinha small{color:var(--muted);font-size:.76rem;font-weight:700}
-.despLinha .v{font-weight:900;letter-spacing:-.03em;white-space:nowrap;font-size:1rem}
-.despTotais{margin-top:16px;padding-top:14px;border-top:2px solid var(--line)}
-.despTotais .tLine{padding:9px 0}
-.despTotais .saldo b{color:var(--green);font-size:1.25rem}
-.despVazio{padding:22px 18px;border:2px dashed var(--line);border-radius:16px;color:var(--muted);font-size:.9rem;line-height:1.55;background:#fafbfd}
+.despLinha b{display:block;font-size:.98rem}
+.despLinha small{color:var(--muted);font-size:.86rem;font-weight:600}
+.despLinha .v{font-weight:800;white-space:nowrap}
+.despTotais{margin-top:14px;padding-top:12px;border-top:2px solid var(--line)}
+.despTotais .saldo b{color:var(--green)}
+.despVazio{padding:18px;border:1px dashed var(--line);border-radius:var(--r-sm);color:var(--muted);
+  font-size:.95rem;background:#fff}
 
-/* ---------------- MURAL ---------------- */
+.dirLista{list-style:none;margin:0;padding:0}
+.dirLista li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;
+  padding:14px 0;border-bottom:1px solid var(--line)}
+.dirLista li:last-child{border-bottom:0}
+.dirCargo{display:block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--red);font-weight:800;margin-bottom:3px}
+.dirLista b{font-size:1.05rem;letter-spacing:-.02em}
+.dirDestaque{background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.dirDestaque .btn{min-height:48px;padding:12px 20px}
+
+/* ================= MURAL ================= */
 .mural{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.sup{
-  background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;
-  display:flex;align-items:center;gap:11px;
-}
-.sup .av{
-  flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
-  background:linear-gradient(145deg,var(--gold),#c98c2a);color:#fff;font-weight:900;font-size:.88rem;
-}
-.sup b{display:block;font-size:.88rem;letter-spacing:-.02em}
-.sup small{color:var(--red);font-weight:800;font-size:.78rem}
-.emptyState{
-  grid-column:1/-1;text-align:center;padding:34px 20px;border:2px dashed var(--line);
-  border-radius:19px;color:var(--muted);background:#fff;
-}
+.sup{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;
+  display:flex;align-items:center;gap:11px}
+.sup .av{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg,var(--gold),#c98c2a);color:#241804;font-weight:900;font-size:.9rem}
+.sup b{display:block;font-size:.95rem}
+.sup small{color:var(--red);font-weight:800;font-size:.85rem}
 
-/* ---------------- CERTIFICADO ---------------- */
+/* ================= CERTIFICADO + COMPARTILHAR ================= */
 .certGrid{display:grid;gap:20px}
-.certPrev{
-  border-radius:20px;padding:30px 24px;text-align:center;color:#fff;
-  background:linear-gradient(150deg,var(--navy),#123457);
-  border:2px solid rgba(227,169,74,.42);box-shadow:var(--shadow-lg);
-}
-.certPrev img{width:76px;height:76px;border-radius:50%;object-fit:cover;margin:0 auto 16px;background:#fff;box-shadow:0 0 0 2px rgba(227,169,74,.7)}
-.certPrev .t{font-size:.66rem;letter-spacing:.19em;text-transform:uppercase;color:var(--gold);font-weight:800}
-.certPrev .n{font-size:clamp(1.4rem,5.4vw,1.95rem);font-weight:900;letter-spacing:-.035em;margin:10px 0 12px;word-break:break-word}
-.certPrev .k{font-size:clamp(2.3rem,9vw,3.1rem);font-weight:900;color:var(--gold);letter-spacing:-.045em;line-height:1;margin:8px 0}
-.certPrev .s{color:#b6cade;font-size:.86rem;margin-top:12px}
-.certPrev .h{margin-top:16px;font-size:.78rem;letter-spacing:.13em;font-weight:800;color:var(--gold-soft)}
+.certForm{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:clamp(18px,3.4vw,26px);box-shadow:var(--shadow)}
+.certForm .btn{margin-top:18px}
+.certPrev{border-radius:var(--r);padding:30px 24px;text-align:center;color:#fff;
+  background:linear-gradient(150deg,var(--navy),#123457);border:2px solid rgba(227,169,74,.42)}
+.certPrev img{width:72px;height:72px;border-radius:50%;object-fit:cover;margin:0 auto 16px;background:#fff}
+.certPrev .t{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.certPrev .n{font-size:clamp(1.4rem,5.4vw,1.9rem);font-weight:900;letter-spacing:-.03em;margin:10px 0 10px;word-break:break-word}
+.certPrev .sub{color:#c3d5e8;font-size:.95rem}
+.certPrev .k{font-size:clamp(2.2rem,9vw,3rem);font-weight:900;color:var(--gold);letter-spacing:-.04em;line-height:1;margin:10px 0}
+.certPrev .s{color:#c3d5e8;font-size:.9rem;margin-top:12px}
+.certPrev .h{margin-top:14px;font-size:.85rem;letter-spacing:.1em;font-weight:800;color:var(--gold-soft)}
 
-/* ---------------- COMPARTILHAR ---------------- */
-.share{
-  background:linear-gradient(140deg,var(--red),#8f1620);color:#fff;
-  border:0;text-align:center;padding:clamp(30px,5vw,54px);
-}
-.share h2{font-size:clamp(1.6rem,5.2vw,2.6rem);margin-bottom:16px}
-.share p{color:#ffdbdf;max-width:600px;margin:0 auto 26px}
+.share{margin-top:34px;padding:clamp(24px,4vw,36px);border-radius:var(--r);
+  background:linear-gradient(140deg,var(--red),#8f1620);color:#fff;text-align:center}
+.share h3{font-size:clamp(1.25rem,3.4vw,1.7rem);color:#fff;margin-bottom:10px;max-width:30ch;margin-inline:auto}
+.share p{color:#ffdbdf;max-width:52ch;margin-inline:auto}
+.shareBtns{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-top:20px}
+.shareBtns .btn.neutro{background:rgba(255,255,255,.16);color:#fff}
+.shareBtns .btn.neutro:hover{background:rgba(255,255,255,.26)}
 
-/* ---------------- FOOTER + STICKY ---------------- */
-body>footer{background:var(--navy);color:#8ba3bc;padding:46px 0 calc(120px + var(--safe-b));font-size:.85rem}
+/* ================= RODAPE + BARRA FIXA ================= */
+body>footer{background:var(--navy);color:var(--muted-dark);padding:44px 0 calc(110px + var(--safe-b));font-size:.92rem}
 .fGrid{display:grid;gap:22px}
 body>footer strong{color:#fff;display:block;margin-bottom:5px}
 body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-offset:3px}
+.fine a,.fGrid a{padding-block:14px}
 
 .sticky{
   position:fixed;left:0;right:0;bottom:0;z-index:60;
-  padding:11px 15px calc(11px + var(--safe-b));
-  background:rgba(255,255,255,.93);backdrop-filter:blur(14px);
-  border-top:1px solid var(--line);
-  display:flex;gap:11px;align-items:center;
-  transform:translateY(115%);transition:transform .35s cubic-bezier(.3,.9,.3,1);
+  padding:10px 15px calc(10px + var(--safe-b));
+  background:rgba(255,255,255,.96);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);display:flex;gap:11px;align-items:center;
+  transform:translateY(120%);transition:transform .3s cubic-bezier(.3,.9,.3,1);
 }
 .sticky.show{transform:translateY(0)}
-.sticky .info b{white-space:nowrap}
-
 .sticky .info{flex:1;min-width:0}
-.sticky .info b{display:block;font-size:.95rem;font-weight:900;letter-spacing:-.03em}
-.sticky .info small{color:var(--muted);font-size:.72rem;font-weight:700}
-.sticky .btn{padding:14px 20px;font-size:.92rem;flex:none}
+.sticky .musica{margin-right:2px}
+.sticky .info b{display:block;font-size:.98rem;font-weight:900;letter-spacing:-.02em;white-space:nowrap}
+.sticky .info .de{color:var(--muted);font-weight:700}
+.sticky .info small{color:var(--muted);font-size:.8rem;font-weight:600}
+.sticky .btn{padding:13px 22px;font-size:.95rem;flex:none;min-height:48px}
 
-/* ---------------- MODAL ---------------- */
-.modal{
-  position:fixed;inset:0;z-index:100;display:none;
-  background:rgba(5,14,26,.72);backdrop-filter:blur(5px);
-  align-items:flex-end;justify-content:center;
-}
-.modal.open{display:flex}
-.modalCard{
-  background:#fff;width:min(560px,100%);border-radius:26px 26px 0 0;
-  padding:26px 22px calc(26px + var(--safe-b));max-height:92vh;overflow-y:auto;
-  animation:up .3s cubic-bezier(.3,.9,.3,1);
-}
-@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modalTop{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
-.modalTop h3{font-size:1.5rem}
-.xBtn{border:0;background:#f0f4f8;width:38px;height:38px;border-radius:50%;font-size:1.4rem;cursor:pointer;flex:none;line-height:1;color:var(--muted)}
-
-/* ---- música de fundo: botão flutuante, sempre à mão para pausar ---- */
+/* ---- música: controle discreto, dentro do cabeçalho e da barra de baixo ----
+   Nada flutuando por cima do conteúdo: qualquer bolha fixa acabava cobrindo
+   texto em alguma largura. Aqui ela ocupa espaço que já era dela. ---- */
 .musica{
-  position:fixed;z-index:70;right:12px;top:calc(12px + env(safe-area-inset-top,0px));
-  display:flex;align-items:center;gap:8px;max-width:calc(100% - 24px);
-  padding:6px 12px 6px 6px;border-radius:99px;border:1px solid rgba(255,255,255,.22);
-  background:rgba(8,22,39,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  color:#fff;cursor:pointer;font:inherit;box-shadow:0 8px 22px rgba(0,0,0,.28);
+  display:flex;align-items:center;gap:8px;flex:none;
+  padding:5px 12px 5px 5px;border-radius:99px;cursor:pointer;font:inherit;
+  border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;
 }
-.musica i{
-  flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
-  background:var(--gold);color:#241804;font-style:normal;font-weight:900;font-size:.8rem;
-}
-.musica>span{display:flex;flex-direction:column;line-height:1.15;min-width:0;text-align:left}
-.musica b{font-size:.74rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.musica small{font-size:.62rem;color:#a9bed4;font-weight:700;white-space:nowrap}
-/* barrinhas de equalizador: só quando está tocando de verdade */
+.musica:hover{background:rgba(255,255,255,.16)}
+.brandRow .musica{margin-left:auto}
+.musica i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:var(--gold);color:#241804;font-style:normal;font-weight:900;font-size:.82rem}
+.musica>span{display:flex;flex-direction:column;line-height:1.2;min-width:0;text-align:left}
+.musicaTit{font-size:.8rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:15ch}
+.musicaSub{font-size:.72rem;color:var(--muted-dark);font-weight:600;white-space:nowrap}
 .musica .eq{display:none;flex-direction:row;align-items:flex-end;gap:2px;height:12px;margin-left:2px}
 .eq u{display:block;width:3px;background:var(--gold);border-radius:2px;animation:eq 1s ease-in-out infinite}
 .eq u:nth-child(2){animation-delay:-.4s}.eq u:nth-child(3){animation-delay:-.7s}
 @keyframes eq{0%,100%{height:3px}50%{height:12px}}
 .musica.tocando .eq{display:flex}
-.modalAberto .musica{display:none}
+/* na barra clara de baixo o contraste se inverte */
+.sticky .musica{border-color:var(--line);background:#f2f5f9;color:var(--ink)}
+.sticky .musica:hover{background:#e7ecf3}
+.sticky .musicaSub{color:var(--muted)}
+@media(max-width:700px){
+  .musica{padding:4px;gap:0}
+  .musica>span:not(.eq){display:none}
+}
 
-/* Tela de boas-vindas: o celular só libera som depois de um toque, então o
-   toque de "entrar" é o que dá a partida na música. Só aparece quando o
-   navegador bloqueou o som — onde tocou sozinha, ela nem existe. */
+/* ---- tela de boas-vindas: o toque que libera o som ---- */
 .portao{
   position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:24px;
-  background:radial-gradient(90% 60% at 78% 12%,rgba(227,169,74,.25),transparent 62%),
-             linear-gradient(160deg,rgba(5,15,28,.96) 0%,rgba(10,36,64,.96) 100%);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  color:#fff;text-align:center;animation:portaoEntra .35s ease;
+  background:radial-gradient(85% 60% at 80% 10%,rgba(227,169,74,.22),transparent 60%),
+             linear-gradient(165deg,rgba(6,18,37,.97) 0%,rgba(11,39,67,.97) 100%);
+  color:#fff;text-align:center;animation:portaoEntra .3s ease;overflow-y:auto;
 }
-.portao.saindo{opacity:0;transition:opacity .35s ease}
+.portao.saindo{opacity:0;transition:opacity .3s ease}
 @keyframes portaoEntra{from{opacity:0}to{opacity:1}}
 .portaoCard{width:min(380px,100%)}
-.portaoCard img{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;background:#fff;
-  box-shadow:0 0 0 3px rgba(227,169,74,.8),0 14px 34px rgba(0,0,0,.45)}
-.portaoCard .eyebrow{margin-bottom:10px}
-.portaoCard h2{font-size:clamp(1.8rem,7vw,2.3rem);color:#fff;margin-bottom:10px}
-.portaoCard p{color:#bcd0e6;margin:0 0 26px;font-size:.98rem}
-.portaoCard .btn{width:100%;font-size:1.08rem;padding:19px 26px}
-.portaoSem{margin-top:14px;background:none;border:0;color:#a9bed4;font-weight:700;font-size:.86rem;
-  text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:12px}
-.portaoMus{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;font-size:.78rem;font-weight:800;
-  color:var(--gold-soft);letter-spacing:.02em}
-/* no celular vira só o botão redondo + barrinhas, e o cabeçalho abre espaço
-   para ele não cobrir o nome do clube */
-@media(max-width:600px){
-  .musica{padding:5px 10px 5px 5px;gap:6px}
-  .musica>span:not(.eq){display:none}
-  .temMusica .brandRow{padding-right:74px}
-}
+.portaoCard img{width:88px;height:88px;border-radius:50%;margin:0 auto 18px;background:#fff;
+  box-shadow:0 0 0 3px rgba(227,169,74,.75)}
+.portaoCard h2{font-size:clamp(1.7rem,6vw,2.1rem);color:#fff;margin-bottom:10px}
+.portaoCard p{color:#cfdded;margin:0 0 24px;font-size:1rem}
+.portaoCard .btn{width:100%;font-size:1.06rem;min-height:56px}
+.portaoSem{margin-top:12px;background:none;border:0;color:var(--muted-dark);font-weight:700;font-size:.92rem;
+  text-decoration:underline;text-underline-offset:4px;cursor:pointer;padding:13px;min-height:44px}
+.portaoMus{display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;font-size:.86rem;
+  font-weight:700;color:var(--gold-soft)}
 
 .toast{
-  position:fixed;left:50%;bottom:110px;transform:translate(-50%,20px);
+  position:fixed;left:50%;bottom:104px;transform:translate(-50%,20px);
   background:var(--navy);color:#fff;padding:13px 22px;border-radius:99px;
-  font-weight:800;font-size:.9rem;z-index:200;opacity:0;pointer-events:none;
-  transition:.3s;box-shadow:var(--shadow-lg);
+  font-weight:700;font-size:.92rem;z-index:200;opacity:0;pointer-events:none;
+  transition:.3s;box-shadow:var(--shadow-lg);max-width:calc(100% - 32px);text-align:center;
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
-/* com o Pix aberto, o aviso sobe: embaixo ele cobriria o botão do comprovante */
-.modalAberto .toast{bottom:auto;top:calc(18px + env(safe-area-inset-top,0px))}
 
-/* O conteúdo só é escondido se o navegador realmente puder animá-lo (classe
-   jsReveal, definida no <head>). Sem JS ou sem IntersectionObserver, tudo
-   aparece normalmente — a página nunca fica em branco por causa da animação. */
-.reveal{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
-.jsReveal .reveal{opacity:0;transform:translateY(26px)}
+/* ---- revelar ao rolar, só quando o navegador consegue ---- */
+.reveal{transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.3,1)}
+.jsReveal .reveal{opacity:0;transform:translateY(20px)}
 .jsReveal .reveal.in{opacity:1;transform:none}
 
-
-/* ---------------- HERO: rota vertical interativa ---------------- */
-.heroGrid{display:grid;gap:30px}
-.heroRoute{
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
-  border-radius:24px;padding:20px 18px;backdrop-filter:blur(8px);
-}
-.hrTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px}
-.hrTop .t{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9db4cd;font-weight:800}
-.legBadge{
-  font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;font-weight:900;
-  padding:5px 11px;border-radius:99px;background:var(--gold);color:#241804;white-space:nowrap;
-}
-.legBadge.volta{background:var(--green);color:#fff}
-.hrHint{font-size:.72rem;color:#8ba3bc;margin:0 0 12px;line-height:1.4}
-
-.vroute{position:relative;height:470px;margin:16px 0 26px}
-.vtrack{position:absolute;left:13px;top:0;bottom:0;width:6px;border-radius:99px;background:rgba(255,255,255,.17)}
-.vfill{
-  position:absolute;left:13px;top:0;width:6px;border-radius:99px;height:0;
-  background:linear-gradient(180deg,var(--red),var(--gold));
-  transition:height 1.5s cubic-bezier(.22,.9,.28,1);
-}
-.vstop{
-  position:absolute;left:0;width:100%;transform:translateY(-50%);
-  display:block;padding:10px 0 10px 48px; /* o texto começa depois da faixa do ônibus */
-  background:none;border:0;cursor:pointer;text-align:left;
-  color:inherit;font:inherit;border-radius:9px;
-}
-.vdot{
-  position:absolute;left:7px;top:50%;margin-top:-8.5px;
-  width:12px;height:12px;border-radius:50%;
-  background:#22405f;border:2.5px solid #7d97b3;
-  transition:transform .2s,background .2s,border-color .2s;
-}
-.vstop.passou .vdot{background:var(--gold);border-color:var(--gold)}
-.vstop[aria-pressed="true"] .vdot{transform:scale(1.5);background:var(--red);border-color:#fff}
-.vname{
-  display:block;font-size:.79rem;font-weight:800;letter-spacing:-.02em;color:#c6d6e6;
-  line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.vstop.passou .vname{color:#fff}
-.vstop:hover .vname,.vstop[aria-pressed="true"] .vname{color:#fff}
-.vkm{font-size:.72rem;color:#89a2bb;font-weight:700}
-.vstop.passou .vkm{color:#a9bed4}
-.vbus{
-  position:absolute;left:-2px;width:35px;height:35px;border-radius:50%;
-  display:grid;place-items:center;font-size:1rem;z-index:3;
-  background:var(--red);border:2.5px solid #fff;box-shadow:0 6px 18px rgba(216,35,47,.55);
-  transform:translateY(-50%);transition:top 1.6s cubic-bezier(.22,.9,.28,1);
-}
-.hrOut{margin-top:10px;padding:13px 14px;border-radius:15px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.13)}
-.hrOut>b{display:block;font-size:.9rem;letter-spacing:-.02em;line-height:1.3}
-.hrOut small{display:block;color:#a9bed4;font-size:.75rem;margin-top:4px;line-height:1.45}
-.hrOut .go{
-  display:inline-block;margin-top:9px;font-size:.79rem;font-weight:800;color:var(--gold);
-  background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
-}
-
-/* ---------------- escolher trecho da estrada ---------------- */
-.segBox{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
-.segTabs{display:flex;gap:6px;background:#eef2f7;padding:5px;border-radius:14px;margin:2px 0 14px}
-.segTab{
-  flex:1;padding:13px 8px;border:0;background:none;border-radius:10px;
-  font-weight:800;font-size:.84rem;cursor:pointer;color:var(--muted);transition:.15s;
-}
-.segTab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(6,20,40,.13)}
-.segRow{display:grid;grid-template-columns:1fr;gap:10px}
-.segBar{position:relative;height:12px;border-radius:99px;background:#e3e9f0;margin:18px 0 8px;overflow:hidden}
-.segSel{position:absolute;top:0;bottom:0;border-radius:99px;left:0;width:0;background:linear-gradient(90deg,var(--red),var(--gold));transition:left .3s,width .3s}
-.segScale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--muted);font-weight:700}
-.segWarn{margin-top:12px;font-size:.79rem;font-weight:700;color:#9a6a13;background:#fff6e5;border:1px solid #f0dcb6;border-radius:12px;padding:10px 12px}
-.segNote{margin-top:10px}
-
-/* Links soltos ficam com ~15px de altura, e o dedo tem uns 9mm. Padding
-   vertical em elemento inline cresce a area clicavel sem mexer no layout.
-   So nos links isolados: numa lista densa isso faria alvos se sobreporem. */
-.fine a, .fGrid a{padding-block:15px}
-
-/* ---------------- BREAKPOINTS ---------------- */
-@media(min-width:700px){
+/* ================= LARGURAS ================= */
+@media(min-width:600px){
+  .kmGrid{grid-template-columns:repeat(3,1fr)}
   .segRow{grid-template-columns:1fr 1fr}
-  /* sem isto o mapa cresce junto com o card e vira um bloco gigante no desktop */
-  .mapBox{max-width:580px;margin-inline:auto}
-  .heroStats{grid-template-columns:repeat(3,1fr)}
-  .hStat.wide{grid-column:1/-1}
-  .kmGrid{grid-template-columns:repeat(6,1fr)}
   .facts{grid-template-columns:repeat(4,1fr)}
-  .miles{grid-template-columns:repeat(4,1fr)}
-  .quotes{grid-template-columns:repeat(2,1fr)}
+  .quotes{grid-template-columns:repeat(3,1fr)}
   .vidGrid{grid-template-columns:1fr 1fr}
   .mural{grid-template-columns:repeat(3,1fr)}
-  .dirGrid{grid-template-columns:repeat(3,1fr)}
-  .fGrid{grid-template-columns:1fr 1fr 1fr}
-  .modal{align-items:center}
-  .modalCard{border-radius:26px}
+  .fGrid{grid-template-columns:repeat(3,1fr)}
+}
+/* Sem foto do clube, a coluna da direita ficaria vazia no computador: o
+   bloco de progresso ocupa esse lugar e a abertura fica equilibrada.
+   Quando existir uma foto real do clube, ela entra aqui. */
+@media(min-width:1000px){
+  .heroInner{display:grid;grid-template-columns:minmax(0,1fr) 400px;column-gap:48px;align-items:start}
+  .heroInner>.brandRow{grid-column:1/-1}
+  .heroInner>.pulso{grid-column:2;grid-row:2/span 6;margin-top:6px;max-width:none}
+  .heroInner>.pulso .pNums{gap:14px}
+  .heroInner>.pulso .pNums b{font-size:1.4rem}
+  .heroInner>:not(.brandRow):not(.pulso){grid-column:1}
+  .hero h1{font-size:clamp(2.6rem,3.6vw,3.4rem)}
 }
 @media(min-width:900px){
-  /* no desktop o painel e uma coluna fixa e o mouse acerta alvo pequeno */
   .vroute{height:360px}
-  .heroGrid{grid-template-columns:minmax(0,1fr) 348px;column-gap:46px;align-items:start}
-  .heroMain{grid-column:1;grid-row:1}
-  .heroRoute{grid-column:2;grid-row:1/span 2;position:sticky;top:24px}
-  .heroBottom{grid-column:1;grid-row:2}
-}
-@media(min-width:960px){
-  .adoptGrid{grid-template-columns:1fr 1.15fr;align-items:start}
-  .kmGrid{grid-template-columns:repeat(3,1fr)}
-  .tGrid{grid-template-columns:1fr 1fr}
   .certGrid{grid-template-columns:1fr 1fr;align-items:center}
-  .sticky{display:none}
-  .quotes{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:359px){
+  .kmGrid{grid-template-columns:repeat(2,1fr)}
+  .pNums{grid-template-columns:1fr 1fr}
+  .pNums div:last-child{grid-column:1/-1}
 }
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{
-    animation-duration:.001ms !important;animation-iteration-count:1 !important;
-    transition-duration:.001ms !important;scroll-behavior:auto !important;
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;
   }
   .reveal{opacity:1;transform:none}
 }
@@ -860,7 +619,7 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   }
 </script>
 
-<!-- ================= HERO ================= -->
+<!-- ================= ABERTURA ================= -->
 <header class="hero">
   <div class="wrap heroInner">
     <div class="brandRow">
@@ -870,25 +629,26 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
         <strong>Clube de Desbravadores Vale do Ivaí</strong>
         <span>Paranavaí · Paraná</span>
       </div>
+      <button type="button" class="musica" hidden aria-pressed="false">
+      <i aria-hidden="true">▶</i>
+      <span><b class="musicaTit">Música</b><small class="musicaSub">tocar</small></span>
+      <span class="eq" aria-hidden="true"><u></u><u></u><u></u></span>
+      </button>
     </div>
 
-    <div class="heroGrid">
-    <div class="heroMain">
-    <div class="heroTag"><i></i> Campanha de transporte · Campori 2027</div>
+    <p class="heroTag"><i></i> Campanha de transporte · Campori 2027</p>
 
     <h1>Ajude nossos Desbravadores a chegar a <em>Barretos.</em></h1>
 
-    <p class="heroPreco">Cada <b class="precoKm">R$ 14,07</b> move o ônibus 1 km.</p>
-
     <p class="heroSub">
-      São <b>1.102 km</b> de ida e volta. Escolha quantos quilômetros você quer
-      colocar nessa estrada.
+      São <b>1.102 km</b> de ida e volta, e cada <b class="precoKm">R$ 14,07</b> move
+      o ônibus 1 km. Escolha quantos quilômetros você quer colocar nessa estrada.
     </p>
 
     <div class="heroBtns">
-      <a class="btn" href="#km" data-rolar="km">🚌 Quero levar o ônibus</a>
-      <button type="button" class="btn ghost ouvir" id="ouvirBtn" aria-pressed="false"
-              aria-controls="audioBox">▶ Ouvir nossa missão</button>
+      <a class="btn" href="#km" data-rolar="km">Quero levar o ônibus 🚌</a>
+      <button type="button" class="linkBtn" id="ouvirBtn" aria-pressed="false"
+              aria-controls="audioBox">▶ Ouvir nossa missão · 40s</button>
     </div>
 
     <!-- Narração: nunca toca sozinha. O arquivo vem de dados.json (audioMissao);
@@ -909,9 +669,9 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
       </details>
     </div>
 
-    <!-- O pulso da campanha. Só mostra número depois que a planilha responde:
-         antes disso é "atualizando", nunca um zero provisório. -->
-    <div class="pulso" id="pulso" aria-busy="true">
+    <!-- O progresso da campanha, num bloco só. Só mostra número depois que a
+         planilha responde: antes disso é "atualizando", nunca um zero. -->
+    <section class="pulso" id="pulso" aria-busy="true" aria-label="Progresso da campanha">
       <div class="miniRoad" aria-hidden="true">
         <div class="mrTrack">
           <div class="mrFill" id="mrFill"></div>
@@ -930,335 +690,50 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
         <span class="mrLbl m">Barretos</span>
         <span class="mrLbl r">de volta</span>
       </div>
+
       <div class="pNums">
-        <div><b id="pKm" class="dep">km</b><span>garantidos</span></div>
         <div><b id="pRaised" class="dep">R$</b><span>arrecadados</span></div>
+        <div><b id="pKm" class="dep">km</b><span>garantidos</span></div>
         <div><b id="pPct" class="dep">%</b><span>da viagem</span></div>
       </div>
+
+      <div class="progBar"><div class="progFill" id="sFill"></div></div>
+
+      <p class="pMeta">
+        <span id="pFaltam" class="dep">Faltam</span>
+        <span class="pMetaFixa">Meta: <span id="sGoal">R$ 15.500</span> · <span id="sKmTotal">1.102 km</span></span>
+      </p>
+      <p class="pGente" id="progGente" hidden></p>
+
+      <p class="pConta" id="boxConta" hidden>
+        <span id="contaRel">Saída em <b id="cDias">--</b> dias</span>
+        <span id="contaFimTxt" hidden></span>
+        <span id="contaDir"></span>
+      </p>
+
       <p class="pStatus" id="pStatus" role="status">Atualizando campanha…</p>
-    </div>
-
-    <div class="boxConta" id="boxConta" hidden>
-      <span class="contaTit">Contagem para a saída</span>
-      <div class="conta" id="conta">
-        <div class="contaRel" id="contaRel">
-          <div class="cUnid"><b id="cDias">--</b><span>dias</span></div>
-          <div class="cSep" aria-hidden="true">:</div>
-          <div class="cUnid"><b id="cHoras">--</b><span>horas</span></div>
-          <div class="cSep" aria-hidden="true">:</div>
-          <div class="cUnid"><b id="cMin">--</b><span>min</span></div>
-        </div>
-        <div class="contaFimTxt" id="contaFimTxt" hidden></div>
-        <div class="contaDir" id="contaDir"></div>
-      </div>
-    </div>
-    </div>
-
-    <aside class="heroRoute" aria-labelledby="hrTitulo">
-      <div class="hrTop">
-        <span class="t" id="hrTitulo">A viagem, em tempo real</span>
-        <span class="legBadge" id="legBadge">Ida</span>
-      </div>
-      <div class="vroute" id="vroute">
-        <div class="vtrack"></div>
-        <div class="vfill" id="vfill"></div>
-        <div class="vbus" id="vbus" aria-hidden="true">🚌</div>
-      </div>
-
-      <div class="hrOut" id="hrOut" role="status" aria-live="polite">
-        <b id="hrTxt">Atualizando a posição do ônibus…</b>
-        <small id="hrSub">São 15 cidades entre Paranavaí e Barretos.</small>
-        <button type="button" class="go" id="hrGo" hidden>Adotar este trecho →</button>
-      </div>
-    </aside>
-
-    <div class="heroBottom">
-    <div class="heroStats">
-      <div class="hStat">
-        <span>Arrecadado</span>
-        <b id="sRaised" class="dep">R$</b>
-        <small>de <span id="sGoal">R$ 15.500</span></small>
-      </div>
-      <div class="hStat">
-        <span>Estrada garantida</span>
-        <b id="sKm" class="dep">km</b>
-        <small>de <span id="sKmTotal">1.102 km</span></small>
-      </div>
-      <div class="hStat">
-        <span>Faltam</span>
-        <b id="sLeftKm" class="dep">km</b>
-        <small id="sLeftBRL" class="dep">R$</small>
-      </div>
-
-      <div class="hStat wide progWrap">
-        <div class="progTop"><span>Progresso da jornada</span><b id="sPct" class="dep">%</b></div>
-        <div class="progBar"><div class="progFill" id="sFill"></div></div>
-        <div class="progGente" id="progGente" hidden></div>
-      </div>
-
-    </div>
-
-    <div class="heroCta">
-      <a class="btn" href="#km" data-rolar="km">🚌 Quero levar o ônibus</a>
-      <a class="btn ghost" href="#jornada">Ver a jornada</a>
-    </div>
-    </div>
-    </div>
+    </section>
   </div>
 </header>
 
 <main>
 
-<!-- ================= JORNADA ================= -->
-<section id="jornada">
-  <div class="wrap">
+<!-- ================= CONTRIBUIR ================= -->
+<section id="adotar" class="claro">
+  <div class="wrap estreito">
     <div class="head reveal">
-      <div class="eyebrow">A jornada</div>
-      <h2>Você não doa só dinheiro.<br>Você <span style="color:var(--red)">move o ônibus.</span></h2>
-      <p class="lead">
-        São aproximadamente 551 km de Paranavaí até Barretos. Ida e volta: 1.102 km.
-        Dividimos a meta de transporte por essa estrada inteira — então
-        <strong style="color:var(--ink)">cada <span class="precoKm">R$ 14,07</span> equivale a 1 km da missão</strong>.
-        O ônibus abaixo se move sozinho, conforme a campanha avança.
-      </p>
-    </div>
-
-    <div class="card routeCard reveal">
-      <div class="routeHud">
-        <div class="hud"><span>Posição</span><b id="hudKm" class="dep">km</b></div>
-        <div class="hud"><span>Etapa</span><b id="hudLeg" class="dep">Ida</b></div>
-        <div class="hud"><span>Concluído</span><b id="hudPct" class="dep">%</b></div>
-      </div>
-
-      <div class="mapBox">
-        <svg viewBox="0 0 560 460" role="img"
-             aria-labelledby="mapTitle mapDesc" id="routeSvg">
-          <title id="mapTitle">Mapa da jornada Paranavaí — Barretos — Paranavaí</title>
-          <desc id="mapDesc">Circuito fechado: a ida ocupa a faixa de cima e a volta a faixa de baixo. O ônibus avança conforme a arrecadação e viaja sempre para frente.</desc>
-
-          <defs>
-            <linearGradient id="gRoad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#d8232f"/>
-              <stop offset="1" stop-color="#e3a94a"/>
-            </linearGradient>
-          </defs>
-
-          <!-- estrada base -->
-          <path id="roadBase"
-                d="M 90 230 A 70 70 0 0 1 160 160 L 400 160 A 70 70 0 0 1 470 230 A 70 70 0 0 1 400 300 L 160 300 A 70 70 0 0 1 90 230"
-                fill="none" stroke="#c1cedc" stroke-width="26" stroke-linecap="round"/>
-          <!-- faixa central tracejada -->
-          <path d="M 90 230 A 70 70 0 0 1 160 160 L 400 160 A 70 70 0 0 1 470 230 A 70 70 0 0 1 400 300 L 160 300 A 70 70 0 0 1 90 230"
-                fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="11 13" opacity=".9"/>
-          <!-- progresso -->
-          <path id="roadDone"
-                d="M 90 230 A 70 70 0 0 1 160 160 L 400 160 A 70 70 0 0 1 470 230 A 70 70 0 0 1 400 300 L 160 300 A 70 70 0 0 1 90 230"
-                fill="none" stroke="url(#gRoad)" stroke-width="26" stroke-linecap="round"/>
-
-          <!-- distância total, no vazio central -->
-          <text class="totalKm"  x="280" y="238" text-anchor="middle">1.102 km</text>
-          <text class="totalSub" x="280" y="266" text-anchor="middle">IDA E VOLTA</text>
-
-          <!-- sentido de cada faixa -->
-          <text class="laneLabel" x="280" y="128" text-anchor="middle">IDA</text>
-          <path d="M 322 118 l 15 6 l -15 6 z" fill="#8b9dae"/>
-          <text class="laneLabel" x="280" y="352" text-anchor="middle">VOLTA</text>
-          <path d="M 222 342 l -15 6 l 15 6 z" fill="#8b9dae"/>
-
-          <!-- Paranavaí -->
-          <path d="M 90 250 L 90 376" stroke="#b9c6d4" stroke-width="2" stroke-dasharray="4 6"/>
-          <circle cx="90" cy="230" r="14" fill="#fff" stroke="#0d1520" stroke-width="5"/>
-          <circle cx="90" cy="230" r="4.5" fill="#0d1520"/>
-          <text class="cityName" x="90" y="404" text-anchor="middle">PARANAVAÍ</text>
-          <text class="cityKm"   x="90" y="430" text-anchor="middle">km 0 · 1.102</text>
-
-          <!-- Barretos -->
-          <path d="M 470 250 L 470 376" stroke="#e8b9bd" stroke-width="2" stroke-dasharray="4 6"/>
-          <circle cx="470" cy="230" r="14" fill="#fff" stroke="#d8232f" stroke-width="5"/>
-          <circle cx="470" cy="230" r="4.5" fill="#d8232f"/>
-          <text class="cityName" x="470" y="404" text-anchor="middle">BARRETOS</text>
-          <text class="cityKm"   x="470" y="430" text-anchor="middle">km 551</text>
-
-          <!-- ônibus: posição e ângulo vêm da tangente da estrada -->
-          <g id="bus">
-            <rect x="-25" y="-15" width="50" height="27" rx="7" fill="#d8232f"/>
-            <rect x="-25" y="-15" width="50" height="9"  rx="5" fill="#fff" opacity=".22"/>
-            <rect x="-19" y="-10" width="12" height="9" rx="2.5" fill="#bfe2ff"/>
-            <rect x="-4"  y="-10" width="12" height="9" rx="2.5" fill="#bfe2ff"/>
-            <rect x="11"  y="-10" width="10" height="9" rx="2.5" fill="#e8f4ff"/>
-            <circle cx="26" cy="-2" r="2.6" fill="#ffd76b"/>
-            <circle cx="-14" cy="13" r="5.4" fill="#12202e"/>
-            <circle cx="15"  cy="13" r="5.4" fill="#12202e"/>
-            <circle cx="-14" cy="13" r="2.1" fill="#7d8b99"/>
-            <circle cx="15"  cy="13" r="2.1" fill="#7d8b99"/>
-          </g>
-        </svg>
-      </div>
-
-      <div class="routeStatus" id="routeStatus">Atualizando a posição do ônibus…</div>
-
-      <p class="fine" style="margin:14px 0 0">
-        A ida ocupa a faixa de cima e a volta a faixa de baixo — o ônibus sempre viaja para frente.
-        Distância rodoviária aproximada, usada como referência da campanha.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ================= DESTINO / FOTOS ================= -->
-<section class="dark">
-  <div class="wrap">
-    <div class="head reveal">
-      <div class="eyebrow gold">O destino</div>
-      <h2>É isso que espera por eles.</h2>
-      <p class="lead on-dark">
-        Camporis de Desbravadores realizados no Parque do Peão, em Barretos:
-        arena lotada, milhares de barracas e clubes de todo o continente reunidos.
-      </p>
-    </div>
-
-    <div class="rail reveal">
-      <figure>
-        <img src="assets/fotos/campori-barretos-1.jpg" loading="lazy" decoding="async"
-             alt="Multidão de Desbravadores reunidos durante um Campori no Parque do Peão, em Barretos">
-        <figcaption>Campori em Barretos · foto: Notícias Adventistas</figcaption>
-      </figure>
-      <figure>
-        <img src="assets/fotos/campori-barretos-2.jpg" loading="lazy" decoding="async"
-             alt="Vista do Parque do Peão de Barretos durante um Campori de Desbravadores">
-        <figcaption>Parque do Peão durante Campori · foto: Portal Bueno</figcaption>
-      </figure>
-      <figure>
-        <img src="assets/fotos/campori-barretos-3.jpg" loading="lazy" decoding="async"
-             alt="Milhares de barracas montadas por clubes de Desbravadores acampados em Barretos">
-        <figcaption>Milhares de Desbravadores acampados · foto: Guaíra News</figcaption>
-      </figure>
-    </div>
-
-
-    <!-- Porte do evento -->
-    <div class="head reveal" style="margin-top:64px">
-      <div class="eyebrow gold">O tamanho da aventura</div>
-      <h2>Paranavaí dentro de um encontro sul-americano.</h2>
-      <p class="lead on-dark">
-        O VI Campori Sul-Americano de Desbravadores, com o tema <strong style="color:#fff">“Sempre Desbravador”</strong>,
-        será realizado no Parque do Peão, em Barretos (SP), em duas edições:
-        <strong style="color:#fff">Alpha, de 5 a 10 de janeiro de 2027</strong>, e
-        <strong style="color:#fff">Omega, de 12 a 17 de janeiro de 2027</strong>.
-      </p>
-    </div>
-
-    <div class="facts reveal">
-      <div class="fact"><span>Participantes</span><b>+120 mil</b><small>somando as duas edições</small></div>
-      <div class="fact"><span>Abrangência</span><b>8 países</b><small>da América do Sul</small></div>
-      <div class="fact"><span>Edição</span><b>6ª</b><small>Campori Sul-Americano</small></div>
-      <div class="fact"><span>Idades</span><b>10–15</b><small>anos, além da liderança</small></div>
-    </div>
-
-    <p class="fine on-dark" style="margin-top:14px">
-      Dados divulgados pela organização oficial do evento.
-      <a href="https://camporidsa.org/pt/" target="_blank" rel="noopener"
-         style="color:var(--gold-soft);text-decoration:underline">Conferir no site oficial do Campori ↗</a>
-    </p>
-  </div>
-</section>
-
-<!-- ================= VIDEOS ================= -->
-<section>
-  <div class="wrap">
-    <div class="head reveal">
-      <div class="eyebrow">Veja com seus olhos</div>
-      <h2>Entenda a missão em poucos minutos.</h2>
-    </div>
-    <div class="vidGrid reveal">
-      <div>
-        <div class="vidFrame">
-          <button type="button" class="ytCapa" data-yt="ZBojPLtE4eY" data-titulo="Vídeo sobre o Campori Sul-Americano de Desbravadores"
-                  aria-label="Assistir: Vídeo sobre o Campori Sul-Americano de Desbravadores">
-            <img src="https://i.ytimg.com/vi/ZBojPLtE4eY/hqdefault.jpg" alt="" loading="lazy" decoding="async"
-                 onerror="this.style.display='none'">
-            <span class="ytPlay" aria-hidden="true"></span>
-          </button>
-        </div>
-        <p class="fine" style="margin-top:11px">O tamanho da experiência que espera nossos Desbravadores.</p>
-      </div>
-      <div>
-        <div class="vidFrame">
-          <button type="button" class="ytCapa" data-yt="-OGYc9zg9zE" data-titulo="Segundo vídeo sobre o Campori de Desbravadores"
-                  aria-label="Assistir: Segundo vídeo sobre o Campori de Desbravadores">
-            <img src="https://i.ytimg.com/vi/-OGYc9zg9zE/hqdefault.jpg" alt="" loading="lazy" decoding="async"
-                 onerror="this.style.display='none'">
-            <span class="ytPlay" aria-hidden="true"></span>
-          </button>
-        </div>
-        <p class="fine" style="margin-top:11px">Uma segunda visão do Campori.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ================= DEPOIMENTOS ================= -->
-<section class="vozes">
-  <div class="wrap">
-    <div class="head reveal">
-      <div class="eyebrow gold">Na voz deles</div>
-      <h2>Não é sobre pagar um ônibus.</h2>
-      <p class="lead on-dark">
-        É sobre o que eles vão viver lá. Quatro dos nossos Desbravadores, e o motivo
-        de cada um querer estar em Barretos.
-      </p>
-    </div>
-    <div class="quotes reveal">
-      <article class="quote">
-        <blockquote>Eu gosto quando a gente ora junto no clube. Em Barretos vai ter um monte de desbravador orando na mesma hora, eu quero muito ver isso.</blockquote>
-        <footer><i aria-hidden="true">L</i><span><b>Lorenzo</b>Desbravador · Vale do Ivaí</span></footer>
-      </article>
-      <article class="quote">
-        <blockquote>Meu pai fala que Deus cuida da gente na viagem. Eu quero ir pra Barretos e voltar contando que deu tudo certo.</blockquote>
-        <footer><i aria-hidden="true">J</i><span><b>João Vitor</b>Desbravador · Vale do Ivaí</span></footer>
-      </article>
-      <article class="quote">
-        <blockquote>No Campori a gente estuda a Bíblia junto com gente de tudo quanto é lugar. Acho que isso faz a minha fé ficar maior.</blockquote>
-        <footer><i aria-hidden="true">M</i><span><b>Miguel</b>Desbravador · Vale do Ivaí</span></footer>
-      </article>
-      <article class="quote">
-        <blockquote>Quero ir pra Barretos pra ficar mais perto de Deus e do meu clube ao mesmo tempo. Acho que é isso que faz o Campori ser diferente.</blockquote>
-        <footer><i aria-hidden="true">N</i><span><b>Nicolas</b>Desbravador · Vale do Ivaí</span></footer>
-      </article>
-    </div>
-    <p class="vozesFecho reveal">Cada quilômetro que você leva é <em>um pedaço dessa viagem</em> na vida deles.</p>
-  </div>
-</section>
-
-<!-- ================= PARANAVAI ================= -->
-<section>
-  <div class="wrap">
-    <div class="local reveal">
-      <div class="eyebrow" style="color:#ffd0d4">Identidade</div>
-      <h3>Paranavaí estará em Barretos.</h3>
-      <p>
-        Um clube de Paranavaí vai atravessar 551 km para se juntar a Desbravadores de oito países.
-        Nossos jovens vão levar o nome da nossa cidade — e voltar com histórias que ficam para a vida inteira.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ================= ADOTAR KM + PIX ================= -->
-<section id="adotar" style="background:#eaf0f6">
-  <div class="wrap">
-    <div class="head reveal">
-      <div class="eyebrow">Adote seus quilômetros</div>
+      <p class="eyebrow">Como contribuir</p>
       <h2>Coloque seus quilômetros na estrada.</h2>
-      <p class="lead">Escolha os km, copie o Pix com o valor já preenchido e mande o comprovante.
-        O valor aparece na hora, sem letras miúdas.</p>
+      <p class="lead">
+        Três passos: escolher os quilômetros, copiar o Pix com o valor já preenchido
+        e enviar o comprovante.
+      </p>
     </div>
 
-    <div class="adoptGrid">
-      <div class="card reveal" id="km">
-        <div class="eyebrow">Passo 1</div>
-        <h3 class="kmTit">Quantos km você quer levar?</h3>
+    <ol class="fluxo">
+      <li class="passo reveal" id="km">
+        <h3 class="passoTit"><i aria-hidden="true">1</i> Quantos km você quer levar?</h3>
+
         <div class="kmGrid" id="kmGrid" role="group" aria-label="Quantidade de quilômetros"></div>
 
         <div class="outroBox" id="outroBox" hidden>
@@ -1271,18 +746,15 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
           <div class="outroErro" id="outroErro" role="alert" hidden></div>
         </div>
 
-        <div class="impact" aria-live="polite">
-          <span>Seu impacto</span>
-          <b class="kmBig" id="impactKm">10 km</b>
-          <p id="impactTxt">Você leva o Vale do Ivaí <b>10 km</b> mais perto de Barretos.</p>
-          <div class="val" id="impactVal">R$ 140,65</div>
-          <button class="btn full" id="openPix">Quero levar esses 10 km 🚌</button>
-        </div>
+        <p class="escolhido" aria-live="polite">
+          <b id="impactKm">10 km</b>
+          <span id="impactTxt">Você leva o Vale do Ivaí <b>10 km</b> mais perto de Barretos.</span>
+        </p>
 
         <details class="avancado" id="avancado">
           <summary>Quero escolher um trecho específico da estrada</summary>
           <div class="segBox">
-            <p class="fine" style="margin:0 0 12px">
+            <p class="fine">
               De onde até onde você quer levar o ônibus. As cidades são as do trajeto real
               Paranavaí → Barretos.
             </p>
@@ -1325,210 +797,293 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 
             <div class="segWarn" id="segWarn" hidden></div>
 
-            <button type="button" class="btn full segNote" id="doOnde"
-                    style="background:#eef2f7;color:var(--ink);box-shadow:none">
+            <button type="button" class="btn neutro full" id="doOnde">
               📍 Começar de onde o ônibus está
             </button>
           </div>
         </details>
+      </li>
 
-        <p class="fine" style="margin-top:14px">
-          A equivalência em quilômetros é apenas uma forma transparente de visualizar a meta.
-          Todo valor recebido é destinado ao transporte do clube para o Campori.
-        </p>
-      </div>
-
-      <div class="card pixPanel reveal" id="pix">
-        <div class="eyebrow gold">Como contribuir</div>
-        <h3 style="font-size:1.7rem;margin-bottom:6px">Pix em cinco passos</h3>
-
-        <div class="pixSteps">
-          <div class="pixStep"><i>1</i><p>Escolha seus quilômetros.</p></div>
-          <div class="pixStep"><i>2</i><p>Copie o Pix com o valor já preenchido.</p></div>
-          <div class="pixStep"><i>3</i><p>Cole no aplicativo do seu banco, em <strong style="color:#fff">Pix Copia e Cola</strong>.</p></div>
-          <div class="pixStep"><i>4</i><p>Envie o comprovante pelo WhatsApp — o código da sua doação já vai junto.</p></div>
-          <div class="pixStep"><i>5</i><p>Após a confirmação no extrato, o ônibus avança.</p></div>
-        </div>
+      <li class="passo reveal" id="pixPasso">
+        <h3 class="passoTit"><i aria-hidden="true">2</i> Copie o Pix de <span id="impactVal">R$ 140,65</span></h3>
 
         <div id="pixReady" hidden>
-          <div class="brBox" style="margin-top:4px">
-            <span class="brLabel">Pix Copia e Cola · valor já preenchido</span>
-            <div class="codDoa"><span>Código desta doação</span><b id="codDoacao">—</b></div>
-            <div class="brCode" id="brcodeTxt" hidden></div>
-            <button class="btn green full" id="copyBrcode">
-              <span>📋 Copiar Pix de <b id="brValor">R$ 140,65</b></span>
-            </button>
-            <p class="depoisCopiar" id="depois1" hidden>✓ Pix copiado. Agora abra seu banco e escolha
-              <strong>Pix Copia e Cola</strong>. Depois, envie o comprovante aqui embaixo.</p>
-            <p class="fine on-dark" style="margin:11px 0 0">
-              Cole no app do banco em <strong>Pix › Pix Copia e Cola</strong>.
-              O valor já vai junto, não precisa digitar nada.
-            </p>
-            <p class="fine on-dark" style="margin:9px 0 0">
-              O código acima identifica a sua doação e já vai junto na mensagem do
-              WhatsApp quando você enviar o comprovante. É por ele que conseguimos
-              achar a sua contribuição no extrato e prestar contas certinho.
-            </p>
-          </div>
+          <dl class="pixDados">
+            <div><dt>Recebedor</dt><dd id="pixReceiver"></dd></div>
+            <div><dt>Código desta doação</dt><dd><b id="codDoacao">—</b></dd></div>
+          </dl>
 
-          <p class="fine on-dark" id="pixReceiver" style="text-align:center;margin:16px 0 0"></p>
-        </div>
+          <div class="brCode" id="brcodeTxt" hidden></div>
 
-        <div class="selo" aria-label="Doação transparente">
-          <strong>Doação transparente</strong>
-          <p>Pix institucional · Igreja Adventista do Sétimo Dia / União Sul Brasileira</p>
-          <ul>
-            <li>Nenhum valor passa por conta pessoal</li>
-            <li>Cada doação recebe um código individual</li>
-            <li>Contribuições são conferidas no extrato</li>
-            <li>Prestação de contas pública</li>
-          </ul>
+          <button class="btn full" id="copyBrcode">
+            <span>📋 Copiar Pix de <b id="brValor">R$ 140,65</b></span>
+          </button>
+
+          <p class="depoisCopiar" id="depois1" hidden>✓ Pix copiado. Agora abra seu banco,
+            escolha <strong>Pix Copia e Cola</strong> e confira o valor antes de confirmar.</p>
+
+          <p class="fine">
+            O valor já vai preenchido, não precisa digitar nada. O código
+            <b>VALE…</b> identifica a sua doação no extrato da conta da igreja —
+            é por ele que a diretoria acha a sua contribuição e presta contas.
+          </p>
         </div>
 
         <div id="pixPending">
-          <div class="pendingBox">
-            ⚠️ Chave PIX ainda não configurada.<br>
-            <span style="font-weight:600;opacity:.85">Preencha <code>pix.chave</code> e <code>pix.recebedor</code> em <code>dados.json</code>.</span>
-          </div>
+          <p class="aviso">
+            Chave Pix ainda não configurada.
+            <span>Preencha <code>pix.chave</code> e <code>pix.recebedor</code> em <code>dados.json</code>.</span>
+          </p>
         </div>
+      </li>
 
-        <button class="btn green full" id="sendProof" style="margin-top:14px">📲 Enviar comprovante pelo WhatsApp</button>
-        <p class="fine on-dark" style="margin-top:12px">
-          O WhatsApp abre com a mensagem já escrita. Por segurança do próprio aplicativo,
-          o anexo do comprovante é feito por você na conversa.
+      <li class="passo reveal">
+        <h3 class="passoTit"><i aria-hidden="true">3</i> Envie o comprovante</h3>
+        <p class="fine">
+          O WhatsApp abre com a mensagem já escrita, com o código da sua doação.
+          Por segurança do próprio aplicativo, o anexo do comprovante é feito por você na conversa.
         </p>
-      </div>
+        <button class="btn zap full" id="sendProof">📲 Enviar comprovante pelo WhatsApp</button>
+        <p class="fine">
+          Copiar o Pix ou abrir o WhatsApp ainda não é a doação confirmada: ela entra na
+          campanha quando a diretoria confere o valor no extrato — e aí o ônibus avança.
+        </p>
+      </li>
+    </ol>
+
+    <div class="selo" aria-label="Doação transparente">
+      <strong>Doação transparente</strong>
+      <p>Pix institucional · Igreja Adventista do Sétimo Dia / União Sul Brasileira</p>
+      <ul>
+        <li>Nenhum valor passa por conta pessoal</li>
+        <li>Cada doação recebe um código individual</li>
+        <li>Contribuições são conferidas no extrato</li>
+        <li>Prestação de contas pública</li>
+      </ul>
     </div>
+
+    <p class="fine centro">
+      A equivalência em quilômetros é apenas uma forma transparente de visualizar a meta.
+      Todo valor recebido é destinado ao transporte do clube para o Campori.
+    </p>
   </div>
 </section>
 
-<!-- ================= MARCOS ================= -->
-<section>
+<!-- ================= O CLUBE E AS VOZES ================= -->
+<section class="vozes" id="clube">
   <div class="wrap">
     <div class="head reveal">
-      <div class="eyebrow">Marcos da estrada</div>
-      <h2>Cada trecho vira uma conquista.</h2>
-    </div>
-    <div class="miles reveal">
-      <div class="mile" data-mile="275"><div class="ic">🏁</div><h3>275 km</h3><p>Primeiro quarto da missão.</p><span class="tag">A desbloquear</span></div>
-      <div class="mile" data-mile="551"><div class="ic">🏕️</div><h3>551 km</h3><p>Chegada simbólica a Barretos.</p><span class="tag">A desbloquear</span></div>
-      <div class="mile" data-mile="826"><div class="ic">🔥</div><h3>826 km</h3><p>Três quartos da jornada.</p><span class="tag">A desbloquear</span></div>
-      <div class="mile" data-mile="1102"><div class="ic">🎉</div><h3>1.102 km</h3><p>Ida e volta garantidas.</p><span class="tag">A desbloquear</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= TRANSPARENCIA ================= -->
-<section id="transparencia" style="background:#eaf0f6">
-  <div class="wrap">
-    <div class="head reveal">
-      <div class="eyebrow">Transparência</div>
-      <h2>Meta clara. Progresso visível.</h2>
-      <p class="lead">Quem contribui merece saber exatamente onde a campanha está.</p>
-    </div>
-    <div class="tGrid reveal">
-      <div class="card">
-        <div class="tLine"><span>Meta de transporte</span><b id="tGoal">R$ 15.500</b></div>
-        <div class="tLine"><span>Total recebido</span><b id="tRaised" class="dep">R$</b></div>
-        <div class="tLine"><span>Falta arrecadar</span><b id="tLeft" class="dep">R$</b></div>
-        <div class="tLine"><span>Estrada financiada</span><b id="tKm" class="dep">km</b></div>
-        <div class="tLine"><span>Contribuições</span><b id="tCount" class="dep">—</b></div>
-        <div class="tLine"><span>Última atualização</span><b id="tUpdate" class="dep">—</b></div>
-      </div>
-      <div class="card contas" style="grid-column:1/-1">
-        <div class="eyebrow" style="color:#9a6a13">Prestação de contas</div>
-        <h3 style="font-size:1.4rem;margin-bottom:6px">Para onde o dinheiro foi</h3>
-        <p class="fine" style="margin:0 0 16px">
-          Cada saída do caixa da campanha aparece aqui, com data e valor.
-        </p>
-        <div id="despesasBox"></div>
-      </div>
-
-      <div class="card trust">
-        <div class="selo claro" style="margin:0 0 20px">
-          <strong style="color:#9a6a13">Doação transparente</strong>
-          <p>Pix institucional · Igreja Adventista do Sétimo Dia / União Sul Brasileira</p>
-          <ul>
-            <li>Nenhum valor passa por conta pessoal</li>
-            <li>Cada doação recebe um código individual</li>
-            <li>Contribuições são conferidas no extrato</li>
-            <li>Prestação de contas pública</li>
-          </ul>
-        </div>
-        <div class="eyebrow" style="color:#9a6a13">Prestação de contas</div>
-        <h3 style="font-size:1.4rem;margin-bottom:12px">Para onde vai o dinheiro</h3>
-        <p style="color:#4a3c1e;font-size:.95rem;margin-bottom:14px">
-          As contribuições vão para a <strong>conta oficial da Igreja Adventista do Sétimo Dia</strong>
-          — União Sul Brasileira. Nenhum valor passa por conta pessoal. O nome do
-          recebedor aparece no seu app na hora de confirmar o Pix.
-        </p>
-        <p style="color:#4a3c1e;font-size:.95rem;margin-bottom:14px">
-          Por ser uma conta institucional, que também recebe outros valores da igreja,
-          <strong>cada doação da campanha recebe um código próprio</strong> (começando com
-          <code>VALE</code>). É esse código que identifica a entrada e permite prestar
-          contas só do que é do Campori.
-        </p>
-        <h3 style="font-size:1.4rem;margin:18px 0 12px">O que será publicado aqui</h3>
-        <ul style="padding-left:19px;margin:0">
-          <li>Orçamento e contrato do transporte</li>
-          <li>Atualização periódica do total arrecadado</li>
-          <li>Comprovantes das despesas da viagem</li>
-          <li>Contato de um responsável pelo clube</li>
-          <li>Prestação de contas final após o Campori</li>
-        </ul>
-        <p class="fine" style="color:#7a6428;margin:14px 0 0">
-          Sem publicar dados pessoais, documentos com CPF ou informações bancárias sensíveis.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= DIRETORIA ================= -->
-<section id="diretoria">
-  <div class="wrap">
-    <div class="head reveal">
-      <div class="eyebrow">Quem está por trás</div>
-      <h2>A diretoria do clube.</h2>
-      <p class="lead">
-        São eles que organizam a viagem e respondem pela campanha.
-        Qualquer dúvida, é só chamar.
+      <p class="eyebrow gold">O clube</p>
+      <h2>Não é sobre pagar um ônibus.</h2>
+      <p class="lead on-dark">
+        Um clube de Paranavaí vai atravessar 551 km para se juntar a Desbravadores de oito
+        países. Nossos jovens vão levar o nome da nossa cidade e voltar com histórias que
+        ficam para a vida inteira. Nas palavras deles:
       </p>
     </div>
 
-    <div class="dirGrid reveal">
-      <div class="dirCard">
-        <span class="dirCargo">Diretor</span>
-        <b>Eder Dias</b>
-        <a class="dirZap" href="https://wa.me/5544997295175" target="_blank" rel="noopener">Falar no WhatsApp ↗</a>
+    <blockquote class="vozDestaque reveal">
+      <p>Eu gosto quando a gente ora junto no clube. Em Barretos vai ter um monte de
+        desbravador orando na mesma hora, eu quero muito ver isso.</p>
+      <footer><i aria-hidden="true">L</i><span><b>Lorenzo</b>Desbravador · Vale do Ivaí</span></footer>
+    </blockquote>
+
+    <div class="quotes reveal">
+      <article class="quote">
+        <blockquote>Meu pai fala que Deus cuida da gente na viagem. Eu quero ir pra Barretos e voltar contando que deu tudo certo.</blockquote>
+        <footer><i aria-hidden="true">J</i><span><b>João Vitor</b>Desbravador</span></footer>
+      </article>
+      <article class="quote">
+        <blockquote>No Campori a gente estuda a Bíblia junto com gente de tudo quanto é lugar. Acho que isso faz a minha fé ficar maior.</blockquote>
+        <footer><i aria-hidden="true">M</i><span><b>Miguel</b>Desbravador</span></footer>
+      </article>
+      <article class="quote">
+        <blockquote>Quero ir pra Barretos pra ficar mais perto de Deus e do meu clube ao mesmo tempo. Acho que é isso que faz o Campori ser diferente.</blockquote>
+        <footer><i aria-hidden="true">N</i><span><b>Nicolas</b>Desbravador</span></footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PERCURSO ================= -->
+<section id="jornada" class="claro">
+  <div class="wrap estreito">
+    <div class="head reveal">
+      <p class="eyebrow">O percurso</p>
+      <h2>Você não doa só dinheiro.<br>Você <span class="realce">move o ônibus.</span></h2>
+      <p class="lead">
+        São 551 km de Paranavaí até Barretos, 1.102 km com a volta. O ônibus abaixo
+        marca até onde a arrecadação já garantiu a estrada — não é a posição de um
+        veículo de verdade.
+      </p>
+    </div>
+
+    <div class="rotaCard reveal" aria-labelledby="hrTitulo">
+      <div class="hrTop">
+        <span class="t" id="hrTitulo">A estrada garantida até agora</span>
+        <span class="legBadge" id="legBadge">Ida</span>
       </div>
-      <div class="dirCard">
-        <span class="dirCargo">Diretor associado</span>
-        <b>André Lima</b>
+
+      <div class="vroute" id="vroute">
+        <div class="vtrack"></div>
+        <div class="vfill" id="vfill"></div>
+        <div class="vbus" id="vbus" aria-hidden="true">🚌</div>
       </div>
-      <div class="dirCard">
-        <span class="dirCargo">Capelão</span>
-        <b>Guilherme Mestriner</b>
-        <a class="dirZap" href="https://wa.me/5544984033799" target="_blank" rel="noopener">Falar no WhatsApp ↗</a>
-        <small class="dirNota">É para este número que vão os comprovantes.</small>
+
+      <p class="routeStatus" id="routeStatus">Atualizando a posição do ônibus…</p>
+
+      <div class="hrOut" id="hrOut" role="status" aria-live="polite">
+        <b id="hrTxt">Atualizando a posição do ônibus…</b>
+        <small id="hrSub">Toque em uma cidade para ver quanto falta para chegar lá.</small>
+        <button type="button" class="linkBtn" id="hrGo" hidden>Adotar este trecho →</button>
       </div>
-      <div class="dirCard">
-        <span class="dirCargo">Tesoureira</span>
-        <b>Camila Nogueira</b>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DESTINO ================= -->
+<section class="dark" id="destino">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow gold">O destino</p>
+      <h2>É isso que espera por eles.</h2>
+      <p class="lead on-dark">
+        O VI Campori Sul-Americano, com o tema “Sempre Desbravador”, acontece no Parque do
+        Peão, em Barretos (SP): <strong>Alpha, de 5 a 10 de janeiro de 2027</strong>, e Omega,
+        de 12 a 17. As fotos são de Camporis anteriores, de outros clubes.
+      </p>
+    </div>
+
+    <div class="railWrap reveal">
+      <div class="rail" id="rail" tabindex="0" role="group" aria-label="Fotos de Camporis anteriores em Barretos">
+        <figure>
+          <img src="assets/fotos/campori-barretos-1.jpg" loading="lazy" decoding="async" width="820" height="461"
+               alt="Multidão de Desbravadores reunidos durante um Campori no Parque do Peão, em Barretos">
+          <figcaption>Campori em Barretos · foto: Notícias Adventistas</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/fotos/campori-barretos-2.jpg" loading="lazy" decoding="async" width="820" height="461"
+               alt="Vista do Parque do Peão de Barretos durante um Campori de Desbravadores">
+          <figcaption>Parque do Peão durante Campori · foto: Portal Bueno</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/fotos/campori-barretos-3.jpg" loading="lazy" decoding="async" width="800" height="600"
+               alt="Milhares de barracas montadas por clubes de Desbravadores acampados em Barretos">
+          <figcaption>Milhares de Desbravadores acampados · foto: Guaíra News</figcaption>
+        </figure>
       </div>
-      <div class="dirCard">
-        <span class="dirCargo">Secretária</span>
-        <b>Isabelly Lima</b>
+      <div class="railNav">
+        <button type="button" class="railBtn" id="railAnt" aria-label="Foto anterior">‹</button>
+        <span class="railDica" id="railDica">1 de 3</span>
+        <button type="button" class="railBtn" id="railProx" aria-label="Próxima foto">›</button>
       </div>
+    </div>
+
+    <div class="facts reveal">
+      <div class="fact"><b>+120 mil</b><span>participantes nas duas edições</span></div>
+      <div class="fact"><b>8 países</b><span>da América do Sul</span></div>
+      <div class="fact"><b>6ª</b><span>edição do Campori Sul-Americano</span></div>
+      <div class="fact"><b>10–15</b><span>anos, além da liderança</span></div>
+    </div>
+
+    <p class="fine on-dark">
+      Dados divulgados pela organização oficial do evento.
+      <a href="https://camporidsa.org/pt/" target="_blank" rel="noopener">Conferir no site oficial do Campori ↗</a>
+    </p>
+
+    <div class="vidGrid reveal">
+      <div>
+        <div class="vidFrame">
+          <button type="button" class="ytCapa" data-yt="ZBojPLtE4eY" data-titulo="Sempre Desbravador, tema do Campori Sul-Americano 2027"
+                  aria-label="Assistir: Sempre Desbravador, tema do Campori Sul-Americano 2027">
+            <img src="https://i.ytimg.com/vi/ZBojPLtE4eY/hqdefault.jpg" alt="" loading="lazy" decoding="async"
+                 onerror="this.style.display='none'">
+            <span class="ytPlay" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="fine on-dark">“Sempre Desbravador”, o tema do Campori 2027.</p>
+      </div>
+      <div>
+        <div class="vidFrame">
+          <button type="button" class="ytCapa" data-yt="-OGYc9zg9zE" data-titulo="Vídeo sobre o Campori de Desbravadores"
+                  aria-label="Assistir: vídeo sobre o Campori de Desbravadores">
+            <img src="https://i.ytimg.com/vi/-OGYc9zg9zE/hqdefault.jpg" alt="" loading="lazy" decoding="async"
+                 onerror="this.style.display='none'">
+            <span class="ytPlay" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="fine on-dark">O tamanho da experiência que espera nossos Desbravadores.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRANSPARENCIA + RESPONSAVEIS ================= -->
+<section id="transparencia" class="claro">
+  <div class="wrap estreito">
+    <div class="head reveal">
+      <p class="eyebrow">Transparência</p>
+      <h2>Meta clara. Progresso visível.</h2>
+      <p class="lead">Quem contribui merece saber exatamente onde a campanha está.</p>
+    </div>
+
+    <dl class="tLista reveal">
+      <div class="tLine"><dt>Meta de transporte</dt><dd id="tGoal">R$ 15.500</dd></div>
+      <div class="tLine"><dt>Total recebido</dt><dd id="tRaised" class="dep">R$</dd></div>
+      <div class="tLine"><dt>Falta arrecadar</dt><dd id="tLeft" class="dep">R$</dd></div>
+      <div class="tLine"><dt>Estrada financiada</dt><dd id="tKm" class="dep">km</dd></div>
+      <div class="tLine"><dt>Contribuições conferidas</dt><dd id="tCount" class="dep">—</dd></div>
+      <div class="tLine"><dt>Última atualização</dt><dd id="tUpdate" class="dep">—</dd></div>
+    </dl>
+
+    <div class="bloco reveal">
+      <h3>Para onde o dinheiro foi</h3>
+      <div id="despesasBox"></div>
+    </div>
+
+    <div class="bloco reveal">
+      <h3>Para onde vai o dinheiro</h3>
+      <p>
+        As contribuições vão para a <strong>conta oficial da Igreja Adventista do Sétimo Dia</strong>
+        — União Sul Brasileira. Nenhum valor passa por conta pessoal, e o nome do recebedor
+        aparece no seu aplicativo na hora de confirmar o Pix.
+      </p>
+      <p>
+        Por ser uma conta institucional, que também recebe outros valores da igreja,
+        <strong>cada doação da campanha recebe um código próprio</strong>, começando com
+        <code>VALE</code>. É esse código que identifica a entrada e permite prestar contas
+        só do que é do Campori.
+      </p>
+      <p><strong>O que será publicado aqui:</strong> orçamento e contrato do transporte,
+        atualização periódica do total arrecadado, comprovantes das despesas da viagem e a
+        prestação de contas final, depois do Campori. Sem publicar dados pessoais, documentos
+        com CPF ou informações bancárias sensíveis.</p>
+    </div>
+
+    <div class="bloco reveal" id="diretoria">
+      <h3>Quem responde pela campanha</h3>
+      <ul class="dirLista">
+        <li class="dirDestaque">
+          <div><span class="dirCargo">Capelão · recebe os comprovantes</span><b>Guilherme Mestriner</b></div>
+          <a class="btn zap" href="https://wa.me/5544984033799" target="_blank" rel="noopener">WhatsApp ↗</a>
+        </li>
+        <li>
+          <div><span class="dirCargo">Diretor</span><b>Eder Dias</b></div>
+          <a class="linkBtn" href="https://wa.me/5544997295175" target="_blank" rel="noopener">WhatsApp ↗</a>
+        </li>
+        <li><div><span class="dirCargo">Diretor associado</span><b>André Lima</b></div></li>
+        <li><div><span class="dirCargo">Tesoureira</span><b>Camila Nogueira</b></div></li>
+        <li><div><span class="dirCargo">Secretária</span><b>Isabelly Lima</b></div></li>
+      </ul>
     </div>
   </div>
 </section>
 
 <!-- ================= MURAL ================= -->
 <section id="secMural" hidden>
-  <div class="wrap">
+  <div class="wrap estreito">
     <div class="head reveal">
-      <div class="eyebrow">Mural</div>
+      <p class="eyebrow">Mural</p>
       <h2>Quem está colocando o ônibus na estrada.</h2>
       <p class="lead">Quem contribui escolhe aparecer aqui ou permanecer anônimo.</p>
     </div>
@@ -1536,17 +1091,20 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
   </div>
 </section>
 
-<!-- ================= CERTIFICADO ================= -->
-<section style="background:#eaf0f6">
-  <div class="wrap">
+<!-- ================= CERTIFICADO + COMPARTILHAR ================= -->
+<section id="compartilhar" class="claro">
+  <div class="wrap estreito">
     <div class="head reveal">
-      <div class="eyebrow">Depois de ajudar</div>
+      <p class="eyebrow">Depois de ajudar</p>
       <h2>Leve sua parte da estrada com você.</h2>
-      <p class="lead">Gere uma arte para compartilhar no WhatsApp ou nos Stories. O valor doado não aparece — só os quilômetros.</p>
+      <p class="lead">
+        Gere uma arte para compartilhar no WhatsApp ou nos Stories. O valor doado não
+        aparece — só os quilômetros.
+      </p>
     </div>
 
     <div class="certGrid reveal">
-      <div class="card">
+      <div class="certForm">
         <label class="fieldLbl" for="certName">Seu nome ou da sua família</label>
         <input class="input" id="certName" placeholder="Ex.: Família Silva" maxlength="30" autocomplete="name">
 
@@ -1559,38 +1117,30 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
           <option value="story">Stories — 1080 × 1920</option>
         </select>
 
-        <button class="btn dark full" id="makeCert" style="margin-top:18px">⬇️ Gerar e compartilhar certificado</button>
-        <p class="fine" style="margin-top:12px">
-          No celular abre o menu de compartilhamento. No computador, a imagem é baixada.
-        </p>
+        <button class="btn escuro full" id="makeCert">⬇️ Gerar e compartilhar certificado</button>
+        <p class="fine">No celular abre o menu de compartilhamento. No computador, a imagem é baixada.</p>
       </div>
 
       <div class="certPrev">
         <img src="assets/logo-vale-do-ivai.jpg" alt="">
         <div class="t">Eu ajudei essa missão</div>
         <div class="n" id="cName">SEU NOME</div>
-        <div style="font-size:.96rem;color:#b6cade">levou o Clube Vale do Ivaí</div>
+        <div class="sub">levou o Clube Vale do Ivaí</div>
         <div class="k" id="cKm">10 KM</div>
-        <div style="font-size:.96rem;color:#b6cade">mais perto do Campori 2027</div>
+        <div class="sub">mais perto do Campori 2027</div>
         <div class="s">Paranavaí → Barretos</div>
         <div class="h">#EuLeveiOVale</div>
       </div>
     </div>
     <canvas id="certCanvas" hidden></canvas>
-  </div>
-</section>
 
-<!-- ================= COMPARTILHAR ================= -->
-<section>
-  <div class="wrap">
-    <div class="card share reveal">
-      <div class="eyebrow" style="color:#ffd0d4">Efeito corrente</div>
-      <h2>Uma pessoa leva 1 km. Outra leva 50.<br>A estrada vai ficando menor.</h2>
+    <div class="share reveal">
+      <h3>Uma pessoa leva 1 km. Outra leva 50. A estrada vai ficando menor.</h3>
       <p>Se você não puder contribuir agora, compartilhar já ajuda a mover o ônibus.</p>
-      <div style="display:flex;flex-wrap:wrap;gap:11px;justify-content:center">
-            <button class="btn green" id="shareBtn">Compartilhar no WhatsApp</button>
-            <button class="btn ghost" id="shareOutros">Outros apps</button>
-          </div>
+      <div class="shareBtns">
+        <button class="btn zap" id="shareBtn">Compartilhar no WhatsApp</button>
+        <button class="btn neutro" id="shareOutros">Outros apps</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1622,59 +1172,17 @@ body>footer a{color:var(--gold-soft);text-decoration:underline;text-underline-of
 <!-- Só no celular, só depois do topo, e some quando o seletor, o Pix ou o
      teclado estão na tela: nunca cobre o que a pessoa está usando. -->
 <div class="sticky" id="sticky" aria-hidden="true">
-  <div class="info">
-    <b>🚌 <span id="stkKm" class="dep">km</span> <span style="color:var(--muted);font-weight:800">/ 1.102 km</span></b>
-    <small id="stkLeft">garantidos até agora</small>
-  </div>
-  <a class="btn" href="#km" data-rolar="km" tabindex="-1">Ajudar</a>
-</div>
-
-<!-- modal PIX -->
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-  <div class="modalCard">
-    <div class="modalTop">
-      <div>
-        <div class="eyebrow">Passo 2 · Pix</div>
-        <h3 id="mTitle">Você escolheu <span id="mKm">10 km</span></h3>
-      </div>
-      <button class="xBtn" id="closeModal" aria-label="Fechar">×</button>
-    </div>
-    <p style="color:var(--muted)">Valor correspondente: <b style="color:var(--ink);font-size:1.3rem" id="mVal">R$ 140,65</b></p>
-    <div id="mPixReady" hidden>
-      <div class="brBox claro" style="margin-top:4px">
-        <span class="brLabel">Pix Copia e Cola · valor já preenchido</span>
-        <div class="codDoa"><span>Código desta doação</span><b id="mCodDoacao">—</b></div>
-        <div class="brCode" id="mBrcode" hidden></div>
-        <button class="btn green full" id="mCopyBrcode">
-          <span>📋 Copiar Pix de <b id="mBrValor">R$ 140,65</b></span>
-        </button>
-      </div>
-      <p class="depoisCopiar" id="depois2" hidden>✓ Pix copiado. Agora abra seu banco e escolha
-        <strong>Pix Copia e Cola</strong>. O valor já vai preenchido.</p>
-      <ol class="passos" id="mPassos">
-        <li class="feito">Escolher os quilômetros</li>
-        <li>Copiar o Pix com o valor</li>
-        <li>Colar no banco, em Pix Copia e Cola</li>
-        <li>Enviar o comprovante pelo WhatsApp</li>
-        <li>Após a confirmação, o ônibus avança</li>
-      </ol>
-    </div>
-    <div id="mPixPending">
-      <div class="pendingBox" style="background:#fff6e5;border-color:#f0dcb6;color:#8a5f10">
-        ⚠️ A chave PIX oficial ainda não foi configurada nesta campanha.
-      </div>
-    </div>
-    <button class="btn green full" id="mProof" style="margin-top:12px">📲 Enviar comprovante pelo WhatsApp</button>
-    <p class="fine" style="margin-top:14px">Este site não processa pagamentos. A transferência acontece no seu próprio banco.</p>
-  </div>
-</div>
-
-<!-- Música de fundo. Só aparece se dados.json tiver musica.arquivo. -->
-<button type="button" class="musica" id="musicaBtn" hidden aria-pressed="false">
-  <i aria-hidden="true" id="musicaIc">▶</i>
-  <span><b id="musicaTit">Música</b><small id="musicaSub">toque para ouvir</small></span>
+  <button type="button" class="musica" hidden aria-pressed="false">
+  <i aria-hidden="true">▶</i>
+  <span><b class="musicaTit">Música</b><small class="musicaSub">tocar</small></span>
   <span class="eq" aria-hidden="true"><u></u><u></u><u></u></span>
 </button>
+  <div class="info">
+    <b>🚌 <span id="stkKm" class="dep">km</span> <span class="de">/ 1.102 km</span></b>
+    <small>garantidos até agora</small>
+  </div>
+  <a class="btn" href="#km" data-rolar="km" id="stkCta" tabindex="-1">Ajudar</a>
+</div>
 
 <div class="portao" id="portao" hidden role="dialog" aria-modal="true" aria-labelledby="portaoTit">
   <div class="portaoCard">
@@ -1954,52 +1462,14 @@ function aplicarTotal(){
   if(!trechoTocado) prepararTrecho();
 }
 
-/* ---------------------- a estrada ---------------------- */
-/* O trajeto é um circuito fechado: a ida ocupa a faixa de cima, o retorno a
-   de baixo. A posição do ônibus vem de getPointAtLength() e o ângulo vem da
-   tangente entre dois pontos vizinhos — por isso o ônibus é matematicamente
-   incapaz de andar de ré, em qualquer ponto da estrada.                     */
+/* ---------------------- situação da estrada ----------------------
+   A pista oval saiu: duas ilustrações da mesma viagem competiam entre si, e
+   quem comunica melhor é o trajeto com as cidades. Ficou o texto que traduz
+   a posição em palavras — e ele deixa claro que o ônibus mede arrecadação,
+   não a localização de um veículo. */
 function drawRoute(){
-  var base = $("roadBase"), done = $("roadDone"), bus = $("bus");
-  var L = base.getTotalLength();
-  var frac = Math.min(1, Math.max(0, kmFinanciados / KM_TOTAL));
-  var at = L * frac;
-
-  done.style.strokeDasharray = L + " " + L;
-  done.style.strokeDashoffset = L;
-
-  var p  = base.getPointAtLength(at);
-  var p2 = base.getPointAtLength(Math.min(L, at + 1.2));
-  var p0 = base.getPointAtLength(Math.max(0, at - 1.2));
-  var ang = Math.atan2(p2.y - p0.y, p2.x - p0.x) * 180 / Math.PI;
-
-  // O ônibus é desenhado de perfil, então ele nunca gira de cabeça para baixo
-  // nem fica na vertical nas curvas: espelhamos quando a viagem é para a
-  // esquerda e limitamos a inclinação. O sentido vem sempre da tangente da
-  // estrada, então o ônibus nunca aponta para trás — em nenhum ponto da rota.
-  var paraEsquerda = Math.abs(ang) > 90;
-  var inclin = paraEsquerda ? (ang > 0 ? ang - 180 : ang + 180) : ang;
-  inclin = Math.max(-18, Math.min(18, inclin));
-
-  var t = "translate(" + p.x.toFixed(1) + "," + p.y.toFixed(1) + ")"
-        + " rotate(" + inclin.toFixed(1) + ")"
-        + (paraEsquerda ? " scale(-1,1)" : "");
-
-  if(reduced){
-    bus.style.transition = "none";
-    done.style.transition = "none";
-  }else{
-    // estado inicial + reflow forçado: o navegador registra o ponto de partida
-    // e anima até o destino pela transição CSS. Não depende de requestAnimationFrame,
-    // que não dispara com a aba em segundo plano — o ônibus nunca fica parado na saída.
-    bus.setAttribute("transform","translate(90,230) rotate(-90)");
-    base.getBoundingClientRect();
-  }
-  bus.setAttribute("transform", t);
-  done.style.strokeDashoffset = L - at;
-
-  // situação atual, em texto
   var st = $("routeStatus"), ida = KM_TOTAL / 2, msg, win = false;
+  if(!st) return;
   if(!temNumero()){
     msg = estado === "carregando" ? "Atualizando a posição do ônibus…"
                                   : "Não deu para atualizar a posição do ônibus agora.";
@@ -2019,10 +1489,6 @@ function drawRoute(){
   }
   st.textContent = msg;
   st.classList.toggle("win", win);
-
-  setText("hudKm", ouAguarde(num(kmFinanciados) + " km"));
-  setText("hudLeg", ouAguarde(kmFinanciados >= ida ? "Volta" : "Ida"));
-  setText("hudPct", ouAguarde(pct.toFixed(0) + "%"));
 }
 
 /* ---------------------- números da campanha ---------------------- */
@@ -2069,18 +1535,12 @@ function renderNumbers(){
   }
 
   setText("stkKm", ouAguarde(num(kmFinanciados)));
+  setText("pFaltam", ouAguarde("Faltam " + moneyShort(falta) + " · " + km(restaKm)));
   renderPulso();
 
-  if(!temNumero()) return;   // barras e marcos só andam com número de verdade
-
-  setTimeout(function(){ $("sFill").style.width = pct + "%"; }, reduced ? 0 : 340);
-
-  document.querySelectorAll(".mile").forEach(function(el){
-    if(kmFinanciados >= Number(el.dataset.mile)){
-      el.classList.add("done");
-      el.querySelector(".tag").textContent = "✓ Desbloqueado";
-    }
-  });
+  if(!temNumero()) return;   // a barra só anda com número de verdade
+  var barra = $("sFill");
+  if(barra) setTimeout(function(){ barra.style.width = pct + "%"; }, reduced ? 0 : 340);
 }
 
 /* O pulso do topo: os três números que respondem "a campanha está andando?".
@@ -2211,20 +1671,19 @@ function lerOutro(){
 }
 
 function atualizarImpacto(){
-  var botoesPix = ["openPix", "copyBrcode", "mCopyBrcode", "sendProof", "mProof"];
+  var botoesPix = ["copyBrcode", "sendProof"];
   esconderCopiado();
   if(!kmValido){
     setText("impactKm", "— km");
     $("impactTxt").textContent = "Digite quantos quilômetros você quer levar.";
     setText("impactVal", "—");
-    setText("openPix", "Quero levar esses km 🚌");
     botoesPix.forEach(function(id){ if($(id)) $(id).disabled = true; });
     return;
   }
   botoesPix.forEach(function(id){
     if(!$(id)) return;
     // WhatsApp só volta se estiver configurado
-    $(id).disabled = (id === "sendProof" || id === "mProof") ? !CONFIG.whatsapp : false;
+    $(id).disabled = (id === "sendProof") ? !CONFIG.whatsapp : false;
   });
 
   var v = money(escolhido * PRECO_KM), k = num(escolhido);
@@ -2233,9 +1692,6 @@ function atualizarImpacto(){
     ? "Você leva o ônibus de <b>" + esc(trechoRotulo) + "</b> — " + k + " km da estrada."
     : "Você leva o Vale do Ivaí <b>" + k + " km</b> mais perto de Barretos.";
   setText("impactVal", v);
-  setText("openPix", escolhido === 1 ? "Quero levar esse 1 km 🚌" : "Quero levar esses " + k + " km 🚌");
-  setText("mKm", k + " km");
-  setText("mVal", v);
   $("certKm").value = escolhido;
   updateCert();
   atualizarPixCodigo();
@@ -2525,37 +1981,29 @@ function atualizarPixCodigo(){
   var valor  = escolhido * PRECO_KM;
   var codigo = pixCopiaCola(valor);
   var rotulo = money(valor);
-  ["brcodeTxt", "mBrcode"].forEach(function(id){ if($(id)) $(id).textContent = codigo; });
-  ["copyBrcode", "mCopyBrcode"].forEach(function(id){
-    if($(id)) $(id).innerHTML = "<span>📋 Copiar Pix de <b>" + esc(rotulo) + "</b></span>";
-  });
-  ["codDoacao", "mCodDoacao"].forEach(function(id){ if($(id)) $(id).textContent = CODIGO_DOACAO; });
+  setText("brcodeTxt", codigo);
+  if($("copyBrcode")) $("copyBrcode").innerHTML = "<span>📋 Copiar Pix de <b>" + esc(rotulo) + "</b></span>";
+  setText("codDoacao", CODIGO_DOACAO);
 }
 
 /* Depois de copiar, o próximo passo tem que saltar aos olhos: a pessoa vai
    ao banco e volta — e ao voltar precisa ver "já copiei, falta o comprovante".
    Por isso o estado fica na tela até o valor mudar. */
 function marcarCopiado(){
-  ["copyBrcode", "mCopyBrcode"].forEach(function(id){
-    if($(id)) $(id).innerHTML = "<span>✓ Pix copiado · copiar de novo</span>";
-  });
-  ["depois1", "depois2"].forEach(function(id){ if($(id)) $(id).hidden = false; });
-  ["sendProof", "mProof"].forEach(function(id){
-    var b = $(id);
-    if(!b || b.disabled) return;
-    b.classList.remove("destaque");
-    void b.offsetWidth;            // reinicia a animação se copiar de novo
-    b.classList.add("destaque");
-  });
-  var itens = document.querySelectorAll("#mPassos li");
-  if(itens[1]) itens[1].classList.add("feito");
+  var b = $("copyBrcode");
+  if(b) b.innerHTML = "<span>✓ Pix copiado · copiar de novo</span>";
+  if($("depois1")) $("depois1").hidden = false;
+  var zap = $("sendProof");
+  if(zap && !zap.disabled){
+    zap.classList.remove("destaque");
+    void zap.offsetWidth;            // reinicia a animação se copiar de novo
+    zap.classList.add("destaque");
+  }
 }
 
 function esconderCopiado(){
-  ["depois1", "depois2"].forEach(function(id){ if($(id)) $(id).hidden = true; });
-  ["sendProof", "mProof"].forEach(function(id){ if($(id)) $(id).classList.remove("destaque"); });
-  var itens = document.querySelectorAll("#mPassos li");
-  if(itens[1]) itens[1].classList.remove("feito");
+  if($("depois1")) $("depois1").hidden = true;
+  if($("sendProof")) $("sendProof").classList.remove("destaque");
 }
 
 /* ---------------------- PIX ---------------------- */
@@ -2563,20 +2011,12 @@ function renderPix(){
   var ok = !!(CONFIG.pix && CONFIG.pix.chave);
   $("pixReady").hidden = !ok;
   $("pixPending").hidden = ok;
-  $("mPixReady").hidden = !ok;
-  $("mPixPending").hidden = ok;
 
-  if(ok){
-    setText("pixReceiver", CONFIG.pix.recebedor ? "Recebedor: " + CONFIG.pix.recebedor : "");
-  }
+  if(ok) setText("pixReceiver", CONFIG.pix.recebedor || "");
 
   var hasWpp = !!CONFIG.whatsapp;
   $("sendProof").disabled = !hasWpp;
-  $("mProof").disabled = !hasWpp;
-  if(!hasWpp){
-    $("sendProof").textContent = "WhatsApp ainda não configurado";
-    $("mProof").textContent = "WhatsApp ainda não configurado";
-  }
+  if(!hasWpp) $("sendProof").textContent = "WhatsApp ainda não configurado";
 }
 
 /* `depois`, quando vem, assume o botão (caso do Pix, que fica marcado);
@@ -2674,8 +2114,7 @@ function renderContagem(){
     rel.hidden = true;
     fimTxt.hidden = false;
     fimTxt.textContent = "A viagem começou!";
-    dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>"
-                  + "Obrigado a quem levou o ônibus até aqui.";
+    dir.textContent = " " + dataPorExtenso(alvo) + " · obrigado a quem levou o ônibus até aqui.";
     pararContagem();
     return;
   }
@@ -2688,15 +2127,8 @@ function renderContagem(){
 
   // só escreve quando o valor muda: o timer bate de segundo em segundo e
   // 59 de cada 60 batidas não mudariam nada na tela
-  porTexto($("cDias"),  String(dias));
-  porTexto($("cHoras"), doisDig(horas % 24));
-  porTexto($("cMin"),   doisDig(min % 60));
-
-  var faltaBRL = Math.max(0, CONFIG.meta - CONFIG.arrecadado);
-  dir.innerHTML = "<b>" + esc(dataPorExtenso(alvo)) + "</b>"
-    + (!temNumero() ? "" : faltaBRL > 0
-        ? "faltam " + moneyShort(faltaBRL) + " para garantir a viagem"
-        : "meta batida — o ônibus está pago");
+  porTexto($("cDias"), String(dias));
+  porTexto(dir, " · " + dataPorExtenso(alvo));
 }
 
 function doisDig(n){ return (n < 10 ? "0" : "") + n; }
@@ -2923,15 +2355,67 @@ function initVideos(){
 /* A barra fixa aparece só quando ajuda: depois do topo (lá o botão grande já
    está na tela), e some sobre o seletor e o Pix (a pessoa já chegou), com o
    Pix aberto e com o teclado na tela — onde ela cobriria o campo. */
+/* A galeria rola de lado. Sem seta e sem contador, muita gente nem percebe
+   que existe mais de uma foto — ainda mais no computador, sem o gesto. */
+function initRail(){
+  var rail = $("rail"), ant = $("railAnt"), prox = $("railProx"), dica = $("railDica");
+  if(!rail || !ant) return;
+  var fotos = rail.querySelectorAll("figure");
+  var atual = function(){
+    var l = rail.scrollLeft, melhor = 0, d = Infinity;
+    fotos.forEach(function(f, i){
+      var dd = Math.abs(f.offsetLeft - rail.offsetLeft - l);
+      if(dd < d){ d = dd; melhor = i; }
+    });
+    return melhor;
+  };
+  // Numa tela larga cabem quase todas as fotos: a última não chega a encostar
+  // na esquerda, então quem manda no estado das setas é o fim da rolagem, e
+  // não a posição teórica da foto — senão "próxima" fica ligada sem ter aonde ir.
+  var fim = function(){ return rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 2; };
+  var pintar = function(){
+    var i = fim() ? fotos.length - 1 : atual();
+    dica.textContent = (i + 1) + " de " + fotos.length;
+    ant.disabled = rail.scrollLeft <= 2;
+    prox.disabled = fim();
+  };
+  // Rola por "página" em vez de mirar a foto seguinte: numa tela larga, a foto
+  // seguinte já está visível e mirar nela não move nada — o botão ficaria morto.
+  var ir = function(passo){
+    rail.scrollBy({ left: passo * Math.max(240, rail.clientWidth * .85), behavior: reduced ? "auto" : "smooth" });
+    setTimeout(pintar, 520);   // se a rolagem travar no fim, o evento não vem
+  };
+  ant.addEventListener("click", function(){ ir(-1); });
+  prox.addEventListener("click", function(){ ir(1); });
+  rail.addEventListener("scroll", function(){
+    clearTimeout(rail._t);
+    rail._t = setTimeout(pintar, 90);
+  });
+  pintar();
+}
+
+/* rolagem suave até uma etapa, respeitando quem pediu menos animação */
+function rolarPara(id){
+  var el = $(id);
+  if(el) el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+}
+
 function initSticky(){
   var s = $("sticky"), hero = document.querySelector(".hero"), adotar = $("adotar");
   if(!("IntersectionObserver" in window)) return;
   var veHero = true, veAdotar = false, digitando = false;
   var atualizar = function(){
-    var mostra = !veHero && !veAdotar && !digitando && !document.body.classList.contains("modalAberto");
+    // a barra é o lugar fixo do controle de música e do progresso, então ela
+    // fica; o que sai é o botão "Ajudar" quando o seletor já está na tela —
+    // e a barra inteira quando o teclado sobe, para não cobrir o campo.
+    var mostra = !veHero && !digitando;
+    var cta = $("stkCta");
     s.classList.toggle("show", mostra);
     s.setAttribute("aria-hidden", mostra ? "false" : "true");
-    s.querySelector("a").tabIndex = mostra ? 0 : -1;
+    if(cta){
+      cta.hidden = veAdotar;
+      cta.tabIndex = (mostra && !veAdotar) ? 0 : -1;
+    }
   };
   new IntersectionObserver(function(e){ veHero = e[0].isIntersecting; atualizar(); }, {threshold:0}).observe(hero);
   if(adotar) new IntersectionObserver(function(e){ veAdotar = e[0].isIntersecting; atualizar(); },
@@ -3142,12 +2626,16 @@ function pintarNarracao(){
 var mus = { audio: null, querTocar: false, silenciada: false, porSistema: false };
 var MUS_CHAVE = "valeivai.musica";
 
+function botoesMusica(){ return document.querySelectorAll(".musica"); }
+
 function initMusica(){
-  var m = CONFIG.musica, btn = $("musicaBtn");
-  if(!m || !m.arquivo || !btn) return;
-  btn.hidden = false;
+  var m = CONFIG.musica, btns = botoesMusica();
+  if(!m || !m.arquivo || !btns.length) return;
+  btns.forEach(function(b){
+    b.hidden = false;
+    b.querySelector(".musicaTit").textContent = m.titulo || "Música";
+  });
   document.body.classList.add("temMusica");
-  setText("musicaTit", m.titulo || "Música");
   var escolha = null;
   try{ escolha = localStorage.getItem(MUS_CHAVE); }catch(e){}
   var a = mus.audio = new Audio();
@@ -3158,12 +2646,17 @@ function initMusica(){
   a.volume = Math.max(0, Math.min(1, Number(m.volume) || 0.35));   // iOS ignora; o resto obedece
   a.addEventListener("play", pintarMusica);
   a.addEventListener("pause", pintarMusica);
-  a.addEventListener("error", function(){ btn.hidden = true; document.body.classList.remove("temMusica"); });
+  a.addEventListener("error", function(){
+    botoesMusica().forEach(function(b){ b.hidden = true; });
+    document.body.classList.remove("temMusica");
+  });
 
-  btn.addEventListener("click", function(e){
-    e.stopPropagation();
-    if(a.paused){ guardarEscolha("tocar"); mus.querTocar = true; tocarMusica(); }
-    else{ guardarEscolha("pausada"); pausarMusica(true); }
+  btns.forEach(function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(a.paused){ guardarEscolha("tocar"); mus.querTocar = true; tocarMusica(); }
+      else{ guardarEscolha("pausada"); pausarMusica(true); }
+    });
   });
 
   pintarMusica();
@@ -3179,7 +2672,7 @@ function initMusica(){
   // barrado? espera o primeiro gesto de verdade em qualquer lugar
   var gestos = ["pointerup", "touchend", "keydown"];
   var primeiro = function(e){
-    if(e.target && e.target.closest && e.target.closest("#musicaBtn, #portaoSem")) return;  // esses decidem sozinhos
+    if(e.target && e.target.closest && e.target.closest(".musica, #portaoSem")) return;  // esses decidem sozinhos
     gestos.forEach(function(g){ document.removeEventListener(g, primeiro, true); });
     if(mus.querTocar && a.paused) tocarMusica();
   };
@@ -3238,14 +2731,16 @@ function silenciarMusica(sim){
 function guardarEscolha(v){ try{ localStorage.setItem(MUS_CHAVE, v); }catch(e){} }
 
 function pintarMusica(){
-  var a = mus.audio, btn = $("musicaBtn");
-  if(!a || !btn) return;
+  var a = mus.audio;
+  if(!a || !CONFIG.musica) return;
   var tocando = !a.paused;
-  btn.classList.toggle("tocando", tocando);
-  btn.setAttribute("aria-pressed", tocando ? "true" : "false");
-  btn.setAttribute("aria-label", (tocando ? "Pausar" : "Tocar") + " música: " + (CONFIG.musica.titulo || ""));
-  $("musicaIc").textContent = tocando ? "❚❚" : "▶";
-  setText("musicaSub", tocando ? (CONFIG.musica.artista || "tocando") : "toque para ouvir");
+  botoesMusica().forEach(function(b){
+    b.classList.toggle("tocando", tocando);
+    b.setAttribute("aria-pressed", tocando ? "true" : "false");
+    b.setAttribute("aria-label", (tocando ? "Pausar" : "Tocar") + " música: " + (CONFIG.musica.titulo || ""));
+    b.querySelector("i").textContent = tocando ? "❚❚" : "▶";
+    b.querySelector(".musicaSub").textContent = tocando ? (CONFIG.musica.artista || "tocando") : "tocar";
+  });
 }
 
 /* ---------------------- ligações ---------------------- */
@@ -3287,44 +2782,17 @@ function bind(){
   $("shareBtn").addEventListener("click", shareCampaign);
   $("shareOutros").addEventListener("click", shareOutros);
   $("sendProof").addEventListener("click", openWhats);
-  $("mProof").addEventListener("click", openWhats);
   $("copyBrcode").addEventListener("click", function(){
     if(!kmValido) return;
     copiar($("brcodeTxt").textContent, this, "Pix copiado", "Pix copiado com o valor", marcarCopiado);
     registrar("copiou");
   });
-  $("mCopyBrcode").addEventListener("click", function(){
-    if(!kmValido) return;
-    copiar($("mBrcode").textContent, this, "Pix copiado", "Pix copiado com o valor", marcarCopiado);
-    registrar("copiou");
-  });
   $("outroKm").addEventListener("input", lerOutro);
   $("outroKm").addEventListener("keydown", function(e){
-    if(e.key === "Enter" && kmValido){ e.preventDefault(); $("openPix").click(); }
+    // Enter no campo leva direto ao passo 2, que é o que a pessoa faria em seguida
+    if(e.key === "Enter" && kmValido){ e.preventDefault(); rolarPara("pixPasso"); }
   });
 
-  var m = $("modal"), voltarFoco = null;
-  var abrir = function(){
-    if(!kmValido) return;
-    voltarFoco = document.activeElement;
-    m.classList.add("open");
-    document.body.classList.add("modalAberto");
-    if(initSticky.atualizar) initSticky.atualizar();
-    setTimeout(function(){ var b = $("mCopyBrcode"); if(b && !b.disabled) b.focus(); }, 60);
-  };
-  var fechar = function(){
-    if(!m.classList.contains("open")) return;
-    m.classList.remove("open");
-    document.body.classList.remove("modalAberto");
-    if(initSticky.atualizar) initSticky.atualizar();
-    if(voltarFoco && voltarFoco.focus) voltarFoco.focus();
-  };
-  $("openPix").addEventListener("click", abrir);
-  $("closeModal").addEventListener("click", fechar);
-  m.addEventListener("click", function(e){ if(e.target === m) fechar(); });
-  document.addEventListener("keydown", function(e){
-    if(e.key === "Escape") fechar();
-  });
 }
 
 /* ---------------------- start ---------------------- */
@@ -3348,6 +2816,7 @@ function start(){
   initReveal();
   initSticky();
   initVideos();
+  initRail();
   initNarracao();
   initMusica();
 }
